@@ -26,8 +26,6 @@ defined('MOODLE_INTERNAL') || die();
 
 $componentname = 'bookingextension_evasys';
 
-// phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-/*
 if ($hassiteconfig) {
     if ($ADMIN->fulltree) {
         // Here you can add subplugin-specific settings.
@@ -42,4 +40,3 @@ if ($hassiteconfig) {
         );
     }
 }
-*/
