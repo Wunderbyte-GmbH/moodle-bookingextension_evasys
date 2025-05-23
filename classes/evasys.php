@@ -16,6 +16,7 @@
 
 /**
  * Class evasys.
+ *
  * @package     bookingextension_evasys
  * @copyright   2025 Wunderbyte GmbH <info@wunderbyte.at>
  * @author      Bernhard Fischer-Sengseis
@@ -27,9 +28,43 @@ namespace mod_booking\bookingextension;
 use mod_booking\plugininfo\bookingextension;
 use mod_booking\plugininfo\bookingextension_interface;
 
+defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->dirroot . '/mod/booking/bookingextensions/evasys/lib.php');
+
 /**
  * Class for the Evasys booking extension.
  */
 class evasys extends bookingextension implements bookingextension_interface {
-    // The plugin can implement functions defined in the interface here or extend the general plugin type.
+    /**
+     * Get the plugin name.
+     * @return string the plugin name
+     */
+    public function get_plugin_name(): string {
+        return get_string('pluginname', 'bookingextension_evasys');
+    }
+
+    /**
+     * Check if the booking extension contains new option fields.
+     * @return bool True if the booking extension contains new option fields, false otherwise.
+     */
+    public function contains_option_fields(): bool {
+        // Yes, this plugin contains new option fields.
+        return true;
+    }
+
+    /**
+     * If the extension adds new option fields this array contains the according information.
+     * @return array
+     */
+    public function get_option_fields_info_array(): array {
+        return [
+            'xtensiontestfield' => [
+                'name' => 'xtensiontestfield',
+                'class' => 'bookingextension_evasys\option\fields\xtensiontestfield',
+                'id' => MOD_BOOKING_OPTION_FIELD_EVASYSTESTFIELD,
+            ],
+            // We can add more fields here...
+        ];
+    }
 }

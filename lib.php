@@ -15,12 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains language strings for the subplugin.
+ * Library of common module functions and constants.
  *
  * @package     bookingextension_evasys
- * @copyright   2025 Wunderbyte GmbH
+ * @copyright   2025 Wunderbyte GmbH <info@wunderbyte.at>
  * @author      Bernhard Fischer-Sengseis
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-$string['evasysheader'] = 'Evasys';
-$string['pluginname'] = 'Booking extension: Evasys';
+// Fields - Currently supported range: 321-329.
+define('MOD_BOOKING_OPTION_FIELD_EVASYSTESTFIELD', 321);
