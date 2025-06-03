@@ -32,7 +32,7 @@ use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/mod/booking/bookingextensions/evasys/lib.php');
+require_once($CFG->dirroot . '/mod/booking/bookingextension/evasys/lib.php');
 
 /**
  * Booking option field class.

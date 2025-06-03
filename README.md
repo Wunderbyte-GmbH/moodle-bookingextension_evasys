@@ -17,7 +17,7 @@ This is a Booking extension used in the Evasys project for Wunderbyte's Booking 
 
 The plugin can be also installed by putting the contents of this directory to
 
-    {your/moodle/dirroot}/mod/booking/bookingextensions
+    {your/moodle/dirroot}/mod/booking/bookingextension
 
 Afterwards, log in to your Moodle site as an admin and go to _Site administration >
 Notifications_ to complete the installation.

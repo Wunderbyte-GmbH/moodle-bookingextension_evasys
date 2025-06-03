@@ -30,7 +30,7 @@ use mod_booking\plugininfo\bookingextension_interface;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/mod/booking/bookingextensions/evasys/lib.php');
+require_once($CFG->dirroot . '/mod/booking/bookingextension/evasys/lib.php');
 
 /**
  * Class for the Evasys booking extension.
@@ -66,5 +66,18 @@ class evasys extends bookingextension implements bookingextension_interface {
             ],
             // We can add more fields here...
         ];
+    }
+
+    /**
+     * Loads plugin settings to the settings tree
+     *
+     * @param \admin_settingpage $settings reference to the settings page
+     * @return void
+     */
+    public function load_subplugin_settings(
+        &$settings
+    ): void {
+        // Here we can add settings for the Evasys booking extension.
+        return;
     }
 }
