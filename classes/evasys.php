@@ -25,6 +25,7 @@
 
 namespace bookingextension_evasys;
 
+use admin_settingpage;
 use mod_booking\plugininfo\bookingextension;
 use mod_booking\plugininfo\bookingextension_interface;
 
@@ -69,10 +70,7 @@ class evasys extends bookingextension implements bookingextension_interface {
     }
 
     /**
-     * Loads plugin settings to the settings tree
-     *
-     * This function usually includes settings.php file in plugins folder.
-     * Alternatively it can create a link to some settings page (instance of admin_externalpage)
+     * Loads plugin settings to the settings tree.
      *
      * @param \part_of_admin_tree $adminroot
      * @param string $parentnodename
@@ -80,25 +78,16 @@ class evasys extends bookingextension implements bookingextension_interface {
      */
     public function load_settings(\part_of_admin_tree $adminroot, $parentnodename, $hassiteconfig): void {
         global $CFG, $USER, $DB, $OUTPUT, $PAGE; // In case settings.php wants to refer to them.
-        $ADMIN = $adminroot; // May be used in settings.php.
-        $plugininfo = $this; // Also can be used inside settings.php.
-        $settingspath = $CFG->dirroot . '/mod/booking/bookingextension/evasys/settings.php';
+        // $ADMIN = $adminroot; // May be used in settings.php.
+        // $plugininfo = $this; // Also can be used inside settings.php.
 
-        if (
-            !$hassiteconfig
-            || !file_exists($settingspath)
-        ) {
-            return;
-        }
+        $evasyssettings = new admin_settingpage(
+            'bookingextension_evasys_settings',
+            get_string('pluginname', 'bookingextension_evasys'),
+            'moodle/site:config',
+            $this->is_enabled() === false
+        );
 
-        $section = $this->get_settings_section_name();
-
-        $settings = new \admin_settingpage($section, $this->displayname, 'moodle/site:config', $this->is_enabled() === false);
-
-        if ($adminroot->fulltree) {
-            include($settingspath);
-        }
-
-        $adminroot->add($this->type . 'plugins', $settings);
+        $adminroot->add('modbookingfolder', $evasyssettings);
     }
 }
