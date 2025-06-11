@@ -39,14 +39,15 @@ require_once($CFG->dirroot . '/user/lib.php');
  */
 class evasys_handler {
     /**
-     * Save data from form into DB.
+     * Saves Optionfield Form.
      *
-     * @param stdClass $formdata
-     * @param stdClass $option
+     * @param object $formdata
+     * @param object $option
+     *
      * @return void
      *
      */
-    public function save_form(&$formdata, &$option) {
+    public function save_form(object &$formdata, object &$option) {
         global $DB;
         $helper = new evasys_helper_service();
         $insertdata = $helper->map_form_to_record($formdata, $option);

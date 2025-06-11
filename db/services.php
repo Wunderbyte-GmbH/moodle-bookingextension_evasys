@@ -17,13 +17,28 @@
 /**
  * Web services for bookingextension_evasys.
  *
- * @package     bookingextension_evasys
+ * @package     mod_booking
  * @copyright   2025 Wunderbyte GmbH
  * @author      Bernhard Fischer-Sengseis
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
 
-$functions = [];
-
+$functions = [
+        'mod_booking_get_evasysperiods' => [
+            'classname'   => 'bookingextension_evasys\external\get_evasysperiods',
+            'description' => 'Fetch list of Evasys periods based on search query.',
+            'type' => 'read',
+            'capabilities' => '',
+            'ajax'        => 1,
+        ],
+        'mod_booking_get_evasysquestionaires' => [
+            'classname'   => 'bookingextension_evasys\external\get_evasysquestionaires',
+            'methodname'  => 'execute',
+            'description' => 'Fetch list of Evasys questionaires based on search query.',
+            'type'        => 'read',
+            'capabilities' => '',
+            'ajax'        => 1,
+        ],
+    ];
 $services = [];

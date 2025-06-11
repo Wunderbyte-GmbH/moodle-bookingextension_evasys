@@ -22,5 +22,21 @@
  * @author      Bernhard Fischer-Sengseis
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+$string['evasys:confirmdelete'] = 'Confirm deletion';
+$string['evasys:datepast'] = 'The starttime of the evaluation cannot be in the past';
+$string['evasys:delete'] = 'Do you want to delete all data for the evaluation on Evasys?';
+$string['evasys:evaluation:durationafterend'] = 'End (hours after coursend)';
+$string['evasys:evaluation:durationbeforestart'] = 'Start (hours before coursend)';
+$string['evasys:evaluation_endtime'] = 'End of evaluation period';
+$string['evasys:evaluation_starttime'] = 'Start of evaluation period';
+$string['evasys:fieldsvalidation'] = 'Not all required fields have been selected.';
+$string['evasys:notifyparticipants'] = 'Optional notifications to participants';
+$string['evasys:other_report_recipients'] = 'Additional report recipients (secondary instructors in Evasys)';
+$string['evasys:questionaire'] = 'Selection of the questionnaire';
+$string['evasys:questionaire_help'] = 'For more information about the forms, please click <a href="https://www.qs.univie.ac.at/evaluationen/weitere-evaluationen/urise/" target="_blank">here</a>.';
+$string['evasys:setcourseendtime'] = 'When you chose this timemode you have to set a courseendtime that is in the future';
+$string['evasys:timemode'] = 'Timemode';
+$string['evasys:timemodeduration'] = 'Define evaluation time based on courseendtime';
+$string['evasys:timemodestart'] = 'Define evaluation time based on fixed dates';
 $string['evasysheader'] = 'Evasys';
 $string['pluginname'] = 'Booking extension: Evasys';
