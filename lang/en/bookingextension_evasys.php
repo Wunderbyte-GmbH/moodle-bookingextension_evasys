@@ -40,4 +40,3 @@ $string['setcourseendtime'] = 'When you choose this time mode, you must set a co
 $string['timemode'] = 'Time mode';
 $string['timemodeduration'] = 'Define evaluation period based on course end time';
 $string['timemodestart'] = 'Define evaluation period using fixed start and end dates';
-

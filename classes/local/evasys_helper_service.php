@@ -37,12 +37,12 @@ class evasys_helper_service {
     /**
      * Sets the secondary Instructors for course insert or update.
      *
-     * @param mixed $array
+     * @param array $secondaryinstructors
      *
      * @return array
      *
      */
-    public function set_secondaryinstructors_for_save($secondaryinstructors) {
+    public function set_secondaryinstructors_for_save(array $secondaryinstructors) {
         $userfieldshortname = get_config('booking', 'evasyscategoryfielduser');
         $userlist = [];
 
@@ -76,20 +76,20 @@ class evasys_helper_service {
     /**
      * Maps DB of Form to DB for saving.
      *
-     * @param /stdClass $formdata
-     * @param /stdClass $option
+     * @param stdClass $formdata
+     * @param stdClass $option
      *
      * @return object
      *
      */
-    public function map_form_to_record($formdata, $option) {
+    public function map_form_to_record(object $formdata, object $option) {
         global $USER;
         $insertdata = new stdClass();
         $now = time();
         $insertdata->optionid = $option->id;
         $insertdata->formid = $formdata->evasys_form;
         if (empty((int)$formdata->evasys_timemode)) {
-            $insertdata->starttime = (int) $option->courseendtime + (int) $formdata->evasys_evaluation_durationbeforestart;
+        $insertdata->starttime = (int) $option->courseendtime + (int) $formdata->evasys_evaluation_durationbeforestart;
             $insertdata->endtime = (int) $option->courseendtime + (int) $formdata->evasys_evaluation_durationafterend;
             $insertdata->durationbeforestart = $formdata->evasys_durationbeforestart;
             $insertdata->durationafterend = $formdata->evasys_durationafterend;
@@ -315,7 +315,7 @@ class evasys_helper_service {
      * @return array
      *
      */
-    public function set_args_get_form($internalid) {
+    public function set_args_get_form(int $internalid) {
         $form = [
             'FormId' => (int)$internalid,
             'IdType' => 'INTERNAL',
@@ -333,7 +333,7 @@ class evasys_helper_service {
      * @return array
      *
      */
-    public function set_args_fetch_forms($subunitid) {
+    public function set_args_fetch_forms(int $subunitid) {
         $args = [
                 'IncludeCustomReports' => true,
                 'IncludeUsageRestrictions' => true,
