@@ -22,21 +22,21 @@
  * @author      Bernhard Fischer-Sengseis
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-$string['evasys:confirmdelete'] = 'Löschen bestätigen';
-$string['evasys:datepast'] = 'Der Startzeitpunkt der Evaluation darf nicht in der Vergangenheit liegen.';
-$string['evasys:delete'] = 'Wollen Sie alle Daten für die Evaluation auf Evasys löschen?';
-$string['evasys:evaluation:durationafterend'] = 'Ende (Stunden nach Kursendzeit)';
-$string['evasys:evaluation:durationbeforestart'] = 'Beginn (Stunden vor Kursendzeit)';
-$string['evasys:evaluation_endtime'] = 'Ende des Evaluierungszeitraums';
-$string['evasys:evaluation_starttime'] = 'Beginn des Evaluierungszeitraums';
-$string['evasys:fieldsvalidation'] = 'Nicht alle Pflichtfelder ausgewählt';
-$string['evasys:notifyparticipants'] = 'Optionale Benachrichtigungen an Teilnehmer:innen';
-$string['evasys:other_report_recipients'] = 'Weitere Berichtsempfänger:innen (Sekundärdozentinnen in Evasys)';
-$string['evasys:questionaire'] = 'Auswahl des Fragebogens';
-$string['evasys:questionaire_help'] = 'Mehr Infos zu den Formularen finden Sie <a href="https://www.qs.univie.ac.at/evaluationen/weitere-evaluationen/urise/" target="_blank">hier</a>.';
-$string['evasys:setcourseendtime'] = 'Bei Auswahl dieses Zeitmodus muss ein Kursende festgelegt werden, das in der Zukunft liegt.';
-$string['evasys:timemode'] = 'Auswahl des Evaluiserungszeitraums';
-$string['evasys:timemodeduration'] = 'Evaluierungszeitraum anhand der Kursendzeit definieren';
-$string['evasys:timemodestart'] = 'Evaluierungszeitraum mit Start- und Enddatum definieren';
-$string['evasysheader'] = 'Evasys';
-$string['pluginname'] = 'Booking-Erweiterung: Evasys';
+$string['confirmdelete'] = 'Löschen bestätigen';
+$string['datepast'] = 'Der Startzeitpunkt der Evaluation darf nicht in der Vergangenheit liegen.';
+$string['delete'] = 'Wollen Sie alle Daten für die Evaluation auf EvaSys löschen?';
+$string['evaluationdurationafterend'] = 'Ende (Stunden nach Kursendzeit)';
+$string['evaluationdurationbeforestart'] = 'Beginn (Stunden vor Kursendzeit)';
+$string['evaluationendtime'] = 'Ende des Evaluierungszeitraums';
+$string['evaluationstarttime'] = 'Beginn des Evaluierungszeitraums';
+$string['evasysheader'] = 'EvaSys';
+$string['fieldsvalidation'] = 'Nicht alle Pflichtfelder ausgewählt';
+$string['notifyparticipants'] = 'Optionale Benachrichtigungen an Teilnehmer:innen';
+$string['otherreportrecipients'] = 'Weitere Berichtsempfänger:innen (Sekundärdozent:innen in EvaSys)';
+$string['pluginname'] = 'Booking-Erweiterung: EvaSys';
+$string['questionaire'] = 'Auswahl des Fragebogens';
+$string['questionaire_help'] = 'Mehr Infos zu den Formularen finden Sie <a href="https://www.qs.univie.ac.at/evaluationen/weitere-evaluationen/urise/" target="_blank">hier</a>.';
+$string['setcourseendtime'] = 'Bei Auswahl dieses Zeitmodus muss ein Kursende festgelegt werden, das in der Zukunft liegt.';
+$string['timemode'] = 'Auswahl des Evaluierungszeitraums';
+$string['timemodeduration'] = 'Evaluierungszeitraum anhand der Kursendzeit definieren';
+$string['timemodestart'] = 'Evaluierungszeitraum mit Start- und Enddatum definieren';

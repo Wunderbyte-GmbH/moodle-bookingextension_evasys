@@ -16,7 +16,7 @@
 /**
  * Provides the required functionality for an autocomplete element to select a user.
  *
- * @module      mod_booking_get_evasysquestionare
+ * @module      mod_booking_get_evasysforms
  * @copyright   2025 Wunderbyte Gmbh <info@wunderbyte.at>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -33,7 +33,7 @@ import Ajax from "core/ajax";
  */
 export async function transport(selector, query, callback, failure) {
   const request = {
-    methodname: "mod_booking_get_evasysquestionaires",
+    methodname: "mod_booking_get_evasysforms",
     args: {
       query: query,
     },

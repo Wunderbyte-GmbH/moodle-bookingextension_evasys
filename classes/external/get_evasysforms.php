@@ -14,25 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-namespace mod_booking\external;
+namespace bookingextension_evasys\external;
 use external_api;
 use external_function_parameters;
 use external_value;
-use mod_booking\local\evasys_handler;
+use bookingextension_evasys\local\evasys_handler;
 
 defined('MOODLE_INTERNAL') || die();
-
 require_once($CFG->libdir . '/externallib.php');
 
 /**
- * Provides the mod_booking_search_keywords_respondapi external function.
+ * Provides the get_evasysforms external function.
  *
- * @package     mod_booking
+ * @package     bookingextension_evasys
  * @category    external
- * @copyright   2023 Georg Maißer <georg.maisser@wunderbyt.at>
+ * @author David Ala
+ * @copyright 2025 Wunderbyte GmbH
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class get_evasysquestionaires extends external_api {
+class get_evasysforms extends external_api {
     /**
      * Describes the external function parameters.
      *
