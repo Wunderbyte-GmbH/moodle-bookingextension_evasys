@@ -112,16 +112,16 @@ class evasys extends bookingextension implements bookingextension_interface {
         $evasyssettings->add(
             new admin_setting_heading(
                 'evasyssettings',
-                get_string('evasyssettings', 'mod_booking'),
-                get_string('evasyssettings_desc', 'mod_booking')
+                get_string('evasyssettings', 'bookingextension_evasys'),
+                get_string('evasyssettings_desc', 'bookingextension_evasys')
             )
         );
 
         $evasyssettings->add(
             new admin_setting_configcheckbox(
                 'booking/useevasys',
-                get_string('useevasys', 'mod_booking'),
-                get_string('useevasys_desc', 'mod_booking'),
+                get_string('useevasys', 'bookingextension_evasys'),
+                get_string('useevasys_desc', 'bookingextension_evasys'),
                 0
             )
         );
@@ -129,8 +129,8 @@ class evasys extends bookingextension implements bookingextension_interface {
         $evasyssettings->add(
             new admin_setting_configtext(
                 'booking/evasysbaseurl',
-                get_string('evasysbaseurl', 'mod_booking'),
-                get_string('evasysbaseurl_desc', 'mod_booking'),
+                get_string('evasysbaseurl', 'bookingextension_evasys'),
+                get_string('evasysbaseurl_desc', 'bookingextension_evasys'),
                 ''
             )
         );
@@ -138,16 +138,16 @@ class evasys extends bookingextension implements bookingextension_interface {
         $evasyssettings->add(
             new admin_setting_configtext(
                 'booking/evasysuser',
-                get_string('evasysuser', 'mod_booking'),
-                get_string('evasysuser_desc', 'mod_booking'),
+                get_string('evasysuser', 'bookingextension_evasys'),
+                get_string('evasysuser_desc', 'bookingextension_evasys'),
                 ''
             )
         );
         $evasyssettings->add(
             new admin_setting_configpasswordunmask(
                 'booking/evasyspassword',
-                get_string('evasyspassword', 'mod_booking'),
-                get_string('evasyspassword_desc', 'mod_booking'),
+                get_string('evasyspassword', 'bookingextension_evasys'),
+                get_string('evasyspassword_desc', 'bookingextension_evasys'),
                 ''
             )
         );
@@ -163,8 +163,8 @@ class evasys extends bookingextension implements bookingextension_interface {
         $evasyssettings->add(
             new admin_setting_configselect(
                 'booking/evasyscategoryfielduser',
-                get_string('evasyscategoryfielduser', 'mod_booking'),
-                get_string('evasyscategoryfielduser_desc', 'mod_booking'),
+                get_string('evasyscategoryfielduser', 'bookingextension_evasys'),
+                get_string('evasyscategoryfielduser_desc', 'bookingextension_evasys'),
                 'evasysid',
                 $userprofilefieldsarray
             )
@@ -174,7 +174,7 @@ class evasys extends bookingextension implements bookingextension_interface {
             $subunitoptions = $evasys->get_subunits();
             $periodoptions = $evasys->get_periods_for_settings();
         } catch (SoapFault $e) {
-                $subunitoptions = [0 => get_string('evasysnotreachable', 'mod_booking')];
+                $subunitoptions = [0 => get_string('evasysnotreachable', 'bookingextension_evasys')];
         }
         if (
             empty($subunitoptions)
@@ -185,15 +185,15 @@ class evasys extends bookingextension implements bookingextension_interface {
                 new admin_setting_description(
                     'booking/evasyssettingswarning',
                     '',
-                    get_string('evasyssettingswarning', 'mod_booking')
+                    get_string('evasyssettingswarning', 'bookingextension_evasys')
                 )
             );
         } else {
             $evasyssettings->add(
                 new admin_setting_configselect(
                     'booking/evasyssubunits',
-                    get_string('evasyssubunits', 'mod_booking'),
-                    get_string('evasyssubunits_desc', 'mod_booking'),
+                    get_string('evasyssubunits', 'bookingextension_evasys'),
+                    get_string('evasyssubunits_desc', 'bookingextension_evasys'),
                     0,
                     $subunitoptions
                 )
@@ -201,8 +201,8 @@ class evasys extends bookingextension implements bookingextension_interface {
             $evasyssettings->add(
                 new admin_setting_configselect(
                     'booking/evasysperiods',
-                    get_string('evasysperiods', 'mod_booking'),
-                    get_string('evasysperiods_desc', 'mod_booking'),
+                    get_string('evasysperiods', 'bookingextension_evasys'),
+                    get_string('evasysperiods_desc', 'bookingextension_evasys'),
                     0,
                     $periodoptions
                 )
