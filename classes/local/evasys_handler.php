@@ -211,8 +211,12 @@ class evasys_handler {
     public function get_recipients() {
         global $COURSE, $DB;
         $context = context_course::instance($COURSE->id);
-        $role = $DB->get_record('role', ['shortname' => 'organizer'], 'id');
-        $users = get_role_users($role->id, $context);
+        $rolesid = get_config('booking', 'rolereportrecipients');
+        if (empty($rolesid)) {
+            $users = get_enrolled_users($context);
+        } else {
+            $users = get_role_users($rolesid, $context);
+        }
         $useroptions = [];
         foreach ($users as $user) {
             $useroptions[$user->id] = "$user->firstname $user->lastname";

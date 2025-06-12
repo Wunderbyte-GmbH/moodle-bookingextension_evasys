@@ -19,7 +19,7 @@
  *
  * @package     bookingextension_evasys
  * @copyright   2025 Wunderbyte GmbH <info@wunderbyte.at>
- * @author      Bernhard Fischer-Sengseis
+ * @author      David Ala
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -184,6 +184,20 @@ class evasys extends bookingextension implements bookingextension_interface {
                 $userprofilefieldsarray
             )
         );
+        $roles = $roles = $DB->get_records('role', [], 'id', 'id, name');
+        $rolesarray = [];
+        foreach ($roles as $role) {
+            $rolesarray[$role->id] = $role->name;
+        }
+         $evasyssettings->add(
+             new admin_setting_configselect(
+                 'booking/rolereportrecipients',
+                 get_string('rolereportrecipients', 'bookingextension_evasys'),
+                 get_string('rolereportrecipients_desc', 'bookingextension_evasys'),
+                 '',
+                 $rolesarray
+             )
+         );
         try {
             $evasys = new evasys_handler();
             $subunitoptions = $evasys->get_subunits();

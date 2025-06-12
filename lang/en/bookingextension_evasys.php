@@ -55,6 +55,8 @@ $string['otherreportrecipients'] = 'Additional report recipients (secondary inst
 $string['pluginname'] = 'Booking extension: EvaSys';
 $string['questionaire'] = 'Select questionnaire';
 $string['questionaire_help'] = 'For more information about the forms, please click <a href="https://www.qs.univie.ac.at/evaluationen/weitere-evaluationen/urise/" target="_blank">here</a>.';
+$string['rolereportrecipients'] = 'Role restriction for additional report recipients';
+$string['rolereportrecipients_desc'] = 'Define the role restriction for additional report recipients.';
 $string['setcourseendtime'] = 'When using this time mode, a course end time in the future must be set.';
 $string['timemode'] = 'Time mode';
 $string['timemodeduration'] = 'Define evaluation period based on course end time';
