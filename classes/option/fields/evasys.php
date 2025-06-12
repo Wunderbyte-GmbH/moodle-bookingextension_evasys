@@ -17,9 +17,10 @@
 /**
  * Evasys Option Form field.
  *
- * @package bookingextension_evasys
- * @copyright 2025 Wunderbyte GmbH <info@wunderbyte.at>
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     bookingextension_evasys
+ * @copyright   2025 Wunderbyte GmbH <info@wunderbyte.at>
+ * @author      David Ala
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
  namespace bookingextension_evasys\option\fields;
@@ -28,7 +29,6 @@
  use bookingextension_evasys\local\evasys_handler;
  use bookingextension_evasys\local\evasys_helper_service;
  use mod_booking\option\field_base;
- use mod_booking\option\fields_info;
  use mod_booking\singleton_service;
  use MoodleQuickForm;
  use stdClass;
@@ -245,7 +245,14 @@ class evasys extends field_base {
         }
 
         if ($applyheader) {
-            fields_info::add_header_to_mform($mform, self::$header);
+            $elementexists = $mform->elementExists(self::$header);
+            if (!$elementexists) {
+                $mform->addElement(
+                    'header',
+                    self::$header,
+                    self::$headericon . get_string(self::$header, self::$subplugin)
+                );
+            }
         }
         $mform->addElement(
             'autocomplete',
