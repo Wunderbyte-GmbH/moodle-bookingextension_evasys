@@ -23,5 +23,6 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 // Fields - Currently supported range: 321-329.
+
 define('MOD_BOOKING_OPTION_FIELD_EVASYS', 515);
 define('MOD_BOOKING_HEADER_EVASYS', 'evasysheader');

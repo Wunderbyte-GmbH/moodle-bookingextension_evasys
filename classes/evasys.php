@@ -71,7 +71,7 @@ class evasys extends bookingextension implements bookingextension_interface {
             'evasys' => [
                 'name' => 'evasys',
                 'class' => 'bookingextension_evasys\option\fields\evasys',
-                'id' => MOD_BOOKING_OPTION_FIELD_EVASYSTESTFIELD,
+                'id' => MOD_BOOKING_OPTION_FIELD_EVASYS,
             ],
             // We can add more fields here...
         ];
@@ -87,8 +87,23 @@ class evasys extends bookingextension implements bookingextension_interface {
      * Reference to the array of functions to be registered with the web service.
      */
     public function register_booking_webservice_functions(array &$functions): void {
-        return; // No webservice functions to register for this plugin.
-        // If you want to register webservice functions, you can do it here.
+        $functions = [
+            'bookingextension_evasys_get_evasysperiods' => [
+                'classname'   => 'bookingextension_evasys\external\get_evasysperiods',
+                'description' => 'Fetch list of Evasys periods based on search query.',
+                'type' => 'read',
+                'capabilities' => '',
+                'ajax'        => 1,
+            ],
+            'bookingextension_evasys_get_evasysforms' => [
+                'classname'   => 'bookingextension_evasys\external\get_evasysforms',
+                'methodname'  => 'execute',
+                'description' => 'Fetch list of Evasys questionaires based on search query.',
+                'type'        => 'read',
+                'capabilities' => '',
+                'ajax'        => 1,
+                ],
+        ];
     }
 
     /**

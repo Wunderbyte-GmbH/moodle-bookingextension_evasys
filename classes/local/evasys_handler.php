@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
+/**F
  * Evasys Class.
  *
  * @package bookingextension_evasys
@@ -25,11 +25,11 @@
 
 namespace bookingextension_evasys\local;
 
+use cache;
 use context_course;
 use bookingextension_evasys\local\evasys_helper_service;
 use mod_booking\singleton_service;
 use stdClass;
-use cache;
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/user/lib.php');
 
@@ -90,7 +90,7 @@ class evasys_handler {
         $helper->map_record_to_form($data, $settings->evasys);
     }
 
-    /**
+    /**F
      * Fetch periods and create array for Settings.
      *
      * @return array
@@ -529,7 +529,7 @@ class evasys_handler {
      */
     public function cached_forms() {
         $cache = cache::make('mod_booking', 'evasysforms');
-        $cachedforms = $cache->get(1);
+        $cachedforms = $cache->get('cachedforms');
 
         if (empty($cachedforms)) {
             $allforms = $this->get_allforms();

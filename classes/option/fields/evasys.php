@@ -42,6 +42,12 @@ require_once($CFG->dirroot . '/mod/booking/bookingextension/evasys/lib.php');
   */
 class evasys extends field_base {
     /**
+     * This subplugin component.
+     * @var string
+     */
+    public static $subplugin = 'bookingextension_evasys';
+
+    /**
      * This ID is used for sorting execution.
      * @var int
      */
@@ -78,6 +84,11 @@ class evasys extends field_base {
      */
     public static $headericon = '<i class="fa fa-cubes" aria-hidden="true"></i>&nbsp;';
 
+    /**
+     * This is an array of incompatible field ids.
+     * @var array
+     */
+    public static $incompatiblefields = [];
     /**
      * List of Evasyskeys.
      *
@@ -278,7 +289,7 @@ class evasys extends field_base {
         $mform->addElement(
             'select',
             'evasys_durationbeforestart',
-            get_string('evaluation:durationbeforestart', 'bookingextension_evasys'),
+            get_string('evaluationdurationbeforestart', 'bookingextension_evasys'),
             $beforestartoptions
         );
         $mform->setDefault('evasys_durationbeforestart', -7200);
@@ -301,7 +312,7 @@ class evasys extends field_base {
         $mform->addElement(
             'date_time_selector',
             'evasys_starttime',
-            get_string('evaluation_starttime', 'bookingextension_evasys'),
+            get_string('evaluationstarttime', 'bookingextension_evasys'),
         );
         $starttimestamp = strtotime('+1 days');
         $mform->setDefault('evasys_starttime', $starttimestamp);
@@ -309,7 +320,7 @@ class evasys extends field_base {
         $mform->addElement(
             'date_time_selector',
             'evasys_endtime',
-            get_string('evasys:evaluation_endtime', 'bookingextension_evasys')
+            get_string('evaluationendtime', 'bookingextension_evasys')
         );
         $endtimestamp = strtotime('+2 days');
         $mform->setDefault('evasys_endtime', $endtimestamp);
@@ -331,7 +342,7 @@ class evasys extends field_base {
         $mform->addElement(
             'autocomplete',
             'evasysperiods',
-            get_string('evasysperiods', 'mod_booking'),
+            get_string('evasysperiods', 'bookingextension_evasys'),
             [],
             $periodoptions,
         );
