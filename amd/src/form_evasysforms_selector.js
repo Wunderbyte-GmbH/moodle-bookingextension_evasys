@@ -33,7 +33,7 @@ import Ajax from "core/ajax";
  */
 export async function transport(selector, query, callback, failure) {
   const request = {
-    methodname: "mod_booking_get_evasysforms",
+    methodname: "bookingextension_evasys_get_evasysforms",
     args: {
       query: query,
     },
