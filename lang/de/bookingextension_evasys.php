@@ -42,6 +42,8 @@ $string['evasyspassword'] = 'Passwort';
 $string['evasyspassword_desc'] = 'Passwort für die EvaSys-Verbindung';
 $string['evasysperiods'] = 'Semester';
 $string['evasysperiods_desc'] = 'Wählen Sie Semester für EvaSys aus.';
+$string['evasysqrcode'] = 'QR-Code der Umfrage';
+$string['evasysqrlink'] = 'Link zum QR-Code der Umfrage';
 $string['evasyssettings'] = 'EvaSys <span class="badge bg-success text-light"><i class="fa fa-cogs" aria-hidden="true"></i> PRO</span>';
 $string['evasyssettings_desc'] = 'Einstellungen für EvaSys';
 $string['evasyssettingswarning'] = '<div class="alert alert-danger" role="alert">Verbindung zu EvaSys konnte nicht hergestellt werden. Überprüfen Sie Benutzername und Passwort.</div>';

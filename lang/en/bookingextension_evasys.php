@@ -42,6 +42,8 @@ $string['evasyspassword'] = 'Password';
 $string['evasyspassword_desc'] = 'Password for the EvaSys connection';
 $string['evasysperiods'] = 'Periods';
 $string['evasysperiods_desc'] = 'Select the periods used for EvaSys.';
+$string['evasysqrcode'] = 'Survey QR code';
+$string['evasysqrlink'] = 'Link to the survey QR code';
 $string['evasyssettings'] = 'EvaSys <span class="badge bg-success text-light"><i class="fa fa-cogs" aria-hidden="true"></i> PRO</span>';
 $string['evasyssettings_desc'] = 'Settings for EvaSys';
 $string['evasyssettingswarning'] = '<div class="alert alert-danger" role="alert">Connection to EvaSys could not be established. Please check your username and password.</div>';
