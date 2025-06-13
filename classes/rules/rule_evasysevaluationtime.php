@@ -17,13 +17,10 @@
 namespace bookingextension_evasys\rules;
 
 use context;
-use mod_booking\bo_availability\bo_info;
-use mod_booking\booking;
 use mod_booking\booking_rules\actions_info;
 use mod_booking\booking_rules\booking_rule;
 use mod_booking\booking_rules\conditions_info;
 use mod_booking\option\fields\applybookingrules;
-use mod_booking\singleton_service;
 use MoodleQuickForm;
 use stdClass;
 
@@ -32,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/mod/booking/lib.php');
 
 /**
- * Rule do something on the EvaSys Evaluation Starttime.
+ * Rule to do something on the EvaSys evaluation start- or endtime.
  *
  * @package bookingextension_evasys
  * @author David Ala
@@ -58,11 +55,12 @@ class rule_evasysevaluationtime implements booking_rule {
     /** @var int $ruleid from database! */
     public $ruleid = null;
 
-    /** @var int $mode */
-    public $mode = null;
+    /** @var string $mode */
+    public $datefield = null;
 
     /** @var bool $ruleisactive */
     public $ruleisactive = true;
+
 
     /**
      * Load json data from DB into the object.
@@ -83,7 +81,7 @@ class rule_evasysevaluationtime implements booking_rule {
         $this->rulejson = $json;
         $ruleobj = json_decode($json);
         $this->name = $ruleobj->name;
-        $this->mode = $ruleobj->ruledata->mode;
+        $this->datefield = $ruleobj->ruledata->datefield;
     }
 
     /**
@@ -175,6 +173,7 @@ class rule_evasysevaluationtime implements booking_rule {
 
         $data->rule_name = $jsonobject->name;
         $data->ruleisactive = $record->isactive;
+        $data->rule_evasysevaluation = $ruledata->datefield;
     }
 
     /**
@@ -183,7 +182,6 @@ class rule_evasysevaluationtime implements booking_rule {
      * @param int $userid optional
      */
     public function execute(int $optionid = 0, int $userid = 0) {
-        $settings = singleton_service::get_instance_of_booking_option_settings($optionid);
         $jsonobject = json_decode($this->rulejson);
 
         if (!applybookingrules::apply_rule($optionid, $this->ruleid)) {
@@ -202,11 +200,8 @@ class rule_evasysevaluationtime implements booking_rule {
         foreach ($records as $record) {
             // The override happens within the SQL of get_records_for_execution.
             // So $record->daystonotify will have the correct value.
-            if (isset($record->daystonotify)) {
-                $this->days = (int)$record->daystonotify;
-            }
             // Set the time of when the task should run.
-            $nextruntime = (int) $record->datefield - ((int) $this->days * 86400);
+            $nextruntime = (int) $record->datefield;
             $record->rulename = $this->rulename;
             $record->nextruntime = $nextruntime;
             $action->execute($record);
@@ -224,31 +219,35 @@ class rule_evasysevaluationtime implements booking_rule {
      * @return bool true if the rule still applies, false if not
      */
     public function check_if_rule_still_applies(int $optionid, int $userid, int $nextruntime): bool {
+
         if (empty($this->ruleisactive)) {
             return false;
         }
+
+        $rulestillapplies = true;
 
         if (!applybookingrules::apply_rule($optionid, $this->ruleid)) {
             return false;
         }
 
+        // We retrieve the same sql we also use in the execute function.
         $records = $this->get_records_for_execution($optionid, $userid, true);
+
         if (empty($records)) {
-            return false;
+            $rulestillapplies = false;
         }
 
         foreach ($records as $record) {
-            $days = isset($record->daystonotify) ? (int)$record->daystonotify : 0;
-            $oldnextruntime = (int)$record->datefield - ($days * 86400);
+            $oldnextruntime = (int) $record->datefield;
 
-            if ($oldnextruntime !== $nextruntime) {
-                return false;
+            if ($oldnextruntime != $nextruntime) {
+                $rulestillapplies = false;
+                break;
             }
         }
 
-        return true;
+        return $rulestillapplies;
     }
-
 
     /**
      * This helperfunction builds the sql with the help of the condition and returns the records.
@@ -280,7 +279,6 @@ class rule_evasysevaluationtime implements booking_rule {
         $anduserid = "";
 
         $params = [
-            'numberofdays' => (int) $ruledata->days,
             'nowparam' => time(),
         ];
 
