@@ -52,11 +52,11 @@ class evasys_handler {
         $helper = new evasys_helper_service();
         $insertdata = $helper->map_form_to_record($formdata, $option);
         if (empty($formdata->evasys_booking_id)) {
-            $returnid = $DB->insert_record('booking_evasys', $insertdata, true, false);
+            $returnid = $DB->insert_record('bookingextension_evasys', $insertdata, true, false);
             // Returning ID so i can update record later for internal and external courseid.
             $formdata->evasys_booking_id = $returnid;
         } else {
-            $DB->update_record('booking_evasys', $insertdata);
+            $DB->update_record('bookingextension_evasys', $insertdata);
         }
     }
 
@@ -70,7 +70,7 @@ class evasys_handler {
      */
     public static function load_evasys(int $optionid) {
         global $DB;
-        return $DB->get_record('booking_evasys', ['optionid' => $optionid], '*', IGNORE_MISSING) ?: (object)[];
+        return $DB->get_record('bookingextension_evasys', ['optionid' => $optionid], '*', IGNORE_MISSING) ?: (object)[];
     }
 
     /**
@@ -294,7 +294,7 @@ class evasys_handler {
                 'id' => $id,
                 'surveyid' => $response->m_nSurveyId,
             ];
-            $DB->update_record('booking_evasys', $data);
+            $DB->update_record('bookingextension_evasys', $data);
         }
         return $response;
     }
@@ -352,7 +352,7 @@ class evasys_handler {
                 'surveyid' => $survey->m_nSurveyId,
                 'pollurl' => $qrcode,
             ];
-            $DB->update_record('booking_evasys', $insertobject);
+            $DB->update_record('bookingextension_evasys', $insertobject);
         }
     }
 
@@ -469,7 +469,7 @@ class evasys_handler {
                 'courseidinternal' => $response->m_nCourseId,
                 'courseidexternal' => $response->m_sExternalId,
             ];
-            $DB->update_record('booking_evasys', $dataobject);
+            $DB->update_record('bookingextension_evasys', $dataobject);
         }
         return $response;
     }
@@ -486,7 +486,7 @@ class evasys_handler {
         global $DB;
         $soap = new evasys_soap_service();
         $response = $soap->delete_course($args);
-        $DB->delete_records('booking_evasys', $id);
+        $DB->delete_records('bookingextension_evasys', $id);
         return $response;
     }
 
@@ -521,7 +521,7 @@ class evasys_handler {
             'id' => $id,
             'pollurl' => $response,
         ];
-        $DB->update_record('booking_evasys', $dataobject);
+        $DB->update_record('bookingextension_evasys', $dataobject);
         return $response;
     }
 
@@ -532,7 +532,7 @@ class evasys_handler {
      *
      */
     public function cached_forms() {
-        $cache = cache::make('mod_booking', 'evasysforms');
+        $cache = cache::make('bookingextension_evasys', 'evasysforms');
         $cachedforms = $cache->get('cachedforms');
 
         if (empty($cachedforms)) {

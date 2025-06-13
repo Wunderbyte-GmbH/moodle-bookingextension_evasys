@@ -15,14 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Web services for bookingextension_evasys.
+ * Bookingextension Evasys database install script.
  *
  * @package     bookingextension_evasys
  * @copyright   2025 Wunderbyte GmbH
- * @author      Bernhard Fischer-Sengseis
+ * @author      David Ala
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
-
-$functions = [];
-$services = [];
+use bookingextension_evasys\local\services\evasysuser_profile_field_initializer;
+/**
+ * XMLDB Booking install function.
+ * @return void
+ */
+function xmldb_booking_install() {
+    global $DB;
+    evasysuser_profile_field_initializer::ensure_evasyscustomfield_exists();
+}
