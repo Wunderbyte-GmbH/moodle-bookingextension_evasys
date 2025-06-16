@@ -43,7 +43,7 @@ class evasys_helper_service {
      *
      */
     public function set_secondaryinstructors_for_save(array $secondaryinstructors) {
-        $userfieldshortname = get_config('booking', 'evasyscategoryfielduser');
+        $userfieldshortname = get_config('bookingextension_evasys', 'evasyscategoryfielduser');
         $userlist = [];
 
         foreach ($secondaryinstructors as $instructor) {
@@ -60,7 +60,7 @@ class evasys_helper_service {
             $userobj->m_sUnitName = '';
             $userobj->m_sAddress = $instructor->address ?? '';
             $userobj->m_sEmail = $instructor->email;
-            $userobj->m_nFbid = (int)get_config('booking', 'evasyssubunits');
+            $userobj->m_nFbid = (int)get_config('bookingextension_evasys', 'evasyssubunits');
             $userobj->m_nAddressId = 0;
             $userobj->m_sPassword = '';
             $userobj->m_sPhoneNumber = $instructor->phone1 ?? '';
@@ -177,7 +177,7 @@ class evasys_helper_service {
      *
      */
     public function set_args_insert_course($title, $optionid, $internalid, $periodid, $secondaryinstructors, $customfield, $courseid = null) {
-        $subunitencoded = get_config('booking', 'evasyssubunits');
+        $subunitencoded = get_config('bookingextension_evasys', 'evasyssubunits');
         $array = explode('-', $subunitencoded);
         $subunitname = base64_decode(end($array));
         $subunitid = reset($array);
@@ -217,7 +217,7 @@ class evasys_helper_service {
      *
      */
     public function set_args_insert_user($userid, $firstname, $lastname, $adress, $email, $phone) {
-        $subunitencoded = get_config('booking', 'evasyssubunits');
+        $subunitencoded = get_config('bookingextension_evasys', 'evasyssubunits');
         $array = explode('-', $subunitencoded);
         $subunitname = base64_decode(end($array));
         $subunitid = reset($array);

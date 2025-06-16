@@ -68,11 +68,16 @@ class evasys_soap_service extends SoapClient {
      * @param string|null $wsdl
      *
      */
-    public function __construct(?string $endpoint = null, ?string $username = null, ?string $password = null, ?string $wsdl = null) {
-        $this->endpoint = $endpoint ?? get_config('booking', 'evasysbaseurl');
-        $this->username = $username ?? get_config('booking', 'evasysuser');
-        $this->password = $password ?? get_config('booking', 'evasyspassword');
-        $this->wsdl = $wsdl ?? get_config('booking', 'evasyswsdl');
+    public function __construct(
+        ?string $endpoint = null,
+        ?string $username = null,
+        ?string $password = null,
+        ?string $wsdl = null,
+    ) {
+        $this->endpoint = $endpoint ?? get_config('bookingextension_evasys', 'evasysbaseurl');
+        $this->username = $username ?? get_config('bookingextension_evasys', 'evasysuser');
+        $this->password = $password ?? get_config('bookingextension_evasys', 'evasyspassword');
+        $this->wsdl = $wsdl ?? get_config('bookingextension_evasys', 'evasyswsdl');
 
         $options = [
             'trace'      => true,

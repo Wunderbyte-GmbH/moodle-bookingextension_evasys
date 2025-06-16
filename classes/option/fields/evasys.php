@@ -204,7 +204,7 @@ class evasys extends field_base {
         $applyheader = true
     ): void {
 
-        if (empty(get_config('booking', 'evasyssubunits'))) {
+        if (empty(get_config('bookingextension_evasys', 'evasyssubunits'))) {
             return;
         }
         $evasys = new evasys_handler();
@@ -240,7 +240,7 @@ class evasys extends field_base {
         },
         ];
 
-        if (empty(get_config('booking', 'useevasys'))) {
+        if (empty(get_config('bookingextension_evasys', 'useevasys'))) {
             return;
         }
 
@@ -353,7 +353,7 @@ class evasys extends field_base {
             [],
             $periodoptions,
         );
-        $mform->setDefault('evasysperiods', get_config('booking', 'evasysperiods'));
+        $mform->setDefault('evasysperiods', get_config('bookingextension_evasys', 'evasysperiods'));
         $mform->addElement(
             'advcheckbox',
             'evasys_notifyparticipants',

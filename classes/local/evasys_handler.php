@@ -174,7 +174,7 @@ class evasys_handler {
     public function get_allforms() {
         $soap = new evasys_soap_service();
         $helper = new evasys_helper_service();
-        $subunitconfig = get_config('booking', 'evasyssubunits');
+        $subunitconfig = get_config('bookingextension_evasys', 'evasyssubunits');
         $subunitid = reset(explode('-', $subunitconfig));
         $args = $helper->set_args_fetch_forms($subunitid);
         $forms = $soap->fetch_forms($args);
@@ -198,7 +198,7 @@ class evasys_handler {
     public function get_recipients() {
         global $COURSE, $DB;
         $context = context_course::instance($COURSE->id);
-        $rolesid = get_config('booking', 'rolereportrecipients');
+        $rolesid = get_config('bookingextension_evasys', 'rolereportrecipients');
         if (empty($rolesid)) {
             $users = get_enrolled_users($context);
         } else {
@@ -257,7 +257,7 @@ class evasys_handler {
         if (isset($response)) {
             $value = [$response->m_sExternalId, $response->m_nId];
             $insert = implode(',', $value);
-            $fieldshortname = get_config('booking', 'evasyscategoryfielduser');
+            $fieldshortname = get_config('bookingextension_evasys', 'evasyscategoryfielduser');
             require_once($CFG->dirroot . "/user/profile/lib.php");
             profile_save_custom_fields($user->id, [$fieldshortname => $insert]);
         }
@@ -354,7 +354,7 @@ class evasys_handler {
      *
      */
     public function aggregate_data_for_course_save($data, $option, $courseid = null) {
-        $userfieldshortname = get_config('booking', 'evasyscategoryfielduser');
+        $userfieldshortname = get_config('bookingextension_evasys', 'evasyscategoryfielduser');
         $helper = new evasys_helper_service();
         foreach ($data->teachersforoption as $teacherid) {
             $teacher = singleton_service::get_instance_of_user($teacherid, true);
@@ -422,7 +422,7 @@ class evasys_handler {
             $perioddata = explode('-', $data->evasysperiods);
             $periodid = reset($perioddata);
         } else {
-            $periodid = get_config('booking', 'evasysperiods');
+            $periodid = get_config('bookingextension_evasys', 'evasysperiods');
         }
         $helper = new evasys_helper_service();
         $coursedata = $helper->set_args_insert_course(
