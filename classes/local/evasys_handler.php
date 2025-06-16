@@ -61,19 +61,6 @@ class evasys_handler {
     }
 
     /**
-     * Load Data for Settings Object.
-     *
-     * @param int $optionid
-     *
-     * @return object
-     *
-     */
-    public static function load_evasys(int $optionid) {
-        global $DB;
-        return $DB->get_record('bookingextension_evasys', ['optionid' => $optionid], '*', IGNORE_MISSING) ?: (object)[];
-    }
-
-    /**
      * Load for Optionformfield.
      *
      * @param object $data
@@ -84,10 +71,10 @@ class evasys_handler {
     public function load_form(object &$data) {
         $helper = new evasys_helper_service();
         $settings = singleton_service::get_instance_of_booking_option_settings($data->id);
-        if ((empty($settings->evasys->id))) {
+        if ((empty($settings->subpluginssettings['evasys']->id))) {
             return;
         }
-        $helper->map_record_to_form($data, $settings->evasys);
+        $helper->map_record_to_form($data, $settings->subpluginssettings['evasys']);
     }
 
     /**F

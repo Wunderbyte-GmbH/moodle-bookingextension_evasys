@@ -107,6 +107,19 @@ class evasys extends bookingextension implements bookingextension_interface {
     }
 
     /**
+     * [Description for load_data_for_settings_singleton]
+     *
+     * @param int $optionid
+     *
+     * @return object
+     *
+     */
+    public static function load_data_for_settings_singleton(int $optionid): object {
+        global $DB;
+        return $DB->get_record('bookingextension_evasys', ['optionid' => $optionid], '*', IGNORE_MISSING) ?: (object)[];
+    }
+
+    /**
      * Loads plugin settings to the settings tree.
      *
      * @param \part_of_admin_tree $adminroot
