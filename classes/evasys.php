@@ -78,36 +78,41 @@ class evasys extends bookingextension implements bookingextension_interface {
     }
 
     /**
-     * Adds webservice functions to the service.
+     * Sets the Data for Optionview for the Bookingoption Description.
      *
-     * This function usually includes settings.php file in plugins folder.
-     * Alternatively it can create a link to some settings page (instance of admin_externalpage)
+     * @param object $settings
      *
-     * @param array $functions
-     * Reference to the array of functions to be registered with the web service.
+     * @return array
+     *
      */
-    public function register_booking_webservice_functions(array &$functions): void {
-        $functions = [
-            'bookingextension_evasys_get_evasysperiods' => [
-                'classname'   => 'bookingextension_evasys\external\get_evasysperiods',
-                'description' => 'Fetch list of Evasys periods based on search query.',
-                'type' => 'read',
-                'capabilities' => '',
-                'ajax'        => 1,
-            ],
-            'bookingextension_evasys_get_evasysforms' => [
-                'classname'   => 'bookingextension_evasys\external\get_evasysforms',
-                'methodname'  => 'execute',
-                'description' => 'Fetch list of Evasys questionaires based on search query.',
-                'type'        => 'read',
-                'capabilities' => '',
-                'ajax'        => 1,
-                ],
-        ];
+    public static function set_template_data_for_optionview(object $settings): array {
+        global $USER;
+        $modcontext = context_module::instance($settings->cmid);
+        $templatedata = [];
+        if (!isset($settings->subpluginssettings['evasys']->pollurl)) {
+            return $templatedata;
+        }
+        if (empty(get_config('bookingextension_evasys', 'includeqrinoptionview'))) {
+            return $templatedata;
+        }
+        $ba = singleton_service::get_instance_of_booking_answers($settings);
+        if (
+            has_capability('mod/booking:updatebooking', $modcontext)
+            || isset($ba->usersonlist[$USER->id])
+            || booking_check_if_teacher($settings->id)
+        ) {
+                $data = [
+                    'key' => 'evasys_qr',
+                    'value' => '<img src="' . s($settings->subpluginssettings['evasys']->pollurl) . '" alt="' . get_string('evasys_qrcode', 'bookingextension_evasys') . '">',
+                    'label' => 'evasys_qr_class',
+                    'description' => get_string('evasys_qrcode', 'bookingextension_evasys'),
+                ];
+                $templatedata = [$data];
+        }
+        return $templatedata;
     }
-
     /**
-     * [Description for load_data_for_settings_singleton]
+     * Provides Data for the settings object.
      *
      * @param int $optionid
      *
@@ -211,6 +216,14 @@ class evasys extends bookingextension implements bookingextension_interface {
                  $rolesarray
              )
          );
+        $evasyssettings->add(
+            new admin_setting_configcheckbox(
+                'bookingextension_evasys/includeqrinoptionview',
+                get_string('includeqrinoptionview', 'bookingextension_evasys'),
+                get_string('includeqrinoptionview_desc', 'bookingextension_evasys'),
+                0,
+            )
+        );
         try {
             $evasys = new evasys_handler();
             $subunitoptions = $evasys->get_subunits();
