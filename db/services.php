@@ -24,5 +24,21 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-$functions = [];
+$functions = [
+    'bookingextension_evasys_get_evasysperiods' => [
+        'classname'   => 'bookingextension_evasys\external\get_evasysperiods',
+        'description' => 'Fetch list of Evasys periods based on search query.',
+        'type' => 'read',
+        'capabilities' => '',
+        'ajax'        => 1,
+    ],
+    'bookingextension_evasys_get_evasysforms' => [
+        'classname'   => 'bookingextension_evasys\external\get_evasysforms',
+        'methodname'  => 'execute',
+        'description' => 'Fetch list of Evasys questionaires based on search query.',
+        'type'        => 'read',
+        'capabilities' => '',
+        'ajax'        => 1,
+        ],
+];
 $services = [];
