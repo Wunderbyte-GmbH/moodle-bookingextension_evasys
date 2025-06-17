@@ -35,6 +35,7 @@ use admin_settingpage;
 use bookingextension_evasys\local\evasys_handler;
 use context_module;
 use context_system;
+use mod_booking\customfield\booking_handler;
 use mod_booking\plugininfo\bookingextension;
 use mod_booking\plugininfo\bookingextension_interface;
 use mod_booking\singleton_service;
@@ -104,6 +105,13 @@ class evasys extends bookingextension implements bookingextension_interface {
             || isset($ba->usersonlist[$USER->id])
             || booking_check_if_teacher($settings->id)
         ) {
+            $now = time();
+            if (
+                $now > $settings->subpluginssettings['evasys']->endtime
+                || $now < $settings->subpluginssettings['evasys']->starttime
+            ) {
+                return $templatedata;
+            }
                 $data = [
                     'key' => 'evasys_qr',
                     'value' => '<img src="' . s($settings->subpluginssettings['evasys']->pollurl) . '" alt="' . get_string('evasysqrcode', 'bookingextension_evasys') . '">',
@@ -229,6 +237,61 @@ class evasys extends bookingextension implements bookingextension_interface {
                 0,
             )
         );
+        $customfields = booking_handler::get_customfields();
+        $customfieldshortnames = ['' => ' '];
+        if (!empty($customfields)) {
+            $customfieldshortnames = [];
+            foreach ($customfields as $cf) {
+                $customfieldshortnames[$cf->shortname] = "$cf->name ($cf->shortname)";
+            }
+        }
+        $evasyssettings->add(
+            new admin_setting_configselect(
+                'bookingextension_evasys/evasyscustomfield1',
+                get_string('evasyscustomfield1', 'bookingextension_evasys'),
+                get_string('evasyscustomfield1_desc', 'bookingextension_evasys'),
+                '',
+                $customfieldshortnames
+            )
+        );
+         $evasyssettings->add(
+             new admin_setting_configselect(
+                 'bookingextension_evasys/evasyscustomfield2',
+                 get_string('evasyscustomfield2', 'bookingextension_evasys'),
+                 get_string('evasyscustomfield2_desc', 'bookingextension_evasys'),
+                 '',
+                 $customfieldshortnames
+             )
+         );
+         $evasyssettings->add(
+             new admin_setting_configselect(
+                 'bookingextension_evasys/evasyscustomfield3',
+                 get_string('evasyscustomfield3', 'bookingextension_evasys'),
+                 get_string('evasyscustomfield3_desc', 'bookingextension_evasys'),
+                 '',
+                 $customfieldshortnames
+             )
+         );
+        $evasyssettings->add(
+            new admin_setting_configselect(
+                'bookingextension_evasys/evasyscustomfield4',
+                get_string('evasyscustomfield4', 'bookingextension_evasys'),
+                get_string('evasyscustomfield4_desc', 'bookingextension_evasys'),
+                '',
+                $customfieldshortnames
+            )
+        );
+         $customoptions = ['' => ""];
+         $evasyssettings->add(
+             new admin_setting_configselect(
+                 'bookingextension_evasys/evasyscustomfield5',
+                 get_string('evasyscustomfield5', 'bookingextension_evasys'),
+                 get_string('evasyscustomfield5_desc', 'bookingextension_evasys'),
+                 '',
+                 $customoptions
+             )
+         );
+
         try {
             $evasys = new evasys_handler();
             $subunitoptions = $evasys->get_subunits();

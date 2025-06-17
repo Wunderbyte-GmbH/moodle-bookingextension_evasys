@@ -64,7 +64,7 @@ class evasyslinkforqr {
         if (!$record) {
             return "";
         }
-        return html_writer::link($record->pollurl, get_string('qrlink', 'bookingextension_evasys'));
+        return html_writer::link($record->pollurl, get_string('evasyslinkforqr', 'bookingextension_evasys'));
     }
 
     /**

@@ -107,8 +107,8 @@ class rule_evasysevaluationtime implements booking_rule {
             'datefield',
             get_string('rulechoosemode', 'bookingextension_evasys'),
             [
-                'starttime' => get_string('evaluationstarttime', 'bookingextension_evasys'),
-                'endtime' => get_string('evaluationendtime', 'bookingextension_evasys'),
+                'starttime' => get_string('evasysevaluationstarttime', 'bookingextension_evasys'),
+                'endtime' => get_string('evasysevaluationendtime', 'bookingextension_evasys'),
             ],
         );
     }

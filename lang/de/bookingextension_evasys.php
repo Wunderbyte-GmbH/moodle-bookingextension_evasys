@@ -22,13 +22,15 @@
  * @author      Bernhard Fischer-Sengseis
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+$string['conditionselectorganizersinbo_desc'] = 'Wählen Sie zusätzliche Berichtsempfänger:innen aus einer Buchungsoption aus.';
 $string['confirmdelete'] = 'Löschen bestätigen';
 $string['datepast'] = 'Der Startzeitpunkt der Evaluation darf nicht in der Vergangenheit liegen.';
 $string['delete'] = 'Wollen Sie alle Daten für die Evaluation in EvaSys löschen?';
 $string['evaluationdurationafterend'] = 'Ende (Stunden nach Kursendzeit)';
 $string['evaluationdurationbeforestart'] = 'Beginn (Stunden vor Kursendzeit)';
-$string['evaluationendtime'] = 'Ende des Evaluierungszeitraums';
-$string['evaluationstarttime'] = 'Beginn des Evaluierungszeitraums';
+$string['evasysevaluationendtime'] = 'Ende des Evaluierungszeitraums';
+$string['evasysevaluationstarttime'] = 'Beginn des Evaluierungszeitraums';
 $string['evasys'] = 'EvaSys';
 $string['evasysbaseurl'] = 'Basis-URL für EvaSys-Verbindung';
 $string['evasysbaseurl_desc'] = 'Die URL wird für die Verbindung zu EvaSys verwendet.';
@@ -36,6 +38,18 @@ $string['evasyscategoryfieldoption'] = 'Customfield für die EvaSys-Kurs-ID';
 $string['evasyscategoryfieldoption_desc'] = 'Wählen Sie ein Customfield aus, in dem für jede Buchungsoption die EvaSys-ID gespeichert wird.';
 $string['evasyscategoryfielduser'] = 'Nutzerprofilfeld für die EvaSys-ID';
 $string['evasyscategoryfielduser_desc'] = 'Wählen Sie ein Nutzerprofilfeld aus, in dem für jede:n Nutzer:in die EvaSys-ID gespeichert wird.';
+$string['evasyscustomfield1'] = 'EvaSys Kurs benutzerdefiniertes Feld Slot 1';
+$string['evasyscustomfield1_desc'] = 'Benutzerdefiniertes Buchungsoptionsfeld auswählen als EvaSys Kurs benutzerdefiniertes Feld';
+$string['evasyscustomfield2'] = 'EvaSys Kurs benutzerdefiniertes Feld Slot 2';
+$string['evasyscustomfield2_desc'] = 'Benutzerdefiniertes Buchungsoptionsfeld auswählen als EvaSys Kurs benutzerdefiniertes Feld';
+$string['evasyscustomfield3'] = 'EvaSys Kurs benutzerdefiniertes Feld Slot 3';
+$string['evasyscustomfield3_desc'] = 'Benutzerdefiniertes Buchungsoptionsfeld auswählen als EvaSys Kurs benutzerdefiniertes Feld';
+$string['evasyscustomfield4'] = 'EvaSys Kurs benutzerdefiniertes Feld Slot 4';
+$string['evasyscustomfield4_desc'] = 'Benutzerdefiniertes Buchungsoptionsfeld auswählen als EvaSys Kurs benutzerdefiniertes Feld';
+$string['evasyscustomfield5'] = 'EvaSys Kurs benutzerdefiniertes Feld Slot 5';
+$string['evasyscustomfield5_desc'] = 'Daten der zusätzliche Trainer:innen auswählen als EvaSys Kurs benutzerdefiniertes Feld';
+$string['evasysevaluationendtime'] = 'Ende des Evaluierungszeitraums';
+$string['evasysevaluationstarttime'] = 'Beginn des Evaluierungszeitraums';
 $string['evasysheader'] = 'EvaSys';
 $string['evasyslinkforqr'] = 'Link zum QR-Code der EvaSys Umfrage';
 $string['evasysnotreachable'] = 'Der EvaSys-Server ist nicht erreichbar.';
@@ -62,9 +76,9 @@ $string['questionaire_help'] = 'Mehr Infos zu den Formularen finden Sie <a href=
 $string['rolereportrecipients'] = 'Rolleneinschränkung für weitere Berichtsempfänger:innen';
 $string['rolereportrecipients_desc'] = 'Definieren Sie die Rolleneinschränkung für weitere Berichtsempfänger:innen.';
 $string['rulechoosemode'] = 'Aktivierungszeitpunkt: ';
-$string['ruleevasysevaluationtime'] = 'EvaSys Evaluationszeit';
-$string['ruleevasysevaluationtime_desc'] = 'Wählen Sie, ob die Regel bei der Startzeit oder der Endzeit der Buchungsoption ausgelöst werden soll.';
-$string['selectorganizersinbo'] = 'Wähle Weitere Berichtsempfänger:innen';
+$string['ruleevasysevaluationtime'] = 'EvaSys Regel für Teilnehmer:innen';
+$string['ruleevasysevaluationtime_desc'] = 'Wählen Sie, ob die Regel bei der Startzeit oder der Endzeit der Evaluation ausgelöst werden soll.';
+$string['selectorganizersinbo'] = 'Wähle EvaSys weitere Berichtsempfänger:innen';
 $string['setcourseendtime'] = 'Bei Auswahl dieses Zeitmodus muss ein Kursende festgelegt werden, das in der Zukunft liegt.';
 $string['timemode'] = 'Auswahl des Evaluierungszeitraums';
 $string['timemodeduration'] = 'Evaluierungszeitraum anhand der Kursendzeit definieren';

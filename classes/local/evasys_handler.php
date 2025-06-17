@@ -393,47 +393,65 @@ class evasys_handler {
         $userfieldvalue = array_shift($teachers)->profile[$userfieldshortname];
         // Set User ID for Course.
         $internalid = end(explode(',', $userfieldvalue));
-        // Make JSON for Customfields.
-        $organumbers = [];
+        // Make JSON for Customfields. 1-4 are bookingoption customfields, 5 is secondary teachers details.
+
+        $count = 1;
+        $customfieldvaluescollected = [];
+        $aggregatedcustomfields = [
+            get_config('evasyscustomfield1', 'bookingextension_evasys'),
+            get_config('evasyscustomfield2', 'bookingextension_evasys'),
+            get_config('evasyscustomfield3', 'bookingextension_evasys'),
+            get_config('evasyscustomfield4', 'bookingextension_evasys'),
+         ];
+        foreach ($aggregatedcustomfields as $customfield) {
+            $customfieldvalues = $settings->customfields[$customfield] ?? [];
+            $valuescollected = [];
+
+            foreach ($customfieldvalues as $value) {
+                $valuescollected[] = $value;
+            }
+            $customfieldvaluescollected[$count] = implode(',', $valuescollected);
+            $count++;
+        }
+
         $teachernames = [];
         foreach ($teachers as $teacher) {
             $names = $teacher->firstname . ' ' . $teacher->lastname;
             $teachernames[] = $names;
-            $organumber = $teacher->profile['organumber'];
-            $organumbers[] = $organumber;
         }
-        $teachersforcustomfield = implode(',', $teachernames);
-        $organumbersforcustomfield = implode(';', $organumbers);
+         $customfield5 = implode(',', $teachernames);
+         $settings = singleton_service::get_instance_of_booking_option_settings($option->id);
+
 
         // The Keys are set in Evasys we need all organisations in 1 and all teachers in 5.
 
-        $coursecustomfield = [
-                '1' => "$organumbersforcustomfield",
-                '2' => '',
-                '3' => '',
-                '4' => '',
-                '5' => "$teachersforcustomfield",
-        ];
-        $customfields = json_encode($coursecustomfield, JSON_UNESCAPED_UNICODE);
+         $coursecustomfield = [
+                '1' => $customfieldvaluescollected[1],
+                '2' => $customfieldvaluescollected[2],
+                '3' => $customfieldvaluescollected[3],
+                '4' => $customfieldvaluescollected[4],
+                '5' => $customfield5,
+         ];
+         $customfields = json_encode($coursecustomfield, JSON_UNESCAPED_UNICODE);
         // Merge the rest of the teachers with recipients so they get an Evasys Report.
-        $secondaryinstructors = array_merge($teachers ?? [], $recipients ?? []);
-        $secondaryinstructorsinsert = $helper->set_secondaryinstructors_for_save($secondaryinstructors);
-        if (!empty($data->evasysperiods)) {
-            $perioddata = explode('-', $data->evasysperiods);
-            $periodid = reset($perioddata);
-        } else {
-            $periodid = get_config('bookingextension_evasys', 'evasysperiods');
-        }
-        $helper = new evasys_helper_service();
-        $coursedata = $helper->set_args_insert_course(
-            $option->text,
-            $option->id,
-            $internalid,
-            $periodid,
-            $secondaryinstructorsinsert,
-            $customfields,
-            $courseid,
-        );
+         $secondaryinstructors = array_merge($teachers ?? [], $recipients ?? []);
+         $secondaryinstructorsinsert = $helper->set_secondaryinstructors_for_save($secondaryinstructors);
+         if (!empty($data->evasysperiods)) {
+             $perioddata = explode('-', $data->evasysperiods);
+             $periodid = reset($perioddata);
+         } else {
+             $periodid = get_config('bookingextension_evasys', 'evasysperiods');
+         }
+         $helper = new evasys_helper_service();
+         $coursedata = $helper->set_args_insert_course(
+             $option->text,
+             $option->id,
+             $internalid,
+             $periodid,
+             $secondaryinstructorsinsert,
+             $customfields,
+             $courseid,
+         );
         return $coursedata;
     }
 
