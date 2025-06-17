@@ -106,9 +106,9 @@ class evasys extends bookingextension implements bookingextension_interface {
         ) {
                 $data = [
                     'key' => 'evasys_qr',
-                    'value' => '<img src="' . s($settings->subpluginssettings['evasys']->pollurl) . '" alt="' . get_string('evasys_qrcode', 'bookingextension_evasys') . '">',
+                    'value' => '<img src="' . s($settings->subpluginssettings['evasys']->pollurl) . '" alt="' . get_string('evasysqrcode', 'bookingextension_evasys') . '">',
                     'label' => 'evasys_qr_class',
-                    'description' => get_string('evasys_qrcode', 'bookingextension_evasys'),
+                    'description' => get_string('evasysqrcode', 'bookingextension_evasys'),
                 ];
                 $templatedata = [$data];
         }

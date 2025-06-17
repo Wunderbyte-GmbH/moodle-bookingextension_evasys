@@ -22,13 +22,14 @@
  * @author      Bernhard Fischer-Sengseis
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+$string['conditionselectorganizersinbo_desc'] = 'Select Additional report recipients from a Bookingoption';
 $string['confirmdelete'] = 'Confirm deletion';
 $string['datepast'] = 'The start time of the evaluation cannot be in the past.';
 $string['delete'] = 'Do you want to delete all data for the evaluation in EvaSys?';
 $string['evaluationdurationafterend'] = 'End (hours after course end)';
 $string['evaluationdurationbeforestart'] = 'Start (hours before course end)';
-$string['evasysevaluationendtime'] = 'End of evaluation period';
-$string['evasysevaluationstarttime'] = 'Start of evaluation period';
+$string['evaluationendtime'] = 'End of evaluation period';
+$string['evaluationstarttime'] = 'Start of evaluation period';
 $string['evasys'] = 'EvaSys';
 $string['evasysbaseurl'] = 'Base URL for EvaSys connection';
 $string['evasysbaseurl_desc'] = 'This URL is used to connect to EvaSys.';
@@ -64,6 +65,7 @@ $string['rolereportrecipients_desc'] = 'Define the role restriction for addition
 $string['rulechoosemode'] = 'Activate on: ';
 $string['ruleevasysevaluationtime'] = 'EvaSys Evaluation Time Rule';
 $string['ruleevasysevaluationtime_desc'] = 'Choose whether the rule should be triggered at the start time or the end time of the booking option.';
+$string['selectorganizersinbo'] = 'Choose Additional report recipients from a Bookingoption';
 $string['setcourseendtime'] = 'When using this time mode, a course end time in the future must be set.';
 $string['timemode'] = 'Time mode';
 $string['timemodeduration'] = 'Define evaluation period based on course end time';

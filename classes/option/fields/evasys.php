@@ -286,6 +286,7 @@ class evasys extends field_base {
         $mform->setDefault('evasys_timemode', 0);
 
         $beforestartoptions = [
+            -172800 => "48",
             - 86400 => "24",
             -7200 => "2",
             -3600 => "1",
@@ -304,7 +305,8 @@ class evasys extends field_base {
             7200 => "2",
             86400 => "24",
             172800 => "48",
-            604800 => "168",
+            259200 => "72",
+            345600 => "96",
             1209600 => "336",
         ];
 
@@ -327,7 +329,7 @@ class evasys extends field_base {
         $mform->addElement(
             'date_time_selector',
             'evasys_endtime',
-            get_string('evaluationendtime', 'bookingextension_evasys')
+            get_string('evaluationstarttime', 'bookingextension_evasys')
         );
         $endtimestamp = strtotime('+2 days');
         $mform->setDefault('evasys_endtime', $endtimestamp);
@@ -471,6 +473,9 @@ class evasys extends field_base {
      * @throws \dml_exception
      */
     public static function save_data(object &$formdata, object &$option) {
+        if (empty($formdata->evasys_form)) {
+            return;
+        }
         $evasys = new evasys_handler();
         $evasys->save_form($formdata, $option);
         if (empty($formdata->teachersforoption)) {
@@ -500,7 +505,7 @@ class evasys extends field_base {
         }
         $helper = new evasys_helper_service();
         $evasys = new evasys_handler();
-        if (empty($data->evasys_courseidexternal)) {
+        if (empty($data->evasys_courseidexternal) && !empty($data->evasys_form)) {
             $coursedata = $evasys->aggregate_data_for_course_save($data, $newoption);
             $courseresponse = $evasys->save_course($data, $coursedata);
             $argssurvey = $helper->set_args_insert_survey(

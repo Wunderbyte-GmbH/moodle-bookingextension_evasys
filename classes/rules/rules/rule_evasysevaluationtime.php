@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace bookingextension_evasys\rules;
+namespace bookingextension_evasys\rules\rules;
 
 use context;
 use mod_booking\booking_rules\actions_info;
@@ -313,7 +313,7 @@ class rule_evasysevaluationtime implements booking_rule {
         $sql->where .= !$testmode ? " >= ( :nowparam - 3600)" : " IS NOT NULL ";
 
         // Make sure, cancelled options aren't fetched.
-        $sql->where .= " AND bo.status < 1 ";
+        $sql->where .= " AND bo.status < 1 AND bee.notifyparticipants > 0";
 
         $sql->from = "{booking_options} bo
                     JOIN {course_modules} cm
