@@ -23,14 +23,14 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/mod/booking/lib.php');
 
 /**
- * Resolves Placeholder for Endtime of the Evaluation.
+ * Resolves Placeholder to QR- Code.
  *
  * @package bookingextension_evasys
  * @author David Ala
  * @copyright 2025 Wunderbyte GmbH
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class evasys_evaluation_endtime {
+class evasysqrcode {
     /**
      * Function which takes a text, replaces the placeholders...
      * ... and returns the text with the correct values.
@@ -60,11 +60,11 @@ class evasys_evaluation_endtime {
     ) {
         global $DB;
 
-        $record = $DB->get_record('bookingextension_evasys', ['optionid' => $optionid], 'endtime');
+        $record = $DB->get_record('bookingextension_evasys', ['optionid' => $optionid], 'pollurl');
         if (!$record) {
             return "";
         }
-        return date('d.m.y H:i', $record->endtime);
+        return html_writer::img($record->pollurl, get_string('evasysqrcode', 'bookingextension_evasys'), ['class' => 'evasys_qrcode']);
     }
 
     /**

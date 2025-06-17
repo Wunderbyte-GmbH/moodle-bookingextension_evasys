@@ -27,11 +27,9 @@ $string['datepast'] = 'The start time of the evaluation cannot be in the past.';
 $string['delete'] = 'Do you want to delete all data for the evaluation in EvaSys?';
 $string['evaluationdurationafterend'] = 'End (hours after course end)';
 $string['evaluationdurationbeforestart'] = 'Start (hours before course end)';
-$string['evasys_evaluationendtime'] = 'End of evaluation period';
-$string['evasys_evaluationstarttime'] = 'Start of evaluation period';
+$string['evasysevaluationendtime'] = 'End of evaluation period';
+$string['evasysevaluationstarttime'] = 'Start of evaluation period';
 $string['evasys'] = 'EvaSys';
-$string['evasys_linkforqr'] = 'Link to the EvaSys survey QR code';
-$string['evasys_qrcode'] = 'EvaSys Survey QR code';
 $string['evasysbaseurl'] = 'Base URL for EvaSys connection';
 $string['evasysbaseurl_desc'] = 'This URL is used to connect to EvaSys.';
 $string['evasyscategoryfieldoption'] = 'Custom field for EvaSys course ID';
@@ -39,11 +37,13 @@ $string['evasyscategoryfieldoption_desc'] = 'Select the custom field where the E
 $string['evasyscategoryfielduser'] = 'User profile field for EvaSys ID';
 $string['evasyscategoryfielduser_desc'] = 'Select the user profile field where the EvaSys ID is stored for each user.';
 $string['evasysheader'] = 'EvaSys';
+$string['evasyslinkforqr'] = 'Link to the EvaSys survey QR code';
 $string['evasysnotreachable'] = 'The EvaSys server is not reachable.';
 $string['evasyspassword'] = 'Password';
 $string['evasyspassword_desc'] = 'Password for the EvaSys connection';
 $string['evasysperiods'] = 'Periods';
 $string['evasysperiods_desc'] = 'Select the periods used for EvaSys.';
+$string['evasysqrcode'] = 'EvaSys Survey QR code';
 $string['evasyssettings'] = 'EvaSys <span class="badge bg-success text-light"><i class="fa fa-cogs" aria-hidden="true"></i> PRO</span>';
 $string['evasyssettings_desc'] = 'Settings for EvaSys';
 $string['evasyssettingswarning'] = '<div class="alert alert-danger" role="alert">Connection to EvaSys could not be established. Please check your username and password.</div>';
@@ -70,3 +70,4 @@ $string['timemodeduration'] = 'Define evaluation period based on course end time
 $string['timemodestart'] = 'Define evaluation period using fixed start and end dates';
 $string['useevasys'] = 'Use EvaSys evaluation';
 $string['useevasys_desc'] = 'Select the user profile field that stores the EvaSys ID for each user.';
+
