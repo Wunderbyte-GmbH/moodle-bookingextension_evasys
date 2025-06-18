@@ -171,13 +171,13 @@ class evasys extends field_base {
         if (
             !empty($formdata['evasys_form'])
             && empty($formdata['evasys_timemode'])
-            && empty($formdata['courseendtime_1'])
+            && empty($settings->courseendtime)
         ) {
             $errors['evasys_timemode'] = get_string('setcourseendtime', 'bookingextension_evasys');
         }
         if (
             !empty($formdata['evasys_form'])
-            && (int) $formdata['evasys_starttime'] < $now
+            && (int) $formdata['evasys_endtime'] < $now
         ) {
             $errors['evasys_timemode'] = get_string('datepast', 'bookingextension_evasys');
         }
@@ -543,14 +543,15 @@ class evasys extends field_base {
             }
             // Checks if the survey and therefore the course needs to be updated.
             if (!$updatesurvey) {
-                foreach ($changes["mod_booking\\option\\fields\\evasys"]['changes'] as $key => $value) {
+                foreach ($changes["bookingextension_evasys\\option\\fields\\evasys"]['changes'] as $key => $value) {
                     if (in_array($key, self::$relevantkeyssurvey, true)) {
                         $updatesurvey = true;
                     }
                 }
             // Checks for the only key where only the course needs to be updated.
                 if (
-                    !$updatesurvey && isset($changes["mod_booking\\option\\fields\\evasys"]['changes'][self::$relevantkeyscourse])
+                    !$updatesurvey
+                    && isset($changes["bookingextension_evasys\\option\\fields\\evasys"]['changes'][self::$relevantkeyscourse])
                 ) {
                     $updatecourse = true;
                 }
