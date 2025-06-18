@@ -137,6 +137,37 @@ class evasys extends bookingextension implements bookingextension_interface {
     }
 
     /**
+     * Adds Downloadbutton for EvasysQrCode to Option.
+     *
+     * @param object $settings
+     * @param bool|object $context
+     *
+     * @return string
+     *
+     */
+    public static function add_options_to_col_actions(object $settings, bool|object $context): string {
+        $option = "";
+        if (
+            (
+            has_capability('mod/booking:updatebooking', $context)
+            || ((has_capability('mod/booking:addeditownoption', $context)))
+            )
+            && isset($settings->subpluginssettings['evasys']->pollurl)
+        ) {
+            $url = $settings->subpluginssettings['evasys']->pollurl;
+            $filename = "qr-code{$settings->subpluginssettings['evasys']->courseidexternal}.png";
+            $option = '<a href="' . $url . '" download="' . $filename . '" class="dropdown-item d-flex align-items-center">
+            <i class="icon fa fa-qrcode fa-fw mr-2" aria-hidden="true""
+                aria-label="' . get_string('evasysqrcode', 'bookingextension_evasys') . '"
+                title="' . get_string('evasysqrcode', 'bookingextension_evasys') . '">
+            </i>
+            ' . get_string('evasysqrcode', 'bookingextension_evasys') . '
+        </a>';
+        }
+        return $option;
+    }
+
+    /**
      * Loads plugin settings to the settings tree.
      *
      * @param \part_of_admin_tree $adminroot
