@@ -398,30 +398,33 @@ class evasys_handler {
         $count = 1;
         $customfieldvaluescollected = [];
         $aggregatedcustomfields = [
-            get_config('evasyscustomfield1', 'bookingextension_evasys'),
-            get_config('evasyscustomfield2', 'bookingextension_evasys'),
-            get_config('evasyscustomfield3', 'bookingextension_evasys'),
-            get_config('evasyscustomfield4', 'bookingextension_evasys'),
+            get_config('bookingextension_evasys', 'evasyscustomfield1'),
+            get_config('bookingextension_evasys', 'evasyscustomfield2'),
+            get_config('bookingextension_evasys', 'evasyscustomfield3'),
+            get_config('bookingextension_evasys', 'evasyscustomfield4'),
          ];
+        $settings = singleton_service::get_instance_of_booking_option_settings($option->id);
         foreach ($aggregatedcustomfields as $customfield) {
             $customfieldvalues = $settings->customfields[$customfield] ?? [];
             $valuescollected = [];
-
             foreach ($customfieldvalues as $value) {
                 $valuescollected[] = $value;
             }
             $customfieldvaluescollected[$count] = implode(',', $valuescollected);
             $count++;
         }
-
-        $teachernames = [];
-        foreach ($teachers as $teacher) {
-            $names = $teacher->firstname . ' ' . $teacher->lastname;
-            $teachernames[] = $names;
+        switch (get_config('bookingextension_evasys', 'evasyscustomfield5')) {
+            case 'fullname':
+                 $teachernames = [];
+                foreach ($teachers as $teacher) {
+                    $names = $teacher->firstname . ' ' . $teacher->lastname;
+                    $teachernames[] = $names;
+                }
+                $customfield5 = implode(',', $teachernames);
+                break;
+            default:
+                $customfield5 = "";
         }
-         $customfield5 = implode(',', $teachernames);
-         $settings = singleton_service::get_instance_of_booking_option_settings($option->id);
-
 
         // The Keys are set in Evasys we need all organisations in 1 and all teachers in 5.
 

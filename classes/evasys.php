@@ -114,7 +114,8 @@ class evasys extends bookingextension implements bookingextension_interface {
             }
                 $data = [
                     'key' => 'evasys_qr',
-                    'value' => '<img src="' . s($settings->subpluginssettings['evasys']->pollurl) . '" alt="' . get_string('evasysqrcode', 'bookingextension_evasys') . '">',
+                    'value' => '<img src="' . s($settings->subpluginssettings['evasys']->pollurl)
+                        . '" alt="' . get_string('evasysqrcode', 'bookingextension_evasys') . '">',
                     'label' => 'evasys_qr_class',
                     'description' => get_string('evasysqrcode', 'bookingextension_evasys'),
                 ];
@@ -238,11 +239,10 @@ class evasys extends bookingextension implements bookingextension_interface {
             )
         );
         $customfields = booking_handler::get_customfields();
-        $customfieldshortnames = ['' => ' '];
+        $customfieldshortnames = ['' => ''];
         if (!empty($customfields)) {
-            $customfieldshortnames = [];
             foreach ($customfields as $cf) {
-                $customfieldshortnames[$cf->shortname] = "$cf->name ($cf->shortname)";
+                $customfieldshortnames[$cf->shortname] = format_string("$cf->name ($cf->shortname)");
             }
         }
         $evasyssettings->add(
@@ -281,7 +281,10 @@ class evasys extends bookingextension implements bookingextension_interface {
                 $customfieldshortnames
             )
         );
-         $customoptions = ['' => ""];
+        $customoptions = [
+            '' => "",
+            'fullname' => get_string('fullname', 'mod_booking'),
+        ];
          $evasyssettings->add(
              new admin_setting_configselect(
                  'bookingextension_evasys/evasyscustomfield5',
