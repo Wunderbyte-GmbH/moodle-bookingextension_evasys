@@ -74,10 +74,10 @@ class evasys_helper_service {
     }
 
     /**
-     * Maps DB of Form to DB for saving.
+     * Maps DB of Form.
      *
-     * @param stdClass $formdata
-     * @param stdClass $option
+     * @param object $formdata
+     * @param object $option
      *
      * @return object
      *
@@ -114,15 +114,15 @@ class evasys_helper_service {
     }
 
     /**
-     * Maps Data of DB record to Formdata.
+     * Maps recorddata to form.
      *
-     * @param /stdClass $data
-     * @param /stdClass $record
+     * @param object $data
+     * @param object $record
      *
      * @return void
      *
      */
-    public function map_record_to_form(&$data, $record) {
+    public function map_record_to_form(object &$data, object $record) {
         $data->evasys_form = $record->formid;
         $data->evasys_evaluation_starttime = $record->starttime;
         $data->evasys_evaluation_endtime = $record->endtime;
@@ -153,7 +153,7 @@ class evasys_helper_service {
      * @return array
      *
      */
-    public function transform_return_to_array($list, $key, $value) {
+    public function transform_return_to_array(array $list, string $key, string $value) {
         $array = [];
         foreach ($list as $element) {
             $array[$element->$key] = $element->$value;
@@ -176,7 +176,15 @@ class evasys_helper_service {
      * @return object
      *
      */
-    public function set_args_insert_course($title, $optionid, $internalid, $periodid, $secondaryinstructors, $customfield, $courseid = null) {
+    public function set_args_insert_course(
+        string $title,
+        int $optionid,
+        int $internalid,
+        int $periodid,
+        array $secondaryinstructors,
+        string $customfield,
+        $courseid = null
+    ) {
         $subunitencoded = get_config('bookingextension_evasys', 'evasyssubunits');
         $array = explode('-', $subunitencoded);
         $subunitname = base64_decode(end($array));
@@ -216,7 +224,14 @@ class evasys_helper_service {
      * @return object
      *
      */
-    public function set_args_insert_user($userid, $firstname, $lastname, $adress, $email, $phone) {
+    public function set_args_insert_user(
+        int $userid,
+        string $firstname,
+        string $lastname,
+        string $adress,
+        string $email,
+        int $phone
+    ) {
         $subunitencoded = get_config('bookingextension_evasys', 'evasyssubunits');
         $array = explode('-', $subunitencoded);
         $subunitname = base64_decode(end($array));
@@ -254,7 +269,7 @@ class evasys_helper_service {
      * @return array
      *
      */
-    public function set_args_insert_survey($userid, $internalcourseid, $formid, $periodid) {
+    public function set_args_insert_survey(int $userid, int $internalcourseid, int $formid, int $periodid) {
         $survey = [
             'nUserId' => $userid,
             'nCourseId' => $internalcourseid,
@@ -272,7 +287,7 @@ class evasys_helper_service {
      * @return array
      *
      */
-    public function set_args_delete_survey($surveyid) {
+    public function set_args_delete_survey(int $surveyid) {
         $survey = [
             'SurveyId' => $surveyid,
             'IgnoreTwoStepDelete' => false,
@@ -303,7 +318,7 @@ class evasys_helper_service {
      * @return array
      *
      */
-    public function set_args_get_qrcode($surveyid) {
+    public function set_args_get_qrcode(int $surveyid) {
         $survey = [
             'SurveyId' => $surveyid,
         ];
@@ -343,6 +358,35 @@ class evasys_helper_service {
                 'UsageRestrictionList' => [
                         'Subunits' => (int) $subunitid,
                 ],
+        ];
+        return $args;
+    }
+    /**
+     * Helperfunction to set Args for openeing survey.
+     *
+     * @param int $surveyid
+     *
+     * @return array
+     *
+     */
+    public function set_args_open_survey(int $surveyid) {
+        $args = [
+            'nSurveyId' => $surveyid,
+        ];
+        return $args;
+    }
+    /**
+     * Helperfunction to set Args for closing survey.
+     *
+     * @param int $surveyid
+     *
+     * @return array
+     *
+     */
+    public function set_args_close_survey(int $surveyid) {
+        $args = [
+            'nSurveyId' => $surveyid,
+            'bSendReportToInstructor' => false,
         ];
         return $args;
     }

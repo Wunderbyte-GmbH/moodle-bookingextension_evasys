@@ -79,6 +79,7 @@ $string['rulechoosemode'] = 'Aktivierungszeitpunkt: ';
 $string['ruleevasysevaluationtime'] = 'EvaSys Regel für Teilnehmer:innen';
 $string['ruleevasysevaluationtime_desc'] = 'Wählen Sie, ob die Regel bei der Startzeit oder der Endzeit der Evaluation ausgelöst werden soll.';
 $string['selectorganizersinbo'] = 'Wähle EvaSys weitere Berichtsempfänger:innen';
+$string['sendtoapi'] = 'bookingextension_evays: send to api (adhoc task)';
 $string['setcourseendtime'] = 'Bei Auswahl dieses Zeitmodus muss ein Kursende festgelegt werden, das in der Zukunft liegt.';
 $string['timemode'] = 'Auswahl des Evaluierungszeitraums';
 $string['timemodeduration'] = 'Evaluierungszeitraum anhand der Kursendzeit definieren';

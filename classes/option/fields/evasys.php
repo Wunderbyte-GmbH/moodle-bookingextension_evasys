@@ -25,9 +25,9 @@
 
  namespace bookingextension_evasys\option\fields;
 
+ use bookingextension_evasys\task\evasys_send_to_api;
  use mod_booking\booking_option_settings;
  use bookingextension_evasys\local\evasys_handler;
- use bookingextension_evasys\local\evasys_helper_service;
  use mod_booking\option\field_base;
  use mod_booking\singleton_service;
  use MoodleQuickForm;
@@ -163,7 +163,7 @@ class evasys extends field_base {
         $now = time();
         if (
             empty($formdata['evasys_form'])
-            && !empty($settings->evasys->formid)
+            && !empty($settings->subpluginssettings['evasys']->formid)
             && empty($formdata['evasys_confirmdelete'])
         ) {
                 $errors['evasys_confirmdelete'] = get_string('delete', 'bookingextension_evasys');
@@ -382,7 +382,7 @@ class evasys extends field_base {
         $mform->addElement(
             'hidden',
             'evasys_courseidexternal',
-            0
+            ''
         );
         $mform->setType('evasys_courseidexternal', PARAM_TEXT);
 
@@ -499,69 +499,31 @@ class evasys extends field_base {
         object $newoption,
         object $originaloption
     ) {
-        global $DB;
-        if (empty($data->teachersforoption)) {
-            return;
-        }
-        $helper = new evasys_helper_service();
-        $evasys = new evasys_handler();
-        if (empty($data->evasys_courseidexternal) && !empty($data->evasys_form)) {
-            $coursedata = $evasys->aggregate_data_for_course_save($data, $newoption);
-            $courseresponse = $evasys->save_course($data, $coursedata);
-            $argssurvey = $helper->set_args_insert_survey(
-                $courseresponse->m_nUserId,
-                $courseresponse->m_nCourseId,
-                $data->evasys_form,
-                $courseresponse->m_nPeriodId,
-            );
-            $evasys->create_survey($argssurvey, $data, $newoption);
-        } else {
-            $now = time();
-            if ($now > (int)$data->evasys_starttime) {
-                return;
-            }
-            if (!empty($data->evasys_confirmdelete)) {
-                    // Delete Survey.
-                    $helper = new evasys_helper_service();
-                    $argssurvey = $helper->set_args_delete_survey($data->evasys_surveyid);
-                    $evasys->delete_survey($argssurvey);
-
-                    // Delete Course.
-                    $argscourse = $helper->set_args_delete_course($data->evasys_courseidinternal);
-                    $evasys->delete_course($argscourse, ['id' => $data->evasys_booking_id]);
-                    return;
-            }
-            $updatesurvey = false;
-            $updatecourse = false;
-            if (
-                !empty($changes["mod_booking\\option\\fields\\teachers"]) || !empty($changes["mod_booking\\option\\fields\\text"])
-            ) {
-                $updatesurvey = true;
-            }
-            // Checks if the survey and therefore the course needs to be updated.
-            if (!$updatesurvey) {
-                foreach ($changes["bookingextension_evasys\\option\\fields\\evasys"]['changes'] as $key => $value) {
-                    if (in_array($key, self::$relevantkeyssurvey, true)) {
-                        $updatesurvey = true;
-                    }
-                }
-            // Checks for the only key where only the course needs to be updated.
-                if (
-                    !$updatesurvey
-                    && isset($changes["bookingextension_evasys\\option\\fields\\evasys"]['changes'][self::$relevantkeyscourse])
-                ) {
-                    $updatecourse = true;
-                }
-            }
-            if ($updatesurvey) {
-                $evasys = new evasys_handler();
-                $surveyid = $data->evasys_surveyid;
-                $evasys->update_survey($surveyid, $data, $newoption);
-            }
-            if ($updatecourse) {
-                $coursedata = $evasys->aggregate_data_for_course_save($data, $newoption, $data->evasys_booking_id);
-                $evasys->update_course($coursedata);
-            }
-        }
+        $relevantdata = new stdClass();
+        $relevantdata->evasys_form = $data->evasys_form;
+        $relevantdata->evasys_surveyid = $data->evasys_surveyid;
+        $relevantdata->evasys_courseidinternal = $data->evasys_courseidinternal;
+        $relevantdata->evasys_booking_id = $data->evasys_booking_id;
+        $relevantdata->teachersforoption = $data->teachersforoption;
+        $relevantdata->evasys_other_report_recipients = $data->evasys_other_report_recipients;
+        $relevantdata->evasys_starttime = $data->evasys_starttime;
+        $relevantdata->evasys_confirmdelete = $data->evasys_confirmdelete;
+        $relevantoptiondata = new stdClass();
+        $relevantoptiondata->id = $newoption->id;
+        $relevantoptiondata->text = $newoption->text;
+        $task = new evasys_send_to_api();
+        $taskdata = [
+            'teacherchanges' => $changes["mod_booking\\option\\fields\\teachers"],
+            'namechanges' => $changes["mod_booking\\option\\fields\\text"],
+            'relevantchanges' => $changes["bookingextension_evasys\\option\\fields\\evasys"]['changes'],
+            'newoption' => $relevantoptiondata,
+            'relevantkeyssurvey' => self::$relevantkeyssurvey,
+            'relevantkeyscourse' => self::$relevantkeyscourse,
+            'recipients' => $data->evasys_other_report_recipients,
+            'data' => $relevantdata,
+        ];
+        $task->set_custom_data($taskdata);
+        // Now queue the task or reschedule it if it already exists (with matching data).
+        \core\task\manager::reschedule_or_queue_adhoc_task($task);
     }
 }

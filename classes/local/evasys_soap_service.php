@@ -95,7 +95,7 @@ class evasys_soap_service extends SoapClient {
     /**
      * Fetches subunits from Evasys.
      *
-     * @return mixed
+     * @return object|null
      *
      */
     public function fetch_subunits() {
@@ -109,7 +109,7 @@ class evasys_soap_service extends SoapClient {
     /**
      * Fetches periods from Evasys.
      *
-     * @return mixed
+     * @return object|null
      *
      */
     public function fetch_periods() {
@@ -124,14 +124,14 @@ class evasys_soap_service extends SoapClient {
     /**
      * Get a Period by ID from Evasys.
      *
-     * @param array $perioddata
+     * @param array $args
      *
-     * @return mixed
+     * @return object|null
      *
      */
-    public function get_period($perioddata) {
+    public function get_period(array $args) {
         try {
-            $response = $this->__soapCall('GetPeriod', $perioddata);
+            $response = $this->__soapCall('GetPeriod', $args);
             return $response;
         } catch (SoapFault $e) {
             return null;
@@ -143,10 +143,10 @@ class evasys_soap_service extends SoapClient {
      *
      * @param array $args
      *
-     * @return mixed
+     * @return object|null
      *
      */
-    public function fetch_forms($args) {
+    public function fetch_forms(array $args) {
         try {
             $response = $this->__soapCall('GetAllForms', $args);
             return $response;
@@ -160,10 +160,10 @@ class evasys_soap_service extends SoapClient {
      *
      * @param array $args
      *
-     * @return mixed
+     * @return object|null
      *
      */
-    public function get_form($args) {
+    public function get_form(array $args) {
         try {
             $response = $this->__soapCall('GetForm', $args);
             return $response;
@@ -175,14 +175,14 @@ class evasys_soap_service extends SoapClient {
    /**
     * Inserts User to Evays.
     *
-    * @param array $user
+    * @param object $args
     *
-    * @return mixed
+    * @return object|null
     *
     */
-    public function insert_user($userdata) {
+    public function insert_user(array $args) {
         try {
-            $response = $this->__soapCall('InsertUser', ['user' => $userdata ]);
+            $response = $this->__soapCall('InsertUser', ['user' => $args]);
             return $response;
         } catch (SoapFault $e) {
             return null;
@@ -192,14 +192,14 @@ class evasys_soap_service extends SoapClient {
     /**
      * Insert Course to Evasys.
      *
-     * @param array $coursedata
+     * @param object $args
      *
-     * @return mixed
+     * @return object|null
      *
      */
-    public function insert_course($coursedata) {
+    public function insert_course(object $args) {
         try {
-            $response = $this->__soapCall('InsertCourse', ['course' => $coursedata ]);
+            $response = $this->__soapCall('InsertCourse', ['course' => $args]);
             return $response;
         } catch (SoapFault $e) {
             return null;
@@ -209,14 +209,14 @@ class evasys_soap_service extends SoapClient {
     /**
      * Updates the Course to Evasys.
      *
-     * @param object $coursedata
+     * @param object $args
      *
-     * @return mixed
+     * @return object|null
      *
      */
-    public function update_course($coursedata) {
+    public function update_course(object $args) {
         try {
-            $response = $this->__soapCall('UpdateCourse', ['course' => $coursedata ]);
+            $response = $this->__soapCall('UpdateCourse', ['course' => $args]);
             return $response;
         } catch (SoapFault $e) {
             return null;
@@ -226,14 +226,14 @@ class evasys_soap_service extends SoapClient {
     /**
      * Deletes Course in Evasys.
      *
-     * @param array $course
+     * @param array $args
      *
      * @return boolean
      *
      */
-    public function delete_course($course) {
+    public function delete_course(array $args) {
         try {
-            $response = $this->__soapCall('DeleteCourse', $course);
+            $response = $this->__soapCall('DeleteCourse', $args);
             return $response;
         } catch (SoapFault $e) {
             return false;
@@ -243,17 +243,16 @@ class evasys_soap_service extends SoapClient {
     /**
      * Insert Survey to Evasys.
      *
-     * @param array $surveydata
+     * @param array $args
      *
-     * @return mixed
+     * @return object|null
      *
      */
-    public function insert_survey($surveydata) {
+    public function insert_survey(array $args) {
         try {
-            $response = $this->__soapCall('InsertCentralSurvey', $surveydata);
+            $response = $this->__soapCall('InsertCentralSurvey', $args);
             return $response;
         } catch (SoapFault $e) {
-            $this->__getLastRequest();
             return null;
         }
     }
@@ -261,14 +260,14 @@ class evasys_soap_service extends SoapClient {
     /**
      * Delete the survey in evasys.
      *
-     * @param array $survey
+     * @param array $args
      *
      * @return boolean
      *
      */
-    public function delete_survey($survey) {
+    public function delete_survey(array $args) {
         try {
-            $response = $this->__soapCall('DeleteSurvey', $survey);
+            $response = $this->__soapCall('DeleteSurvey', $args);
             return $response;
         } catch (SoapFault $e) {
             return false;
@@ -278,20 +277,52 @@ class evasys_soap_service extends SoapClient {
     /**
      * Get QR code from evasys.
      *
-     * @param array $survey
+     * @param array $args
      *
      * @return string
      *
      */
-    public function get_qr_code($survey) {
+    public function get_qr_code(array $args) {
         try {
-            $response = $this->__soapCall('GetOnlineQRCode', $survey);
+            $response = $this->__soapCall('GetOnlineQRCode', $args);
             return $response;
         } catch (SoapFault $e) {
             return "";
         }
     }
 
+    /**
+     * Opens Survey for Datacollection.
+     *
+     * @param mixed $args
+     *
+     * @return boolean
+     *
+     */
+    public function open_survey(array $args) {
+        try {
+            $response = $this->__soapCall('OpenSurvey', $args);
+            return $response;
+        } catch (SoapFault $e) {
+            return false;
+        }
+    }
+    /**
+     * Closes the Datacollection for the survey.
+     *
+     * @param array $args
+     *
+     * @return boolean
+     *
+     */
+    public function close_survey(array $args) {
+        try {
+            $response = $this->__soapCall('CloseSurvey', $args);
+            return $response;
+        } catch (SoapFault $e) {
+            return false;
+        }
+    }
     /**
      * Sets Soapheader for authentication.
      *
