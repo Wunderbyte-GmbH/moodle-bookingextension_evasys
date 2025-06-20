@@ -514,10 +514,7 @@ class evasys extends field_base {
                 $data->evasys_form,
                 $courseresponse->m_nPeriodId,
             );
-            $id = $data->evasys_booking_id;
-            $survey = $evasys->save_survey($argssurvey, $id);
-            $argsqr = $helper->set_args_get_qrcode($survey->m_nSurveyId);
-            $qrcode = $evasys->get_qrcode($id, $argsqr);
+            $evasys->create_survey($argssurvey, $data, $newoption);
         } else {
             $now = time();
             if ($now > (int)$data->evasys_starttime) {

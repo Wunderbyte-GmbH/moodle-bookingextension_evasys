@@ -25,9 +25,11 @@
 
 namespace bookingextension_evasys\local;
 
+use bookingextension_evasys\event\evasys_surveycreated;
 use cache;
 use context_course;
 use bookingextension_evasys\local\evasys_helper_service;
+use context_module;
 use mod_booking\singleton_service;
 use stdClass;
 defined('MOODLE_INTERNAL') || die();
@@ -272,7 +274,7 @@ class evasys_handler {
      * @return object
      *
      */
-    public function save_survey($args, $id) {
+    public function save_survey(array $args, int $id) {
         global $DB;
         $soap = new evasys_soap_service();
         $response = $soap->insert_survey($args);
@@ -294,7 +296,7 @@ class evasys_handler {
      * @return boolean
      *
      */
-    public function delete_survey($args) {
+    public function delete_survey(array $args) {
          $soap = new evasys_soap_service();
          $response = $soap->delete_survey($args);
          return $response;
@@ -310,7 +312,7 @@ class evasys_handler {
      * @return void
      *
      */
-    public function update_survey($surveyid, $data, $option) {
+    public function update_survey(int $surveyid, object $data, object $option) {
         global $DB;
         $soap = new evasys_soap_service();
         $helper = new evasys_helper_service();

@@ -64,7 +64,11 @@ class evasysqrcode {
         if (!$record) {
             return "";
         }
-        return html_writer::img($record->pollurl, get_string('evasysqrcode', 'bookingextension_evasys'), ['class' => 'evasys_qrcode']);
+        return html_writer::img(
+            $record->pollurl,
+            get_string('evasysqrcode', 'bookingextension_evasys'),
+            ['class' => 'evasys_qrcode']
+        );
     }
 
     /**

@@ -34,7 +34,6 @@ use admin_setting_heading;
 use admin_settingpage;
 use bookingextension_evasys\local\evasys_handler;
 use context_module;
-use context_system;
 use mod_booking\customfield\booking_handler;
 use mod_booking\plugininfo\bookingextension;
 use mod_booking\plugininfo\bookingextension_interface;
