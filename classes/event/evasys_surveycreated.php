@@ -24,6 +24,8 @@
 
 namespace bookingextension_evasys\event;
 
+use stdClass;
+
 
 /**
  * The evasys_surveycreated event class.
@@ -52,7 +54,7 @@ class evasys_surveycreated extends \core\event\base {
      *
      */
     public static function get_name() {
-        return get_string('presencechanged', 'bookingextension_evasys');
+        return get_string('evasyssurveycreated', 'bookingextension_evasys');
     }
 
     /**
@@ -63,21 +65,11 @@ class evasys_surveycreated extends \core\event\base {
      */
     public function get_description() {
         $data = (object) [
-            'optionid' => $this->optionid,
+            'context' => $this->context,
+            'objectid' => $this->objectid,
         ];
-        return "XXX";
-    }
-
-    /**
-     * Custom validation.
-     *
-     * @throws \coding_exception
-     * @return void
-     */
-    protected function validate_data() {
-        parent::validate_data();
-        if (!isset($this->other['optionid'])) {
-            throw new \coding_exception('The \'optionid\' value must be set in other.');
-        }
+        $a = new stdClass();
+        $a->optionid = $data->objectid;
+        return get_string('evasyssurveycreated_desc', 'bookingextension_evasys', $a);
     }
 }

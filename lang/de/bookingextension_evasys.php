@@ -61,6 +61,8 @@ $string['evasyssettings_desc'] = 'Einstellungen für EvaSys';
 $string['evasyssettingswarning'] = '<div class="alert alert-danger" role="alert">Verbindung zu EvaSys konnte nicht hergestellt werden. Überprüfen Sie Benutzername und Passwort.</div>';
 $string['evasyssubunits'] = 'Untereinheiten';
 $string['evasyssubunits_desc'] = 'Wählen Sie die Untereinheiten für die Evaluation aus.';
+$string['evasyssurveycreated'] = 'EvaSys Umfrage erstellt';
+$string['evasyssurveycreated_desc'] = 'Eine Umfrage für die Buchungsoption mit der ID: {$a->optionid} wurde erstellt';
 $string['evasysuser'] = 'Benutzername';
 $string['evasysuser_desc'] = 'Benutzername für die EvaSys-Verbindung';
 $string['fieldsvalidation'] = 'Nicht alle Pflichtfelder wurden ausgewählt.';

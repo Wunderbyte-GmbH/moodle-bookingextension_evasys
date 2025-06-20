@@ -26,7 +26,13 @@ namespace bookingextension_evasys;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class observer {
-    public static function survey_created {
+    /**
+     * Function that listens on survey created event.
+     *
+     * @return void
+     *
+     */
+    public static function survey_created() {
         return;
     }
 }

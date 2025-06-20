@@ -60,6 +60,8 @@ $string['evasyssettings_desc'] = 'Settings for EvaSys';
 $string['evasyssettingswarning'] = '<div class="alert alert-danger" role="alert">Connection to EvaSys could not be established. Please check your username and password.</div>';
 $string['evasyssubunits'] = 'Subunits';
 $string['evasyssubunits_desc'] = 'Select the subunits for the evaluation in EvaSys.';
+$string['evasyssurveycreated'] = 'EvaSys survey created';
+$string['evasyssurveycreated_desc'] = 'A survey has been generated for the booking option with the ID: {$a->optionid}';
 $string['evasysuser'] = 'Username';
 $string['evasysuser_desc'] = 'Username for the EvaSys connection';
 $string['fieldsvalidation'] = 'Not all required fields have been selected.';

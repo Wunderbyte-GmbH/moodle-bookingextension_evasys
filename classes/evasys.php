@@ -82,6 +82,17 @@ class evasys extends bookingextension implements bookingextension_interface {
     }
 
     /**
+     * Returns eventkeys that are allowed for the bookingrule.
+     *
+     * @return array
+     *
+     */
+    public static function get_allowedruleeventkeys(): array {
+        $allowedeventkeys = ['evasys_surveycreated'];
+        return $allowedeventkeys;
+    }
+
+    /**
      * Sets the Data for Optionview for the Bookingoption Description.
      *
      * @param object $settings

@@ -341,6 +341,39 @@ class evasys_handler {
             ];
             $DB->update_record('bookingextension_evasys', $insertobject);
         }
+        $settings = singleton_service::get_instance_of_booking_option_settings($option->id);
+        $context = context_module::instance($settings->cmid);
+        $event = evasys_surveycreated::create([
+            'objectid' => $option->id,
+            'context' => $context,
+        ]);
+        $event->trigger();
+    }
+
+    /**
+     * Creates the Survey and QR Code for EvaSys.
+     *
+     * @param array $args
+     * @param object $data
+     * @param object $option
+     *
+     * @return void
+     *
+     */
+    public function create_survey(array $args, object $data, object $option) {
+            $helper = new evasys_helper_service();
+            $evasys = new evasys_handler();
+            $id = $data->evasys_booking_id;
+            $survey = $evasys->save_survey($args, $id);
+            $argsqr = $helper->set_args_get_qrcode($survey->m_nSurveyId);
+            $qrcode = $evasys->get_qrcode($id, $argsqr);
+            $settings = singleton_service::get_instance_of_booking_option_settings($option->id);
+            $context = context_module::instance($settings->cmid);
+            $event = evasys_surveycreated::create([
+                'objectid' => $option->id,
+                'context' => $context,
+            ]);
+            $event->trigger();
     }
 
     /**
