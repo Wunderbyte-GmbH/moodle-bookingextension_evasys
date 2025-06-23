@@ -22,6 +22,7 @@
  * @author      Bernhard Fischer-Sengseis
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+$string['closesurvey'] = 'bookingextension_evays: close survey for data collection (adhoc task)';
 $string['conditionselectorganizersinbo_desc'] = 'Select Additional report recipients from a Bookingoption';
 $string['confirmdelete'] = 'Confirm deletion';
 $string['datepast'] = 'The start time of the evaluation cannot be in the past.';
@@ -68,6 +69,7 @@ $string['fieldsvalidation'] = 'Not all required fields have been selected.';
 $string['includeqrinoptionview'] = 'Show evaluation QR code in booking description';
 $string['includeqrinoptionview_desc'] = 'Displays the QR code for the EvaSys evaluation in the booking option description. Admins, teachers and booked users can see the code.';
 $string['notifyparticipants'] = 'Optional notifications to participants';
+$string['opensurvey'] = 'bookingextension_evays: open survey for data collection (adhoc task)';
 $string['otherreportrecipients'] = 'Additional report recipients (secondary instructors in EvaSys)';
 $string['pluginname'] = 'Booking extension: EvaSys';
 $string['questionaire'] = 'Select questionnaire';

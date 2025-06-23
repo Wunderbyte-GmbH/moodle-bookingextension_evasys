@@ -19,7 +19,7 @@
  *
  * @package bookingextension_evasys
  * @copyright 2025 Wunderbyte GmbH <info@wunderbyte.at>
- * @author Mahdi Poustini, Bernhard Fischer-Sengseis
+ * @author David Ala
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -38,7 +38,7 @@ use Exception;
 require_once($CFG->dirroot . '/mod/booking/lib.php');
 
 /**
- * Class to handle adhoc Task to send a mail by a rule at a certain time.
+ * Class to handle adhoc Task for communication with the SOAP Server.
  */
 class evasys_send_to_api extends \core\task\adhoc_task {
     /**
@@ -66,15 +66,14 @@ class evasys_send_to_api extends \core\task\adhoc_task {
             mtrace($this->get_name() . ' executed.');
 
             try {
-                // Chekc if all required keys exits in $taskdata.
+                // Check if all required keys exits in $taskdata.
                 $requiredkeys = [
-                    'data',
-                    'newoption',
-                    'relevantkeyssurvey',
-                    'relevantkeyscourse',
                     'teacherchanges',
                     'namechanges',
                     'relevantchanges',
+                    'relevantkeyssurvey',
+                    'relevantkeyscourse',
+                    'recipients',
                     'data',
                 ];
                 foreach ($requiredkeys as $key) {
@@ -82,7 +81,7 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                         throw new Exception("Excepted key ({$key}) not found in task data.");
                     }
                 }
-                $data = $taskdata->relevantdata;
+                $data = $taskdata->data;
                 $newoption = $taskdata->newoption;
                 $relevantkeyssurvey = $taskdata->relevantkeyssurvey;
                 $relevankeyscourse = $taskdata->relevantkeyscourse;
@@ -97,7 +96,24 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                 $evasys = new evasys_handler();
                 if (empty($data->evasys_courseidexternal) && !empty($data->evasys_form)) {
                     $course = $evasys->create_course($data, $newoption);
-                    $evasys->create_survey($course, $data, $newoption);
+                    if (empty($course)) {
+                         throw new Exception('On Coursecreation there was no connection to EvaSys');
+                    }
+                    $survey = $evasys->create_survey($course, $data, $newoption);
+                    if (empty($survey)) {
+                         throw new Exception('On Surveycreation there was no connection to EvaSys.');
+                    }
+                    $taskopen = new evasys_open_survey();
+                    $taskclose = new evasys_close_survey();
+                    $taskdata = [
+                        'surveyid' => $survey->m_nSurveyId,
+                     ];
+                      $taskopen->set_custom_data($taskdata);
+                      $taskclose->set_custom_data($taskdata);
+                      $taskopen->set_next_run_time($data->evasys_starttime);
+                      $taskclose->set_next_run_time($data->evasys_endtime);
+                      \core\task\manager::queue_adhoc_task($taskopen);
+                      \core\task\manager::queue_adhoc_task($taskclose);
                 } else {
                     $now = time();
                     if ($now > (int)$data->evasys_starttime) {
@@ -113,6 +129,7 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                     }
                     $updatesurvey = false;
                     $updatecourse = false;
+                    // Checks if teachers or option name changed. If it changed we already know we need to update course and survey.
                     if (
                         !empty($teacherchanges)
                         || !empty($namechanges)
@@ -134,9 +151,21 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                             $updatecourse = true;
                         }
                     }
+                    // Checks if starttime or endtime of the survey has been changed so create new task.
                     if ($updatesurvey) {
                         $surveyid = $data->evasys_surveyid;
                         $evasys->update_survey($surveyid, $data, $newoption);
+                        $taskopen = new evasys_open_survey();
+                        $taskclose = new evasys_close_survey();
+                        $taskdata = [
+                        'surveyid' => $surveyid,
+                        ];
+                        $taskopen->set_custom_data($taskdata);
+                        $taskclose->set_custom_data($taskdata);
+                        $taskopen->set_next_run_time($data->evasys_starttime);
+                        $taskclose->set_next_run_time($data->evasys_endtime);
+                        \core\task\manager::reschedule_or_queue_adhoc_task($taskopen);
+                        \core\task\manager::reschedule_or_queue_adhoc_task($taskclose);
                     }
                     if ($updatecourse) {
                         $evasys->update_course($data, $newoption, $data->evasys_booking_id);
