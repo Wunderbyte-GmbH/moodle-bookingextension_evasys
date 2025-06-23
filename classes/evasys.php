@@ -121,7 +121,7 @@ class evasys extends bookingextension implements bookingextension_interface {
             }
                 $data = [
                     'key' => 'evasys_qr',
-                    'value' => '<img src="' . s($settings->subpluginssettings['evasys']->pollurl)
+                    'value' => '<img src="' . s($settings->subpluginssettings['evasys']->qrurl)
                         . '" alt="' . get_string('evasysqrcode', 'bookingextension_evasys') . '">',
                     'label' => 'evasys_qr_class',
                     'description' => get_string('evasysqrcode', 'bookingextension_evasys'),
@@ -159,16 +159,25 @@ class evasys extends bookingextension implements bookingextension_interface {
             has_capability('mod/booking:updatebooking', $context)
             || ((has_capability('mod/booking:addeditownoption', $context)))
             )
-            && isset($settings->subpluginssettings['evasys']->pollurl)
+            && isset($settings->subpluginssettings['evasys']->qrurl)
         ) {
-            $url = $settings->subpluginssettings['evasys']->pollurl;
-            $filename = "qr-code{$settings->subpluginssettings['evasys']->courseidexternal}.png";
-            $option = '<a href="' . $url . '" download="' . $filename . '" class="dropdown-item d-flex align-items-center">
+            // First Option show link to qr-code.
+            $url = $settings->subpluginssettings['evasys']->qrurl;
+            $option = '<a href="' . $url . '" target="_blank" class="dropdown-item d-flex align-items-center">
             <i class="icon fa fa-qrcode fa-fw mr-2" aria-hidden="true""
                 aria-label="' . get_string('evasysqrcode', 'bookingextension_evasys') . '"
                 title="' . get_string('evasysqrcode', 'bookingextension_evasys') . '">
             </i>
             ' . get_string('evasysqrcode', 'bookingextension_evasys') . '
+        </a>';
+            // Second Option show the survey.
+            $url = $settings->subpluginssettings['evasys']->surveyurl;
+            $option .= '<a href="' . $url . '" target="_blank" " class="dropdown-item d-flex align-items-center">
+            <i class="icon fas fa-file-alt fa-fw mr-2" aria-hidden="true"
+                aria-label="' . get_string('evasyssurveyurl', 'bookingextension_evasys') . '"
+                title="' . get_string('evasyssurveyurl', 'bookingextension_evasys') . '">
+            </i>
+            ' . get_string('evasyssurveyurl', 'bookingextension_evasys') . '
         </a>';
         }
         return $option;

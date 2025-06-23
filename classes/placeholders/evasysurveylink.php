@@ -23,14 +23,14 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/mod/booking/lib.php');
 
 /**
- * Resolves Placeholder to Link for QR- Code.
+ * Resolves Placeholder to Link for Survey.
  *
  * @package bookingextension_evasys
  * @author David Ala
  * @copyright 2025 Wunderbyte GmbH
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class evasyslinkforqr {
+class evasysurveylink {
     /**
      * Function which takes a text, replaces the placeholders...
      * ... and returns the text with the correct values.
@@ -60,11 +60,11 @@ class evasyslinkforqr {
     ) {
         global $DB;
 
-        $record = $DB->get_record('bookingextension_evasys', ['optionid' => $optionid], 'qrurl');
+        $record = $DB->get_record('bookingextension_evasys', ['optionid' => $optionid], 'surveyurl');
         if (!$record) {
             return "";
         }
-        return html_writer::link($record->qrurl, get_string('evasyslinkforqr', 'bookingextension_evasys'));
+        return html_writer::link($record->surveyurl, get_string('evasyssurveylink', 'bookingextension_evasys'));
     }
 
     /**

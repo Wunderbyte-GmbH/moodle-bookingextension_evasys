@@ -407,7 +407,7 @@ class evasys extends field_base {
         $mform->addElement('hidden', 'evasys_qr', 0);
         $mform->setType('evasys_qr', PARAM_TEXT);
 
-         $mform->addElement('hidden', 'evasys_formurl', 0);
+        $mform->addElement('hidden', 'evasys_surveyurl', 0);
         $mform->setType('evasys_surveyurl', PARAM_TEXT);
     }
 

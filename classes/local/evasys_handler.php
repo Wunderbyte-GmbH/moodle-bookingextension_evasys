@@ -369,8 +369,8 @@ class evasys_handler {
         if (empty($survey)) {
             return $survey;
         }
-        $argsqr = $helper->set_args_get_qrcode($survey->m_nSurveyId);
-        $qrcode = $this->get_qrcode($data->evasys_booking_id, $argsqr);
+        $qrcode = $this->get_qrcode($data->evasys_booking_id, $survey->m_nSurveyId);
+        $surveyurl = $this->get_surveyurl($data->evasys_booking_id, $survey->m_nSurveyId);
         if (!empty($survey)) {
             $insertobject = (object) [
                 'id' => $data->evasys_booking_id,
@@ -414,8 +414,8 @@ class evasys_handler {
         if (empty($survey)) {
             return $survey;
         }
-        $argsqr = $helper->set_args_get_qrcode($survey->m_nSurveyId);
-        $qrcode = $evasys->get_qrcode($id, $argsqr);
+        $qrcode = $evasys->get_qrcode($id, $survey->m_nSurveyId);
+        $surveyurl = $evasys->get_surveyurl($id, $survey->m_nSurveyId);
         $settings = singleton_service::get_instance_of_booking_option_settings($option->id);
         $context = context_module::instance($settings->cmid);
         $event = evasys_surveycreated::create([
@@ -602,22 +602,49 @@ class evasys_handler {
     }
 
     /**
-     * Gets the QR Code for Survey.
+     * Gets the QR Code for Survey and saves it to DB.
      *
      * @param int $id
-     * @param array $survey
+     * @param int $surveyid
      *
      * @return string
      *
      */
-    public function get_qrcode($id, $survey) {
+    public function get_qrcode(int $id, int $surveyid) {
         global $DB;
+        $helper = new evasys_helper_service();
+        $args = $helper->set_args_get_qrcode($surveyid);
         $soap = new evasys_soap_service();
-        $response = $soap->get_qr_code($survey);
+        $response = $soap->get_qr_code($args);
         if (!empty($response)) {
             $dataobject = (object) [
             'id' => $id,
-            'pollurl' => $response,
+            'qrurl' => $response,
+            ];
+            $DB->update_record('bookingextension_evasys', $dataobject);
+        }
+        return $response;
+    }
+
+    /**
+     * Gets the survey and saves it to DB.
+     *
+     * @param int $id
+     * @param int $surveyid
+     *
+     * @return object|null
+     *
+     */
+    public function get_surveyurl(int $id, int $surveyid) {
+        global $DB;
+        $helper = new evasys_helper_service();
+        $soap = new evasys_soap_service();
+        $args = $helper->set_args_get_surveyurl($surveyid);
+        $response = $soap->get_surveyurl($args);
+        if (!empty($response)) {
+            $dataobject = (object) [
+            'id' => $id,
+            'surveyurl' => $response->OnlineCodes->m_sDirectOnlineLink,
             ];
             $DB->update_record('bookingextension_evasys', $dataobject);
         }

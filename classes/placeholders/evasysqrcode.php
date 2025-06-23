@@ -60,12 +60,12 @@ class evasysqrcode {
     ) {
         global $DB;
 
-        $record = $DB->get_record('bookingextension_evasys', ['optionid' => $optionid], 'pollurl');
+        $record = $DB->get_record('bookingextension_evasys', ['optionid' => $optionid], 'qrurl');
         if (!$record) {
             return "";
         }
         return html_writer::img(
-            $record->pollurl,
+            $record->qrurl,
             get_string('evasysqrcode', 'bookingextension_evasys'),
             ['class' => 'evasys_qrcode']
         );

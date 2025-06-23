@@ -391,4 +391,23 @@ class evasys_helper_service {
         ];
         return $args;
     }
+    /**
+     * Helperfunction to set Args for getting the surveyurl.
+     *
+     * @param int $surveyid
+     *
+     * @return array
+     *
+     */
+    public function set_args_get_surveyurl(int $surveyid) {
+        $args = [
+            'nSurveyId' => $surveyid,
+            'nPswdCount' => 0,
+            'nCodeTypes' => 0,
+            'bForceNewPasswordGeneration' => false,
+            'bSetPswdsToSent' => false,
+            'bGetFiveDigitOnlineCode' => false,
+        ];
+        return $args;
+    }
 }

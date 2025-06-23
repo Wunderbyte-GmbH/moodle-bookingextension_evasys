@@ -36,7 +36,7 @@ function xmldb_bookingextension_evasys_upgrade($oldversion) {
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2025061300) {
+    if ($oldversion < 2025062301) {
         // Define table bookingextension_evasys to be created.
         $table = new xmldb_table('bookingextension_evasys');
         // Adding fields to table bookingextension_evasys.
@@ -67,7 +67,7 @@ function xmldb_bookingextension_evasys_upgrade($oldversion) {
             $dbman->create_table($table);
         }
         // Booking savepoint reached.
-        upgrade_plugin_savepoint(true, 2025061300, 'bookingextension', 'evasys');
+        upgrade_plugin_savepoint(true, 2025062301, 'bookingextension', 'evasys');
     }
     return true;
 }

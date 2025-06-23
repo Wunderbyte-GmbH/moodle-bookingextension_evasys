@@ -323,6 +323,23 @@ class evasys_soap_service extends SoapClient {
             return false;
         }
     }
+
+    /**
+     * This call is used to work around the soap API and get the surveyurl.
+     *
+     * @param array $args
+     *
+     * @return object|null
+     *
+     */
+    public function get_surveyurl(array $args) {
+        try {
+            $response = $this->__soapCall('GetPswdsBySurvey', $args);
+            return $response;
+        } catch (SoapFault $e) {
+            return null;
+        }
+    }
     /**
      * Sets Soapheader for authentication.
      *
