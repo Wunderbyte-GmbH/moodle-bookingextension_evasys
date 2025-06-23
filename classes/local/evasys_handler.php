@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Evasys Class.
+ * Evasys Handler Class.
  *
  * @package bookingextension_evasys
  * @author David Ala
@@ -34,6 +34,7 @@ use mod_booking\singleton_service;
 use stdClass;
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/user/lib.php');
+require_once($CFG->dirroot . "/user/profile/lib.php");
 
 
 /**
@@ -55,7 +56,7 @@ class evasys_handler {
         $insertdata = $helper->map_form_to_record($formdata, $option);
         if (empty($formdata->evasys_booking_id)) {
             $returnid = $DB->insert_record('bookingextension_evasys', $insertdata, true, false);
-            // Returning ID so i can update record later for internal and external courseid.
+            // Returning ID so we can update record later for internal and external courseid.
             $formdata->evasys_booking_id = $returnid;
         } else {
             $DB->update_record('bookingextension_evasys', $insertdata);
@@ -63,7 +64,7 @@ class evasys_handler {
     }
 
     /**
-     * Load for Optionformfield.
+     * Load for optionformfield.
      *
      * @param object $data
      *
@@ -80,7 +81,7 @@ class evasys_handler {
     }
 
     /**
-     * Fetch periods and create array for Settings.
+     * Fetches periods and create array for Settings.
      *
      * @return array
      *
@@ -103,7 +104,7 @@ class evasys_handler {
     }
 
     /**
-     * Feteches the periods in the query
+     * Feteches periods for the query.
      *
      * @param string $query
      *
@@ -135,14 +136,14 @@ class evasys_handler {
     }
 
     /**
-     * Fetches all the Questionaires for the query.
+     * Fetches all the forms for the query.
      *
      * @param string $query
      *
      * @return array
      *
      */
-    public function get_questionaires_for_query(string $query) {
+    public function get_forms_for_query(string $query) {
         $cache = $this->cached_forms();
         $forms = $cache[0];
         foreach ($forms as $key => $value) {
@@ -191,7 +192,7 @@ class evasys_handler {
     }
 
     /**
-     * Fetches all user with manager role from DB.
+     * Fetches all users with manager role from DB.
      *
      * @return array
      *
@@ -238,11 +239,11 @@ class evasys_handler {
     /**
      * Saves user in Evasys.
      *
-     * @param stdClass $user
+     * @param object $user
      * @return void
      *
      */
-    public function save_user(stdClass $user) {
+    public function save_user(object $user) {
         global $CFG;
         $helper = new evasys_helper_service();
         $userdata = $helper->set_args_insert_user(
@@ -259,13 +260,12 @@ class evasys_handler {
             $value = [$response->m_sExternalId, $response->m_nId];
             $insert = implode(',', $value);
             $fieldshortname = get_config('bookingextension_evasys', 'evasyscategoryfielduser');
-            require_once($CFG->dirroot . "/user/profile/lib.php");
             profile_save_custom_fields($user->id, [$fieldshortname => $insert]);
         }
     }
 
     /**
-     * Saves survey for Evasys and Surveyid to DB.
+     * Saves survey in Evasys and Surveyid to DB.
      *
      * @param array $args
      * @param int $id
@@ -288,7 +288,7 @@ class evasys_handler {
     }
 
     /**
-     * Deletes Survey.
+     * Deletes Survey in Evasys and DB.
      *
      * @param int $surveyid
      *
@@ -304,7 +304,7 @@ class evasys_handler {
     }
 
     /**
-     * Opens Survey for Datacollection.
+     * Opens Survey for Data collection.
      *
      * @param int $surveyid
      *
@@ -320,7 +320,7 @@ class evasys_handler {
     }
 
     /**
-     * Close Survey for Datacollection.
+     * Close Survey for Data collection.
      *
      * @param int $surveyid
      *
@@ -365,20 +365,12 @@ class evasys_handler {
             (int) $data->evasys_form,
             $course->m_nPeriodId
         );
-        $survey = $soap->insert_survey($argsnewsurvey);
+        $survey = $this->save_survey($argsnewsurvey, $data->evasys_booking_id);
         if (empty($survey)) {
             return $survey;
         }
         $qrcode = $this->get_qrcode($data->evasys_booking_id, $survey->m_nSurveyId);
         $surveyurl = $this->get_surveyurl($data->evasys_booking_id, $survey->m_nSurveyId);
-        if (!empty($survey)) {
-            $insertobject = (object) [
-                'id' => $data->evasys_booking_id,
-                'surveyid' => $survey->m_nSurveyId,
-                'pollurl' => $qrcode,
-            ];
-            $DB->update_record('bookingextension_evasys', $insertobject);
-        }
         $settings = singleton_service::get_instance_of_booking_option_settings($option->id);
         $context = context_module::instance($settings->cmid);
         $event = evasys_surveycreated::create([
@@ -390,9 +382,9 @@ class evasys_handler {
     }
 
     /**
-     * Creates the Survey and QR Code for EvaSys.
+     * Creates the survey, surveyurl and QR-code for EvaSys.
      *
-     * @param array $args
+     * @param object $courseresponse
      * @param object $data
      * @param object $option
      *
@@ -401,7 +393,6 @@ class evasys_handler {
      */
     public function create_survey(object $courseresponse, object $data, object $option) {
         $helper = new evasys_helper_service();
-        $evasys = new evasys_handler();
         $argssurvey = $helper->set_args_insert_survey(
             $courseresponse->m_nUserId,
             $courseresponse->m_nCourseId,
@@ -410,12 +401,12 @@ class evasys_handler {
         );
 
         $id = $data->evasys_booking_id;
-        $survey = $evasys->save_survey($argssurvey, $id);
+        $survey = $this->save_survey($argssurvey, $id);
         if (empty($survey)) {
             return $survey;
         }
-        $qrcode = $evasys->get_qrcode($id, $survey->m_nSurveyId);
-        $surveyurl = $evasys->get_surveyurl($id, $survey->m_nSurveyId);
+        $qrcode = $this->get_qrcode($id, $survey->m_nSurveyId);
+        $surveyurl = $this->get_surveyurl($id, $survey->m_nSurveyId);
         $settings = singleton_service::get_instance_of_booking_option_settings($option->id);
         $context = context_module::instance($settings->cmid);
         $event = evasys_surveycreated::create([
@@ -439,6 +430,7 @@ class evasys_handler {
     public function aggregate_data_for_course_save($data, $option, $courseid = null) {
         $userfieldshortname = get_config('bookingextension_evasys', 'evasyscategoryfielduser');
         $helper = new evasys_helper_service();
+        // Gets all the Teachers and looks if they already exist in Evasys.
         foreach ($data->teachersforoption as $teacherid) {
             $teacher = singleton_service::get_instance_of_user($teacherid, true);
             $teachers[$teacherid] = $teacher;
@@ -451,6 +443,7 @@ class evasys_handler {
                 continue;
             }
         }
+        // Gets all the other report recipients and looks if they already exist in Evasys.
         foreach ($data->evasys_other_report_recipients as $recipientid) {
             $recipient = singleton_service::get_instance_of_user($recipientid, true);
             $recipients[$recipientid] = $recipient;
@@ -474,7 +467,7 @@ class evasys_handler {
         });
 
         $userfieldvalue = array_shift($teachers)->profile[$userfieldshortname];
-        // Set User ID for Course.
+        // Set User ID for Course insert to Evasys.
         $parts = explode(',', $userfieldvalue);
         $internalid = end($parts);
         // Make JSON for Customfields. 1-4 are bookingoption customfields, 5 is secondary teachers details.
@@ -516,6 +509,7 @@ class evasys_handler {
                 '5' => $customfield5,
          ];
          $customfields = json_encode($coursecustomfield, JSON_UNESCAPED_UNICODE);
+
         // Merge the rest of the teachers with recipients so they get an Evasys Report.
          $secondaryinstructors = array_merge($teachers ?? [], $recipients ?? []);
          $secondaryinstructorsinsert = $helper->set_secondaryinstructors_for_save($secondaryinstructors);
@@ -536,7 +530,6 @@ class evasys_handler {
          );
         return $coursedata;
     }
-
 
     /**
      * Creates a Course in EvaSys.

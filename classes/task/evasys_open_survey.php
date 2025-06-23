@@ -15,20 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Adhoc Task for EvaSys Create and Update Logic.
+ * Adhoc Task for EvaSys to open survey for data collection.
  *
  * @package bookingextension_evasys
  * @copyright 2025 Wunderbyte GmbH <info@wunderbyte.at>
- * @author Mahdi Poustini, Bernhard Fischer-Sengseis
+ * @author David Ala
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace bookingextension_evasys\task;
 
 use bookingextension_evasys\local\evasys_handler;
-use mod_booking\singleton_service;
 use PhpParser\Error;
-use stdClass;
 
 
 defined('MOODLE_INTERNAL') || die();

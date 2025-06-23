@@ -26,7 +26,6 @@
 namespace bookingextension_evasys\task;
 
 use bookingextension_evasys\local\evasys_handler;
-use mod_booking\singleton_service;
 
 
 defined('MOODLE_INTERNAL') || die();
@@ -78,7 +77,8 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                 ];
                 foreach ($requiredkeys as $key) {
                     if (!property_exists($taskdata, $key)) {
-                        throw new Exception("Excepted key ({$key}) not found in task data.");
+                        mtrace($this->get_name() . "Excepted key ({$key}) not found in task data.");
+                        return;
                     }
                 }
                 $data = $taskdata->data;
@@ -88,7 +88,7 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                 $teacherchanges = $taskdata->teacherchanges;
                 $namechanges = $taskdata->namechanges;
                 $relevantchanges = $taskdata->relevantchanges;
-
+                // Check if teachers exist otherwise skip the task.
                 if (empty($data->teachersforoption)) {
                     mtrace($this->get_name() . ': Skipping task - no teachers assigned.');
                     return;
@@ -97,11 +97,13 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                 if (empty($data->evasys_courseidexternal) && !empty($data->evasys_form)) {
                     $course = $evasys->create_course($data, $newoption);
                     if (empty($course)) {
-                         throw new Exception('On Coursecreation there was no connection to EvaSys');
+                          mtrace($this->get_name() . ': On course creation there was no connection to EvaSys');
+                          return;
                     }
                     $survey = $evasys->create_survey($course, $data, $newoption);
                     if (empty($survey)) {
-                         throw new Exception('On Surveycreation there was no connection to EvaSys.');
+                         mtrace($this->get_name() . ': On survey creation there was no connection to EvaSys');
+                          return;
                     }
                     $taskopen = new evasys_open_survey();
                     $taskclose = new evasys_close_survey();
@@ -143,7 +145,7 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                                 $updatesurvey = true;
                             }
                         }
-                    // Checks for the only key where only the course needs to be updated.
+                    // Checks for the only key where just the course needs to be updated.
                         if (
                             !$updatesurvey
                             && isset($courserelevantchanges->$relevankeyscourse)
@@ -151,7 +153,6 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                             $updatecourse = true;
                         }
                     }
-                    // Checks if starttime or endtime of the survey has been changed so create new task.
                     if ($updatesurvey) {
                         $surveyid = $data->evasys_surveyid;
                         $evasys->update_survey($surveyid, $data, $newoption);

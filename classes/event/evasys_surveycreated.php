@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The bookinganswer_presencechanged event.
+ * The evasys_surveycreated event.
  *
  * @package bookingextension_evasys
  * @copyright 2024 Wunderbyte

@@ -88,12 +88,12 @@ class evasys_soap_service extends SoapClient {
             parent::__construct($this->wsdl, $options);
             $this->set_soap_header();
         } catch (SoapFault $e) {
-            // exception
+            debugging('EvaSys SOAP connection failed: ' . $e->getMessage(), DEBUG_DEVELOPER);
         }
     }
 
     /**
-     * Fetches subunits from Evasys.
+     * Fetches subunits from EvaSys.
      *
      * @return object|null
      *
@@ -107,7 +107,7 @@ class evasys_soap_service extends SoapClient {
         }
     }
     /**
-     * Fetches periods from Evasys.
+     * Fetches periods from EvaSys.
      *
      * @return object|null
      *
@@ -139,7 +139,7 @@ class evasys_soap_service extends SoapClient {
     }
 
     /**
-     * Fetches Forms from Evasys.
+     * Fetches Forms from EvaSys.
      *
      * @param array $args
      *
@@ -156,7 +156,7 @@ class evasys_soap_service extends SoapClient {
     }
 
     /**
-     * Gets a Form by ID from Evasys.
+     * Gets a Form by ID from EvaSys.
      *
      * @param array $args
      *
@@ -173,7 +173,7 @@ class evasys_soap_service extends SoapClient {
     }
 
    /**
-    * Inserts User to Evays.
+    * Inserts User to EvaSys.
     *
     * @param object $args
     *
@@ -190,7 +190,7 @@ class evasys_soap_service extends SoapClient {
     }
 
     /**
-     * Insert Course to Evasys.
+     * Insert Course to EvaSys.
      *
      * @param object $args
      *
@@ -207,7 +207,7 @@ class evasys_soap_service extends SoapClient {
     }
 
     /**
-     * Updates the Course to Evasys.
+     * Updates the Course to EvaSys.
      *
      * @param object $args
      *
@@ -224,7 +224,7 @@ class evasys_soap_service extends SoapClient {
     }
 
     /**
-     * Deletes Course in Evasys.
+     * Deletes Course in EvaSys.
      *
      * @param array $args
      *
@@ -241,7 +241,7 @@ class evasys_soap_service extends SoapClient {
     }
 
     /**
-     * Insert Survey to Evasys.
+     * Insert Survey to EvaSys.
      *
      * @param array $args
      *
@@ -258,7 +258,7 @@ class evasys_soap_service extends SoapClient {
     }
 
     /**
-     * Delete the survey in evasys.
+     * Delete the survey in EvaSys.
      *
      * @param array $args
      *
@@ -275,7 +275,7 @@ class evasys_soap_service extends SoapClient {
     }
 
     /**
-     * Get QR code from evasys.
+     * Get QR code from EvaSys.
      *
      * @param array $args
      *
@@ -294,7 +294,7 @@ class evasys_soap_service extends SoapClient {
     /**
      * Opens Survey for Datacollection.
      *
-     * @param mixed $args
+     * @param array $args
      *
      * @return boolean
      *

@@ -105,6 +105,7 @@ class evasys extends field_base {
         'evasys_durationbeforestart',
         'evasys_durationafterend',
         'evasys_qr',
+        'evasys_surveyurl',
     ];
 
     /**
@@ -212,36 +213,37 @@ class evasys extends field_base {
             return;
         }
         $evasys = new evasys_handler();
-        $forms = ['tags' => false,
-        'multiple' => false,
-        'noselectionstring' => '',
-        'ajax' => 'bookingextension_evasys/form_evasysforms_selector',
-        'valuehtmlcallback' => function ($value) {
-            if (empty($value)) {
-                return get_string('choose...', 'mod_booking');
-            }
-            $array = explode('-', $value);
-            $name = end($array);
-            $return = base64_decode($name);
-            return $return;
-        },
+        $forms = [
+            'tags' => false,
+            'multiple' => false,
+            'noselectionstring' => '',
+            'ajax' => 'bookingextension_evasys/form_evasysforms_selector',
+            'valuehtmlcallback' => function ($value) {
+                if (empty($value)) {
+                    return get_string('choose...', 'mod_booking');
+                }
+                $array = explode('-', $value);
+                $name = end($array);
+                $return = base64_decode($name);
+                return $return;
+            },
         ];
 
         $recipients = $evasys->get_recipients();
         $periodoptions = [
-        'tags' => false,
-        'multiple' => false,
-        'noselectionstring' => '',
-        'ajax' => 'bookingextension_evasys/form_evasysperiods_selector',
-        'valuehtmlcallback' => function ($value) {
-            if (empty($value)) {
-                return get_string('choose...', 'mod_booking');
-            }
-            $array = explode('-', $value);
-            $name = end($array);
-            $return = base64_decode($name);
-            return $return;
-        },
+            'tags' => false,
+            'multiple' => false,
+            'noselectionstring' => '',
+            'ajax' => 'bookingextension_evasys/form_evasysperiods_selector',
+            'valuehtmlcallback' => function ($value) {
+                if (empty($value)) {
+                    return get_string('choose...', 'mod_booking');
+                }
+                $array = explode('-', $value);
+                $name = end($array);
+                $return = base64_decode($name);
+                return $return;
+            },
         ];
 
         if (empty(get_config('bookingextension_evasys', 'useevasys'))) {
@@ -506,6 +508,7 @@ class evasys extends field_base {
         object $newoption,
         object $originaloption
     ) {
+        // Get just the relevant data for the logic of the task.
         $relevantdata = new stdClass();
         $relevantdata->evasys_form = $data->evasys_form;
         $relevantdata->evasys_surveyid = $data->evasys_surveyid;
@@ -520,6 +523,7 @@ class evasys extends field_base {
         $relevantoptiondata = new stdClass();
         $relevantoptiondata->id = $newoption->id;
         $relevantoptiondata->text = $newoption->text;
+
         $task = new evasys_send_to_api();
         $taskdata = [
             'teacherchanges' => $changes["mod_booking\\option\\fields\\teachers"],

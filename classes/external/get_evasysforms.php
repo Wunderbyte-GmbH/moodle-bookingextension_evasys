@@ -71,11 +71,11 @@ class get_evasysforms extends external_api {
         return new \external_single_structure([
             'list' => new \external_multiple_structure(
                 new \external_single_structure([
-                    'id' => new \external_value(PARAM_TEXT, 'ID with Base64 encoded Name'),
-                    'name' => new \external_value (PARAM_TEXT, 'Name of the questionaire'),
+                    'id' => new external_value(PARAM_TEXT, 'ID with Base64 encoded Name'),
+                    'name' => new external_value(PARAM_TEXT, 'Name of the questionaire'),
                 ])
             ),
-            'warnings' => new \external_value(PARAM_TEXT, 'Warnings'),
+            'warnings' => new external_value(PARAM_TEXT, 'Warnings'),
         ]);
     }
 }

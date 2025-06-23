@@ -74,7 +74,7 @@ class evasys_helper_service {
     }
 
     /**
-     * Maps DB of Form.
+     * Maps optionform to db record.
      *
      * @param object $formdata
      * @param object $option
@@ -115,7 +115,7 @@ class evasys_helper_service {
     }
 
     /**
-     * Maps recorddata to form.
+     * Maps db record to optionform.
      *
      * @param object $data
      * @param object $record
@@ -144,7 +144,7 @@ class evasys_helper_service {
     }
 
     /**
-     * Transforms Array of objects to an associates array for the settings.
+     * Transforms Array of objects to an associative array for the settings.
      *
      * @param array $list
      * @param string $key
@@ -163,7 +163,7 @@ class evasys_helper_service {
 
 
     /**
-     * Sets args for insert course.
+     * Helperfunction to set args for insert course to EvaSys.
      *
      * @param string $title
      * @param int $optionid
@@ -213,7 +213,7 @@ class evasys_helper_service {
     }
 
     /**
-     * Set args for user to insert into evasys.
+     * Helperfunction to set args for user to insert into evasys.
      *
      * @param int $userid
      * @param string $firstname
@@ -260,7 +260,7 @@ class evasys_helper_service {
     }
 
     /**
-     * Helperfunction to set Args for inserting a Survey via SOAP call.
+     * Helperfunction to set args for inserting a survey to EvaSys.
      *
      * @param int $userid
      * @param int $internalcourseid
@@ -281,7 +281,7 @@ class evasys_helper_service {
         return $survey;
     }
     /**
-     * Helperfunction to set Args for deleting a Survey via SOAP call.
+     * Helperfunction to set args for deleting a survey in EvaSys.
      *
      * @param int $surveyid
      *
@@ -297,14 +297,14 @@ class evasys_helper_service {
     }
 
     /**
-     * Helperfunction to set Args for deleting a Course via SOAP call.
+     * Helperfunction to set args for deleting a course in EvaSys.
      *
      * @param int $internalcourseid
      *
      * @return array
      *
      */
-    public function set_args_delete_course($internalcourseid) {
+    public function set_args_delete_course(int $internalcourseid) {
         $course = [
             'CourseId' => $internalcourseid,
             'IdType' => 'INTERNAL',
@@ -312,7 +312,7 @@ class evasys_helper_service {
         return $course;
     }
     /**
-     * Helperfunction to set Args for getting QR-Code.
+     * Helperfunction to set args for getting QR-Code.
      *
      * @param int $surveyid
      *
@@ -327,7 +327,7 @@ class evasys_helper_service {
     }
 
     /**
-     * Helperfunction to set Args for getting a Form.
+     * Helperfunction to set args for getting a Form.
      *
      * @param int $internalid
      *
@@ -345,7 +345,7 @@ class evasys_helper_service {
     }
 
     /**
-     * Helperfunction to set Args for getting all Forms.
+     * Helperfunction to set args for getting all Forms.
      *
      * @param int $subunitid
      *
@@ -363,7 +363,7 @@ class evasys_helper_service {
         return $args;
     }
     /**
-     * Helperfunction to set Args for openeing survey.
+     * Helperfunction to set args for openeing survey.
      *
      * @param int $surveyid
      *
@@ -377,7 +377,7 @@ class evasys_helper_service {
         return $args;
     }
     /**
-     * Helperfunction to set Args for closing survey.
+     * Helperfunction to set args for closing survey.
      *
      * @param int $surveyid
      *
