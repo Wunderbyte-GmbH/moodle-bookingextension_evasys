@@ -180,7 +180,7 @@ class evasys_soap_service extends SoapClient {
     * @return object|null
     *
     */
-    public function insert_user(array $args) {
+    public function insert_user(object $args) {
         try {
             $response = $this->__soapCall('InsertUser', ['user' => $args]);
             return $response;

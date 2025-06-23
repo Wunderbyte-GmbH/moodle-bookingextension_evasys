@@ -124,8 +124,8 @@ class evasys_helper_service {
      */
     public function map_record_to_form(object &$data, object $record) {
         $data->evasys_form = $record->formid;
-        $data->evasys_evaluation_starttime = $record->starttime;
-        $data->evasys_evaluation_endtime = $record->endtime;
+        $data->evasys_starttime = $record->starttime;
+        $data->evasys_endtime = $record->endtime;
         $data->evasys_qr = $record->pollurl;
         $data->evasys_other_report_recipients = explode(',', $record->organizers);
         $data->evasys_notifyparticipants = $record->notifyparticipants;
@@ -139,8 +139,6 @@ class evasys_helper_service {
         $data->evasys_durationbeforestart = $record->durationbeforestart;
         $data->evasys_durationafterend = $record->durationafterend;
         $data->evasys_timemode = $record->timemode;
-        $data->evasys_durationbeforestart = $record->durationbeforestart;
-        $data->evasys_durationafterend = $record->durationafterend;
     }
 
     /**
@@ -211,15 +209,16 @@ class evasys_helper_service {
         ];
         return $coursedata;
     }
+
     /**
-     * Helperfunction to set Args for inserting a User via SOAP call.
+     * Set args for user to insert into evasys.
      *
      * @param int $userid
      * @param string $firstname
      * @param string $lastname
      * @param string $adress
      * @param string $email
-     * @param int $phone
+     * @param int|null $phone
      *
      * @return object
      *
@@ -230,7 +229,7 @@ class evasys_helper_service {
         string $lastname,
         string $adress,
         string $email,
-        int $phone
+        ?int $phone
     ) {
         $subunitencoded = get_config('bookingextension_evasys', 'evasyssubunits');
         $array = explode('-', $subunitencoded);
@@ -250,7 +249,7 @@ class evasys_helper_service {
             'm_nFbid' => (int) $subunitid,
             'm_nAddressId' => 0,
             'm_sPassword' => '',
-            'm_sPhoneNumber' => $phone ?? '',
+            'm_sPhoneNumber' => $phone,
             'm_bUseLDAP' => null,
             'm_bActiveUser' => null,
             'm_aCourses' => null,
@@ -386,7 +385,7 @@ class evasys_helper_service {
     public function set_args_close_survey(int $surveyid) {
         $args = [
             'nSurveyId' => $surveyid,
-            'bSendReportToInstructor' => false,
+            'bSendReportToInstructor' => true,
         ];
         return $args;
     }

@@ -446,7 +446,7 @@ class evasys extends field_base {
         }
 
         $freezetime = time();
-        $evaluationstarttime = (int)($mform->_defaultValues['evasys_starttime'] ?? 0);
+        $evaluationstarttime = (int)($formdata['evasys_starttime'] ?? 0);
         if (empty($evaluationstarttime)) {
             return;
         }
@@ -502,11 +502,13 @@ class evasys extends field_base {
         $relevantdata = new stdClass();
         $relevantdata->evasys_form = $data->evasys_form;
         $relevantdata->evasys_surveyid = $data->evasys_surveyid;
+        $relevantdata->evasys_courseidexternal = $data->evasys_courseidexternal;
         $relevantdata->evasys_courseidinternal = $data->evasys_courseidinternal;
         $relevantdata->evasys_booking_id = $data->evasys_booking_id;
         $relevantdata->teachersforoption = $data->teachersforoption;
         $relevantdata->evasys_other_report_recipients = $data->evasys_other_report_recipients;
         $relevantdata->evasys_starttime = $data->evasys_starttime;
+        $relevantdata->evasys_endtime = $data->evasys_endtime;
         $relevantdata->evasys_confirmdelete = $data->evasys_confirmdelete;
         $relevantoptiondata = new stdClass();
         $relevantoptiondata->id = $newoption->id;

@@ -249,9 +249,9 @@ class evasys_handler {
             $user->id,
             $user->firstname,
             $user->lastname,
-            $user->adress,
+            $user->adress ?? "",
             $user->email,
-            $user->phone1
+            (int) $user->phone1
         );
         $soap = new evasys_soap_service();
         $response = $soap->insert_user($userdata);
@@ -342,7 +342,7 @@ class evasys_handler {
      * @param object $data
      * @param object $option
      *
-     * @return void
+     * @return object | null
      *
      */
     public function update_survey(int $surveyid, object $data, object $option) {
@@ -366,6 +366,9 @@ class evasys_handler {
             $course->m_nPeriodId
         );
         $survey = $soap->insert_survey($argsnewsurvey);
+        if (empty($survey)) {
+            return $survey;
+        }
         $argsqr = $helper->set_args_get_qrcode($survey->m_nSurveyId);
         $qrcode = $this->get_qrcode($data->evasys_booking_id, $argsqr);
         if (!empty($survey)) {
@@ -383,6 +386,7 @@ class evasys_handler {
             'context' => $context,
         ]);
         $event->trigger();
+        return $survey;
     }
 
     /**
@@ -392,7 +396,7 @@ class evasys_handler {
      * @param object $data
      * @param object $option
      *
-     * @return void
+     * @return object|null
      *
      */
     public function create_survey(object $courseresponse, object $data, object $option) {
@@ -407,6 +411,9 @@ class evasys_handler {
 
         $id = $data->evasys_booking_id;
         $survey = $evasys->save_survey($argssurvey, $id);
+        if (empty($survey)) {
+            return $survey;
+        }
         $argsqr = $helper->set_args_get_qrcode($survey->m_nSurveyId);
         $qrcode = $evasys->get_qrcode($id, $argsqr);
         $settings = singleton_service::get_instance_of_booking_option_settings($option->id);
@@ -416,6 +423,7 @@ class evasys_handler {
             'context' => $context,
         ]);
         $event->trigger();
+        return $survey;
     }
 
     /**
@@ -519,9 +527,9 @@ class evasys_handler {
          }
          $coursedata = $helper->set_args_insert_course(
              $option->text,
-             $option->id,
+             (int) $option->id,
              $internalid,
-             $periodid,
+             (int) $periodid,
              $secondaryinstructorsinsert,
              $customfields,
              $courseid,
@@ -544,7 +552,7 @@ class evasys_handler {
         $coursedata = $this->aggregate_data_for_course_save($data, $option);
         $soap = new evasys_soap_service();
         $response = $soap->insert_course($coursedata);
-        if (isset($response)) {
+        if (!empty($response)) {
             $dataobject = (object)[
                 'id' => $data->evasys_booking_id,
                 'courseidinternal' => $response->m_nCourseId,
@@ -570,7 +578,9 @@ class evasys_handler {
         $argscourse = $helper->set_args_delete_course($internalid);
         $soap = new evasys_soap_service();
         $response = $soap->delete_course($argscourse);
-        $DB->delete_records('bookingextension_evasys', ['id' => $tableid]);
+        if (!empty($response)) {
+            $DB->delete_records('bookingextension_evasys', ['id' => $tableid]);
+        }
         return $response;
     }
 
@@ -637,6 +647,7 @@ class evasys_handler {
             $timecreated = time();
             $cachedata = [$formswithtitle, $timecreated];
             $cache->set('cachedforms', $cachedata);
+            $cachedforms = $cachedata;
         }
         return $cachedforms;
     }

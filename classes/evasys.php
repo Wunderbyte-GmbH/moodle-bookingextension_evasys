@@ -116,10 +116,7 @@ class evasys extends bookingextension implements bookingextension_interface {
             || booking_check_if_teacher($settings->id)
         ) {
             $now = time();
-            if (
-                $now > $settings->subpluginssettings['evasys']->endtime
-                || $now < $settings->subpluginssettings['evasys']->starttime
-            ) {
+            if ($now > $settings->subpluginssettings['evasys']->endtime) {
                 return $templatedata;
             }
                 $data = [
