@@ -101,6 +101,10 @@ class evasys extends field_base {
         'evasys_other_report_recipients',
         'evasysperiods',
         'evasys_notifyparticipants',
+        'evasys_timemode',
+        'evasys_durationbeforestart',
+        'evasys_durationafterend',
+        'evasys_qr',
     ];
 
     /**
@@ -402,6 +406,9 @@ class evasys extends field_base {
 
         $mform->addElement('hidden', 'evasys_qr', 0);
         $mform->setType('evasys_qr', PARAM_TEXT);
+
+         $mform->addElement('hidden', 'evasys_formurl', 0);
+        $mform->setType('evasys_surveyurl', PARAM_TEXT);
     }
 
     /**

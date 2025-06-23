@@ -43,7 +43,8 @@ function xmldb_bookingextension_evasys_upgrade($oldversion) {
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('optionid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('formid', XMLDB_TYPE_TEXT, null, null, null, null, null);
-        $table->add_field('pollurl', XMLDB_TYPE_CHAR, '255', null, null, null, null);
+        $table->add_field('qrurl', XMLDB_TYPE_CHAR, '255', null, null, null, null);
+        $table->add_field('surveyurl', XMLDB_TYPE_CHAR, '255', null, null, null, null);
         $table->add_field('timemode', XMLDB_TYPE_INTEGER, '1', null, null, null, null);
         $table->add_field('starttime', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
         $table->add_field('endtime', XMLDB_TYPE_INTEGER, '10', null, null, null, null);

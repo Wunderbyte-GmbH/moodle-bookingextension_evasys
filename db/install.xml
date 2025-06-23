@@ -9,7 +9,8 @@
     <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
     <FIELD NAME="optionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
     <FIELD NAME="formid" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
-    <FIELD NAME="pollurl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+    <FIELD NAME="qrurl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+    <FIELD NAME="surveyurl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
     <FIELD NAME="timemode" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false"/>
     <FIELD NAME="starttime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
     <FIELD NAME="endtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>

@@ -102,8 +102,9 @@ class evasys_helper_service {
         $insertdata->notifyparticipants = $formdata->evasys_notifyparticipants;
         $insertdata->usermodified = $USER->id;
         $insertdata->periods = $formdata->evasysperiods;
-        $insertdata->qr = $formdata->pollurl;
+        $insertdata->qr = $formdata->qrurl;
         $insertdata->timemode = $formdata->evasys_timemode;
+        $insertdata->surveyurl = $formdata->evasys_surveyurl;
         if (empty($formdata->evasys_booking_id)) {
             $insertdata->timecreated = $now;
         } else {
@@ -126,7 +127,7 @@ class evasys_helper_service {
         $data->evasys_form = $record->formid;
         $data->evasys_starttime = $record->starttime;
         $data->evasys_endtime = $record->endtime;
-        $data->evasys_qr = $record->pollurl;
+        $data->evasys_qr = $record->qrurl;
         $data->evasys_other_report_recipients = explode(',', $record->organizers);
         $data->evasys_notifyparticipants = $record->notifyparticipants;
         $data->evasys_booking_id = $record->id;
@@ -139,6 +140,7 @@ class evasys_helper_service {
         $data->evasys_durationbeforestart = $record->durationbeforestart;
         $data->evasys_durationafterend = $record->durationafterend;
         $data->evasys_timemode = $record->timemode;
+        $data->evasys_surveyurl = $record->surveyurl;
     }
 
     /**
