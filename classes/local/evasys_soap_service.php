@@ -72,7 +72,7 @@ class evasys_soap_service extends SoapClient {
         ?string $endpoint = null,
         ?string $username = null,
         ?string $password = null,
-        ?string $wsdl = null,
+        ?string $wsdl = null
     ) {
         $this->endpoint = $endpoint ?? get_config('bookingextension_evasys', 'evasysbaseurl');
         $this->username = $username ?? get_config('bookingextension_evasys', 'evasysuser');

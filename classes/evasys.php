@@ -147,12 +147,12 @@ class evasys extends bookingextension implements bookingextension_interface {
      * Adds Downloadbutton for EvasysQrCode to Option.
      *
      * @param object $settings
-     * @param bool|object $context
+     * @param mixed $context
      *
      * @return string
      *
      */
-    public static function add_options_to_col_actions(object $settings, bool|object $context): string {
+    public static function add_options_to_col_actions(object $settings, mixed $context): string {
         $option = "";
         if (
             (
