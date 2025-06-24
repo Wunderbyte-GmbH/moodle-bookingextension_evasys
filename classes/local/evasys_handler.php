@@ -510,7 +510,7 @@ class evasys_handler {
          ];
          $customfields = json_encode($coursecustomfield, JSON_UNESCAPED_UNICODE);
 
-        // Merge the rest of the teachers with recipients so they get an Evasys Report.
+         // Merge the rest of the teachers with recipients so they get an Evasys Report.
          $secondaryinstructors = array_merge($teachers ?? [], $recipients ?? []);
          $secondaryinstructorsinsert = $helper->set_secondaryinstructors_for_save($secondaryinstructors);
          if (!empty($data->evasysperiods)) {

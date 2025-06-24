@@ -145,7 +145,7 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                                 $updatesurvey = true;
                             }
                         }
-                    // Checks for the only key where just the course needs to be updated.
+                        // Checks for the only key where just the course needs to be updated.
                         if (
                             !$updatesurvey
                             && isset($courserelevantchanges->$relevankeyscourse)

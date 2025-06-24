@@ -172,14 +172,14 @@ class evasys_soap_service extends SoapClient {
         }
     }
 
-   /**
-    * Inserts User to EvaSys.
-    *
-    * @param object $args
-    *
-    * @return object|null
-    *
-    */
+    /**
+     *
+     *
+     * @param object $args
+     *
+     * @return object|null
+     *
+     */
     public function insert_user(object $args) {
         try {
             $response = $this->__soapCall('InsertUser', ['user' => $args]);

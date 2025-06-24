@@ -66,7 +66,7 @@ class evasys_open_survey extends \core\task\adhoc_task {
               mtrace($this->get_name() . ' executed.');
 
             try {
-             // Check if all required keys exist in $taskdata.
+                // Check if all required keys exist in $taskdata.
                 $requiredkeys = [
                 'surveyid',
                 ];
