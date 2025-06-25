@@ -58,7 +58,7 @@ class get_evasysforms extends external_api {
             'query' => $query,
         ]);
         $evasys = new evasys_handler();
-        return $evasys->get_questionaires_for_query($params['query']);
+        return $evasys->get_forms_for_query($params['query']);
     }
 
     /**
