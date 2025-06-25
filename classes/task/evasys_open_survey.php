@@ -83,7 +83,6 @@ class evasys_open_survey extends \core\task\adhoc_task {
                 mtrace($this->get_name() . ": Task done successfully.");
             } catch (\Throwable $e) {
                 mtrace($this->get_name() . ": ERROR - " . $e->getMessage());
-                throw $e;
             }
         } else {
              mtrace($this->get_name() . ': ERROR - missing taskdata.');

@@ -22,12 +22,14 @@
  * @author      David Ala
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-use bookingextension_evasys\local\services\evasysuser_profile_field_initializer;
 /**
  * XMLDB Booking install function.
  * @return void
  */
-function xmldb_booking_install() {
+function xmldb_bookingextension_evasys_install() {
     global $DB;
-    evasysuser_profile_field_initializer::ensure_evasyscustomfield_exists();
+
+    require_once(__DIR__ . '/../classes/services/evasysuser_profile_field_initializer.php');
+
+    \bookingextension_evasys\services\evasysuser_profile_field_initializer::ensure_evasyscustomfield_exists();
 }

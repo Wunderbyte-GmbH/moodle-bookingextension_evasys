@@ -23,7 +23,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace bookingextension_evasys\local\services;
+namespace bookingextension_evasys\services;
 
 
 /**
