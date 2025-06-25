@@ -509,16 +509,17 @@ class evasys extends field_base {
         object $originaloption
     ) {
         // Get just the relevant data for the logic of the task.
+        $settings = singleton_service::get_instance_of_booking_option_settings($newoption->id);
         $relevantdata = new stdClass();
-        $relevantdata->evasys_form = $data->evasys_form;
-        $relevantdata->evasys_surveyid = $data->evasys_surveyid;
-        $relevantdata->evasys_courseidexternal = $data->evasys_courseidexternal;
-        $relevantdata->evasys_courseidinternal = $data->evasys_courseidinternal;
-        $relevantdata->evasys_booking_id = $data->evasys_booking_id;
+        $relevantdata->evasys_form = $settings->subpluginssettings['evasys']->formid;
+        $relevantdata->evasys_surveyid = $settings->subpluginssettings['evasys']->surveyid;
+        $relevantdata->evasys_courseidexternal = $settings->subpluginssettings['evasys']->courseidexternal;
+        $relevantdata->evasys_courseidinternal = $settings->subpluginssettings['evasys']->courseidinternal;
+        $relevantdata->evasys_booking_id = $settings->subpluginssettings['evasys']->id;
         $relevantdata->teachersforoption = $data->teachersforoption;
         $relevantdata->evasys_other_report_recipients = $data->evasys_other_report_recipients;
-        $relevantdata->evasys_starttime = $data->evasys_starttime;
-        $relevantdata->evasys_endtime = $data->evasys_endtime;
+        $relevantdata->evasys_starttime = $settings->subpluginssettings['evasys']->starttime;
+        $relevantdata->evasys_endtime = $settings->subpluginssettings['evasys']->endtime;
         $relevantdata->evasys_confirmdelete = $data->evasys_confirmdelete;
         $relevantoptiondata = new stdClass();
         $relevantoptiondata->id = $newoption->id;
