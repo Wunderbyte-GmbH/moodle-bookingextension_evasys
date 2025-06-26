@@ -103,7 +103,7 @@ class evasys extends bookingextension implements bookingextension_interface {
         global $USER;
         $modcontext = context_module::instance($settings->cmid);
         $templatedata = [];
-        if (!isset($settings->subpluginssettings['evasys']->pollurl)) {
+        if (!isset($settings->subpluginssettings['evasys']->qrurl)) {
             return $templatedata;
         }
         if (empty(get_config('bookingextension_evasys', 'includeqrinoptionview'))) {
