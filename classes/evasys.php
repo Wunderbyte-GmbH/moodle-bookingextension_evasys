@@ -341,13 +341,14 @@ class evasys extends bookingextension implements bookingextension_interface {
                  $customoptions
              )
          );
-
-        try {
             $evasys = new evasys_handler();
             $subunitoptions = $evasys->get_subunits();
             $periodoptions = $evasys->get_periods_for_settings();
-        } catch (SoapFault $e) {
-                $subunitoptions = [0 => get_string('evasysnotreachable', 'bookingextension_evasys')];
+        if (
+                empty($subunitoptions)
+                && empty($periodoptions)
+        ) {
+            $subunitoptions = [0 => get_string('evasysnotreachable', 'bookingextension_evasys')];
         }
         if (
             empty($subunitoptions)

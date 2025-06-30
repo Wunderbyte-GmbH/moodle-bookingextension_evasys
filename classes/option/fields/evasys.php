@@ -186,6 +186,12 @@ class evasys extends field_base {
         ) {
             $errors['evasys_timemode'] = get_string('datepast', 'bookingextension_evasys');
         }
+        if (
+            !empty($formdata['evasys_form'])
+            && $settings->courseendtime < $settings->coursestarttime
+        ) {
+                $errors['evasys_timemode'] = get_string('setcourseendtime', 'bookingextension_evasys');
+        }
         return $errors;
     }
 
@@ -510,6 +516,9 @@ class evasys extends field_base {
     ) {
         // Get just the relevant data for the logic of the task.
         $settings = singleton_service::get_instance_of_booking_option_settings($newoption->id);
+        if (!isset($settings->subpluginssettings['evasys']->id)) {
+            return;
+        }
         $relevantdata = new stdClass();
         $relevantdata->evasys_form = $settings->subpluginssettings['evasys']->formid;
         $relevantdata->evasys_surveyid = $settings->subpluginssettings['evasys']->surveyid;
