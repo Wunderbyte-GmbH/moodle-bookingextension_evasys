@@ -26,6 +26,7 @@
 namespace bookingextension_evasys\task;
 
 use bookingextension_evasys\local\evasys_handler;
+use mod_booking\booking_option;
 
 
 defined('MOODLE_INTERNAL') || die();
@@ -172,6 +173,7 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                         $evasys->update_course($data, $newoption, $data->evasys_booking_id);
                     }
                 }
+                booking_option::purge_cache_for_option($newoption->id);
                 mtrace($this->get_name() . ": Task done successfully.");
             } catch (\Throwable $e) {
                 mtrace($this->get_name() . ": ERROR - " . $e->getMessage());
