@@ -357,10 +357,13 @@ class evasys_helper_service {
                 'IncludeCustomReports' => true,
                 'IncludeUsageRestrictions' => true,
                 'UsageRestrictionList' => [
-                        'Subunits' => (int) $subunitid,
+                        'Subunits' =>
+                [
+                    'ID' => (int) $subunitid,
+                        ],
                 ],
-        ];
-        return $args;
+                    ];
+                return $args;
     }
     /**
      * Helperfunction to set args for openeing survey.

@@ -369,6 +369,7 @@ class evasys_handler {
         if (empty($survey)) {
             return $survey;
         }
+        $this->close_survey($survey->m_nSurveyId);
         $qrcode = $this->get_qrcode($data->evasys_booking_id, $survey->m_nSurveyId);
         $surveyurl = $this->get_surveyurl($data->evasys_booking_id, $survey->m_nSurveyId);
         $settings = singleton_service::get_instance_of_booking_option_settings($option->id);
@@ -405,6 +406,7 @@ class evasys_handler {
         if (empty($survey)) {
             return $survey;
         }
+        $this->close_survey($survey->m_nSurveyId);
         $qrcode = $this->get_qrcode($id, $survey->m_nSurveyId);
         $surveyurl = $this->get_surveyurl($id, $survey->m_nSurveyId);
         $settings = singleton_service::get_instance_of_booking_option_settings($option->id);
