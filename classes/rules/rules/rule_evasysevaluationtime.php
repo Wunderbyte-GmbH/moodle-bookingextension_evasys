@@ -109,6 +109,7 @@ class rule_evasysevaluationtime implements booking_rule {
             [
                 'starttime' => get_string('evasysevaluationstarttime', 'bookingextension_evasys'),
                 'endtime' => get_string('evasysevaluationendtime', 'bookingextension_evasys'),
+                'courseendtime' => get_string('ruleoptionfieldcourseendtime', 'mod_booking'),
             ],
         );
     }
