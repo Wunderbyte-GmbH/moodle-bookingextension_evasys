@@ -89,8 +89,8 @@ class evasys_helper_service {
         $insertdata->optionid = $option->id;
         $insertdata->formid = $formdata->evasys_form;
         if (empty((int)$formdata->evasys_timemode)) {
-            $insertdata->starttime = (int) $option->courseendtime + (int) $formdata->evasys_evaluation_durationbeforestart;
-            $insertdata->endtime = (int) $option->courseendtime + (int) $formdata->evasys_evaluation_durationafterend;
+            $insertdata->starttime = (int) $option->courseendtime + (int) $formdata->evasys_durationbeforestart;
+            $insertdata->endtime = (int) $option->courseendtime + (int) $formdata->evasys_durationafterend;
             $insertdata->durationbeforestart = $formdata->evasys_durationbeforestart;
             $insertdata->durationafterend = $formdata->evasys_durationafterend;
         } else {

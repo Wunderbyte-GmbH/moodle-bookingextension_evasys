@@ -335,16 +335,18 @@ class evasys extends field_base {
             'date_time_selector',
             'evasys_starttime',
             get_string('evasysevaluationstarttime', 'bookingextension_evasys'),
+            ['step' => 5],
         );
-        $starttimestamp = mktime(0, 0, 0, date('n') , date('j') + 1, date('Y'));
+        $starttimestamp = self::prettytime(strtotime("now +1 day +1 hour"));
         $mform->setDefault('evasys_starttime', $starttimestamp);
 
         $mform->addElement(
             'date_time_selector',
             'evasys_endtime',
-            get_string('evasysevaluationendtime', 'bookingextension_evasys')
+            get_string('evasysevaluationendtime', 'bookingextension_evasys'),
+            ['step' => 5]
         );
-        $endtimestamp = mktime(0, 0, 0, date('n') , date('j') + 2, date('Y'));
+        $endtimestamp = self::prettytime(strtotime("+2 days"));
         $mform->setDefault('evasys_endtime', $endtimestamp);
 
         // Hide date selectors unless "duration" (option 1) is selected.
@@ -549,5 +551,23 @@ class evasys extends field_base {
         $task->set_custom_data($taskdata);
         // Now queue the task or reschedule it if it already exists (with matching data).
         \core\task\manager::reschedule_or_queue_adhoc_task($task);
+    }
+    /**
+     * Makes the minutes always to be zero.
+     *
+     * @param int $timestamp
+     *
+     * @return int
+     *
+     */
+    private static function prettytime(int $timestamp) {
+        $prettytimestamp = make_timestamp(
+            (int)date('Y', $timestamp),
+            (int)date('n', $timestamp),
+            (int)date('j', $timestamp),
+            (int)date('H', $timestamp),
+            0,
+        );
+        return $prettytimestamp;
     }
 }
