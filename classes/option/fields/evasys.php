@@ -336,7 +336,7 @@ class evasys extends field_base {
             'evasys_starttime',
             get_string('evasysevaluationstarttime', 'bookingextension_evasys'),
         );
-        $starttimestamp = strtotime('+1 days');
+        $starttimestamp = mktime(0, 0, 0, date('n') , date('j') + 1, date('Y'));
         $mform->setDefault('evasys_starttime', $starttimestamp);
 
         $mform->addElement(
@@ -344,7 +344,7 @@ class evasys extends field_base {
             'evasys_endtime',
             get_string('evasysevaluationendtime', 'bookingextension_evasys')
         );
-        $endtimestamp = strtotime('+2 days');
+        $endtimestamp = mktime(0, 0, 0, date('n') , date('j') + 2, date('Y'));
         $mform->setDefault('evasys_endtime', $endtimestamp);
 
         // Hide date selectors unless "duration" (option 1) is selected.
