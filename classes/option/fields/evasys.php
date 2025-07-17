@@ -182,6 +182,7 @@ class evasys extends field_base {
         }
         if (
             !empty($formdata['evasys_form'])
+            && !empty($formdata['evasys_timemode'])
             && (int) $formdata['evasys_endtime'] < $now
         ) {
             $errors['evasys_timemode'] = get_string('datepast', 'bookingextension_evasys');

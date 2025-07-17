@@ -208,7 +208,7 @@ class evasys_handler {
         }
         $useroptions = [];
         foreach ($users as $user) {
-            $useroptions[$user->id] = "$user->firstname $user->lastname";
+            $useroptions[$user->id] = "$user->firstname $user->lastname (ID: $user->id) | $user->email";
         }
         return $useroptions;
     }
