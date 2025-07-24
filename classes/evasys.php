@@ -268,15 +268,18 @@ class evasys extends bookingextension implements bookingextension_interface {
         foreach ($roles as $role) {
             $rolesarray[$role->id] = $role->name;
         }
-         $evasyssettings->add(
-             new admin_setting_configselect(
-                 'bookingextension_evasys/rolereportrecipients',
-                 get_string('rolereportrecipients', 'bookingextension_evasys'),
-                 get_string('rolereportrecipients_desc', 'bookingextension_evasys'),
-                 '',
-                 $rolesarray
-             )
-         );
+        if (empty($rolesarray)) {
+            $rolesarray[0] = get_string('nothingtoselect', 'bookingextension_evasys');
+        }
+        $evasyssettings->add(
+            new admin_setting_configselect(
+                'bookingextension_evasys/rolereportrecipients',
+                get_string('rolereportrecipients', 'bookingextension_evasys'),
+                get_string('rolereportrecipients_desc', 'bookingextension_evasys'),
+                '',
+                $rolesarray
+            )
+        );
         $evasyssettings->add(
             new admin_setting_configcheckbox(
                 'bookingextension_evasys/includeqrinoptionview',
@@ -328,32 +331,27 @@ class evasys extends bookingextension implements bookingextension_interface {
                 $customfieldshortnames
             )
         );
+
         $customoptions = [
-            '' => "",
+            '' => '',
             'fullname' => get_string('fullname', 'mod_booking'),
         ];
-         $evasyssettings->add(
-             new admin_setting_configselect(
-                 'bookingextension_evasys/evasyscustomfield5',
-                 get_string('evasyscustomfield5', 'bookingextension_evasys'),
-                 get_string('evasyscustomfield5_desc', 'bookingextension_evasys'),
-                 '',
-                 $customoptions
-             )
-         );
-            $evasys = new evasys_handler();
-            $subunitoptions = $evasys->get_subunits();
-            $periodoptions = $evasys->get_periods_for_settings();
-        if (
-                empty($subunitoptions)
-                && empty($periodoptions)
-        ) {
-            $subunitoptions = [0 => get_string('evasysnotreachable', 'bookingextension_evasys')];
-        }
+
+        $evasyssettings->add(
+            new admin_setting_configselect(
+                'bookingextension_evasys/evasyscustomfield5',
+                get_string('evasyscustomfield5', 'bookingextension_evasys'),
+                get_string('evasyscustomfield5_desc', 'bookingextension_evasys'),
+                '',
+                $customoptions
+            )
+        );
+
+        $evasys = new evasys_handler();
+        $subunitoptions = $evasys->get_subunits();
+        $periodoptions = $evasys->get_periods_for_settings();
         if (
             empty($subunitoptions)
-            && empty(get_config('bookingextension_evasys', 'evasysuser'))
-            && empty(get_config('bookingextension_evasys', 'evasyspassword'))
         ) {
             $evasyssettings->add(
                 new admin_setting_description(
@@ -363,6 +361,9 @@ class evasys extends bookingextension implements bookingextension_interface {
                 )
             );
         } else {
+            if (empty($periodoptions)) {
+                $periodoptions = [0 => get_string('nothingtoselect', 'bookingextension_evasys')];
+            }
             $evasyssettings->add(
                 new admin_setting_configselect(
                     'bookingextension_evasys/evasyssubunits',

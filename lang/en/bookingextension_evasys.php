@@ -70,6 +70,7 @@ $string['evasysuser_desc'] = 'Username for the EvaSys connection';
 $string['fieldsvalidation'] = 'Not all required fields have been selected.';
 $string['includeqrinoptionview'] = 'Show evaluation QR code in booking description';
 $string['includeqrinoptionview_desc'] = 'Displays the QR code for the EvaSys evaluation in the booking option description. Admins, teachers and booked users can see the code.';
+$string['nothingtoselect'] = 'Nothing to select';
 $string['notifyparticipants'] = 'Optional notifications to participants';
 $string['opensurvey'] = 'bookingextension_evays: open survey for data collection (adhoc task)';
 $string['otherreportrecipients'] = 'Additional report recipients (secondary instructors in EvaSys)';
