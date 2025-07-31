@@ -115,10 +115,6 @@ class evasys extends bookingextension implements bookingextension_interface {
             || isset($ba->usersonlist[$USER->id])
             || booking_check_if_teacher($settings->id)
         ) {
-            $now = time();
-            if ($now > $settings->subpluginssettings['evasys']->endtime) {
-                return $templatedata;
-            }
                 $data = [
                     'key' => 'evasys_qr',
                     'value' => '<img src="' . s($settings->subpluginssettings['evasys']->qrurl)
