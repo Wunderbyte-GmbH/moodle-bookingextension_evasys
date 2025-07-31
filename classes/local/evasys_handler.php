@@ -320,16 +320,32 @@ class evasys_handler {
     }
 
     /**
-     * Close Survey for Data collection.
+     * Close Survey for Data collection and send report to recipients.
      *
      * @param int $surveyid
      *
      * @return boolean
      *
      */
-    public function close_survey(int $surveyid) {
+    public function close_survey_final(int $surveyid) {
         $helper = new evasys_helper_service();
-        $args = $helper->set_args_close_survey($surveyid);
+        $args = $helper->set_args_close_survey_final($surveyid);
+        $soap = new evasys_soap_service();
+        $response = $soap->close_survey($args);
+        return $response;
+    }
+
+    /**
+     * Close Survey temporary for Data collection.
+     *
+     * @param int $surveyid
+     *
+     * @return boolean
+     *
+     */
+    public function close_survey_temporary(int $surveyid) {
+        $helper = new evasys_helper_service();
+        $args = $helper->set_args_close_survey_temporary($surveyid);
         $soap = new evasys_soap_service();
         $response = $soap->close_survey($args);
         return $response;
@@ -369,7 +385,7 @@ class evasys_handler {
         if (empty($survey)) {
             return $survey;
         }
-        $this->close_survey($survey->m_nSurveyId);
+        $this->close_survey_temporary($survey->m_nSurveyId);
         $qrcode = $this->get_qrcode($data->evasys_booking_id, $survey->m_nSurveyId);
         $surveyurl = $this->get_surveyurl($data->evasys_booking_id, $survey->m_nSurveyId);
         $settings = singleton_service::get_instance_of_booking_option_settings($option->id);
@@ -406,7 +422,7 @@ class evasys_handler {
         if (empty($survey)) {
             return $survey;
         }
-        $this->close_survey($survey->m_nSurveyId);
+        $this->close_survey_temporary($survey->m_nSurveyId);
         $qrcode = $this->get_qrcode($id, $survey->m_nSurveyId);
         $surveyurl = $this->get_surveyurl($id, $survey->m_nSurveyId);
         $settings = singleton_service::get_instance_of_booking_option_settings($option->id);

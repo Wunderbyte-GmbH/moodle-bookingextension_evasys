@@ -75,7 +75,7 @@ class evasys_close_survey extends \core\task\adhoc_task {
                     }
                 }
                 $handler = new evasys_handler();
-                $hasopened = $handler->close_survey($taskdata->surveyid);
+                $hasopened = $handler->close_survey_final($taskdata->surveyid);
                 if (!$hasopened) {
                     throw new Exception('Survey could not be closed on Evasys');
                 }

@@ -387,13 +387,29 @@ class evasys_helper_service {
      * @return array
      *
      */
-    public function set_args_close_survey(int $surveyid) {
+    public function set_args_close_survey_final(int $surveyid) {
         $args = [
             'nSurveyId' => $surveyid,
             'bSendReportToInstructor' => true,
         ];
         return $args;
     }
+    /**
+     * Helperfunction to set args for closing survey.
+     *
+     * @param int $surveyid
+     *
+     * @return array
+     *
+     */
+    public function set_args_close_survey_temporary(int $surveyid) {
+        $args = [
+            'nSurveyId' => $surveyid,
+            'bSendReportToInstructor' => false,
+        ];
+        return $args;
+    }
+
     /**
      * Helperfunction to set Args for getting the surveyurl.
      *
