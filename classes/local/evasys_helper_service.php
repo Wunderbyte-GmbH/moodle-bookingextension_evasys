@@ -88,15 +88,10 @@ class evasys_helper_service {
         $now = time();
         $insertdata->optionid = $option->id;
         $insertdata->formid = $formdata->evasys_form;
-        if (empty((int)$formdata->evasys_timemode)) {
-            $insertdata->starttime = (int) $option->courseendtime + (int) $formdata->evasys_durationbeforestart;
-            $insertdata->endtime = (int) $option->courseendtime + (int) $formdata->evasys_durationafterend;
-            $insertdata->durationbeforestart = $formdata->evasys_durationbeforestart;
-            $insertdata->durationafterend = $formdata->evasys_durationafterend;
-        } else {
-            $insertdata->starttime = $formdata->evasys_starttime;
-            $insertdata->endtime = $formdata->evasys_endtime;
-        }
+        $insertdata->starttime = (int) $option->courseendtime + (int) $formdata->evasys_durationbeforestart;
+        $insertdata->endtime = (int) $option->courseendtime + (int) $formdata->evasys_durationafterend;
+        $insertdata->durationbeforestart = $formdata->evasys_durationbeforestart;
+        $insertdata->durationafterend = $formdata->evasys_durationafterend;
         $insertdata->trainers = implode(',', ($formdata->teachersforoption ?? []));
         $insertdata->organizers = implode(',', ($formdata->evasys_other_report_recipients ?? []));
         $insertdata->notifyparticipants = $formdata->evasys_notifyparticipants;

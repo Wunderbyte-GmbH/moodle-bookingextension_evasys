@@ -119,6 +119,7 @@ class evasys_handler {
         $periods = $soap->fetch_periods();
         $listforarray = $periods->Periods;
         $periodoptions = $helper->transform_return_to_array($listforarray, 'm_nPeriodId', 'm_sTitel');
+        $periodoptions = array_reverse($periodoptions, true);
         foreach ($periodoptions as $key => $value) {
             if (stripos($value, $query) !== false) {
                 $list[$key] = $value;
@@ -490,7 +491,11 @@ class evasys_handler {
         $userfieldvalue = array_shift($teachers)->profile[$userfieldshortname];
         // Set User ID for Course insert to Evasys.
         $parts = explode(',', $userfieldvalue);
-        $internalid = end($parts);
+        if (!empty($parts)) {
+            $internalid = end($parts);
+        } else {
+            $internalid = (int) $userfieldvalue;
+        }
         // Make JSON for Customfields. 1-4 are bookingoption customfields, 5 is secondary teachers details.
         $count = 1;
         $customfieldvaluescollected = [];
@@ -533,7 +538,6 @@ class evasys_handler {
          // Merge the rest of the teachers with recipients so they get an Evasys Report.
          $secondaryinstructors = array_merge($teachers ?? [], $recipients ?? []);
          $secondaryinstructorsinsert = $helper->set_secondaryinstructors_for_save($secondaryinstructors);
-         $secondaryinstructorsinsert = ", " . $secondaryinstructorsinsert;
          if (!empty($data->evasysperiods)) {
              $perioddata = explode('-', $data->evasysperiods);
              $periodid = reset($perioddata);
