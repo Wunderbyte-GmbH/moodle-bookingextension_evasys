@@ -29,7 +29,9 @@ use bookingextension_evasys\event\evasys_surveycreated;
 use cache;
 use context_course;
 use bookingextension_evasys\local\evasys_helper_service;
+use context_coursecat;
 use context_module;
+use core_course_category;
 use mod_booking\singleton_service;
 use stdClass;
 defined('MOODLE_INTERNAL') || die();
@@ -199,7 +201,7 @@ class evasys_handler {
      */
     public function get_recipients() {
         global $COURSE, $DB;
-        $context = context_course::instance($COURSE->id);
+        $context = context_coursecat::instance($COURSE->category);
         $rolesid = get_config('bookingextension_evasys', 'rolereportrecipients');
         if (empty($rolesid)) {
             $users = get_enrolled_users($context);
@@ -446,6 +448,7 @@ class evasys_handler {
      *
      */
     public function aggregate_data_for_course_save($data, $option, $courseid = null) {
+        global $COURSE;
         $userfieldshortname = get_config('bookingextension_evasys', 'evasyscategoryfielduser');
         $helper = new evasys_helper_service();
         // Gets all the Teachers and looks if they already exist in Evasys.
@@ -494,8 +497,6 @@ class evasys_handler {
         $aggregatedcustomfields = [
             get_config('bookingextension_evasys', 'evasyscustomfield1'),
             get_config('bookingextension_evasys', 'evasyscustomfield2'),
-            get_config('bookingextension_evasys', 'evasyscustomfield3'),
-            get_config('bookingextension_evasys', 'evasyscustomfield4'),
          ];
         $settings = singleton_service::get_instance_of_booking_option_settings($option->id);
         foreach ($aggregatedcustomfields as $customfield) {
@@ -507,6 +508,7 @@ class evasys_handler {
             $customfieldvaluescollected[$count] = implode(',', $valuescollected);
             $count++;
         }
+        $category = core_course_category::get($COURSE->category);
         switch (get_config('bookingextension_evasys', 'evasyscustomfield5')) {
             case 'fullname':
                  $teachernames = [];
@@ -520,17 +522,18 @@ class evasys_handler {
                 $customfield5 = "";
         }
          $coursecustomfield = [
-                '1' => $customfieldvaluescollected[1],
-                '2' => $customfieldvaluescollected[2],
-                '3' => $customfieldvaluescollected[3],
-                '4' => $customfieldvaluescollected[4],
-                '5' => $customfield5,
+                '1' => $COURSE->category ?? "",
+                '2' => $category->get_formatted_name() ?? "",
+                '3' => $customfieldvaluescollected[1],
+                '4' => $customfieldvaluescollected[2],
+                '5' => ", " . $customfield5,
          ];
          $customfields = json_encode($coursecustomfield, JSON_UNESCAPED_UNICODE);
 
          // Merge the rest of the teachers with recipients so they get an Evasys Report.
          $secondaryinstructors = array_merge($teachers ?? [], $recipients ?? []);
          $secondaryinstructorsinsert = $helper->set_secondaryinstructors_for_save($secondaryinstructors);
+         $secondaryinstructorsinsert = ", " . $secondaryinstructorsinsert;
          if (!empty($data->evasysperiods)) {
              $perioddata = explode('-', $data->evasysperiods);
              $periodid = reset($perioddata);
@@ -540,7 +543,7 @@ class evasys_handler {
          $coursedata = $helper->set_args_insert_course(
              $option->text,
              (int) $option->id,
-             $internalid,
+             (int) $internalid,
              (int) $periodid,
              $secondaryinstructorsinsert,
              $customfields,

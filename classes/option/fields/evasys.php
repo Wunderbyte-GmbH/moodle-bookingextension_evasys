@@ -165,33 +165,12 @@ class evasys extends field_base {
      */
     public static function validation(array $formdata, array $files, array &$errors) {
         $settings = singleton_service::get_instance_of_booking_option_settings($formdata['id']);
-        $now = time();
         if (
             empty($formdata['evasys_form'])
             && !empty($settings->subpluginssettings['evasys']->formid)
             && empty($formdata['evasys_confirmdelete'])
         ) {
                 $errors['evasys_confirmdelete'] = get_string('delete', 'bookingextension_evasys');
-        }
-        if (
-            !empty($formdata['evasys_form'])
-            && empty($formdata['evasys_timemode'])
-            && empty($settings->courseendtime)
-        ) {
-            $errors['evasys_timemode'] = get_string('setcourseendtime', 'bookingextension_evasys');
-        }
-        if (
-            !empty($formdata['evasys_form'])
-            && !empty($formdata['evasys_timemode'])
-            && (int) $formdata['evasys_endtime'] < $now
-        ) {
-            $errors['evasys_timemode'] = get_string('datepast', 'bookingextension_evasys');
-        }
-        if (
-            !empty($formdata['evasys_form'])
-            && $settings->courseendtime < $settings->coursestarttime
-        ) {
-                $errors['evasys_timemode'] = get_string('setcourseendtime', 'bookingextension_evasys');
         }
         return $errors;
     }
@@ -285,19 +264,18 @@ class evasys extends field_base {
         );
 
         $mform->hideIf('evasys_confirmdelete', 'evasys_delete', 'eq', 0);
+        // Customer wants the option to potentially have this, but not now.
         $options = [
             0 => get_string('timemodeduration', 'bookingextension_evasys'),
             1 => get_string('timemodestart', 'bookingextension_evasys'),
 
         ];
         $mform->addElement(
-            'select',
+            'hidden',
             'evasys_timemode',
-            get_string('timemode', 'bookingextension_evasys'),
-            $options
+            0
         );
-        $mform->setDefault('evasys_timemode', 0);
-
+        $mform->setType('evasys_timemode', PARAM_INT);
         $beforestartoptions = [
             -172800 => "48",
             - 86400 => "24",

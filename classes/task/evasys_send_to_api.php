@@ -128,6 +128,7 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                             $evasys->delete_survey($data->evasys_surveyid);
                             // Afterwards the course.
                             $evasys->delete_course($data->evasys_courseidinternal, $data->evasys_booking_id);
+                            booking_option::purge_cache_for_option($newoption->id);
                             return;
                     }
                     $updatesurvey = false;
