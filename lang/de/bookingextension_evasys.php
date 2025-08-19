@@ -47,6 +47,7 @@ $string['evasyscustomfield4'] = 'EvaSys Kurs benutzerdefiniertes Feld Slot 4';
 $string['evasyscustomfield4_desc'] = 'Benutzerdefiniertes Buchungsoptionsfeld auswählen als EvaSys Kurs benutzerdefiniertes Feld';
 $string['evasyscustomfield5'] = 'EvaSys Kurs benutzerdefiniertes Feld Slot 5';
 $string['evasyscustomfield5_desc'] = 'Daten der zusätzliche Trainer:innen auswählen als EvaSys Kurs benutzerdefiniertes Feld';
+$string['evasysdescription'] = 'Evaluierungen werden erst angelegt, wenn Trainer*innen festgelegt wurden und alle Felder nach Auswahl des Fragebogens befüllt wurden';
 $string['evasysevaluationendtime'] = 'Ende des Evaluierungszeitraums';
 $string['evasysevaluationstarttime'] = 'Beginn des Evaluierungszeitraums';
 $string['evasysheader'] = 'Evaluierung';
