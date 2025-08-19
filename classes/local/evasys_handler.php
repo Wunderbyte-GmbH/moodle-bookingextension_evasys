@@ -201,15 +201,18 @@ class evasys_handler {
      *
      */
     public function get_recipients() {
-        global $COURSE, $DB;
-        $context = context_coursecat::instance($COURSE->category);
-        $rolesid = get_config('bookingextension_evasys', 'rolereportrecipients');
-        if (empty($rolesid)) {
-            $users = get_enrolled_users($context);
-        } else {
-            $users = get_role_users($rolesid, $context);
+        global $DB;
+        $roleid = get_config('bookingextension_evasys', 'rolereportrecipients');
+        if (empty($roleid)) {
+            return [];
         }
-        $useroptions = [];
+        $sql = "SELECT DISTINCT u.*
+          FROM {role_assignments} ra
+          JOIN {user} u ON u.id = ra.userid
+         WHERE ra.roleid = :roleid";
+
+        $params = ['roleid' => $roleid];
+        $users = $DB->get_records_sql($sql, $params);
         foreach ($users as $user) {
             $useroptions[$user->id] = "$user->firstname $user->lastname (ID: $user->id) | $user->email";
         }
@@ -445,7 +448,7 @@ class evasys_handler {
      * @param object $option
      * @param int $courseid
      *
-     * @return object
+     * @return array
      *
      */
     public function aggregate_data_for_course_save($data, $option, $courseid = null) {

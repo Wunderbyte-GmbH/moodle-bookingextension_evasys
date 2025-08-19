@@ -192,12 +192,12 @@ class evasys_soap_service extends SoapClient {
     /**
      * Insert Course to EvaSys.
      *
-     * @param object $args
+     * @param array $args
      *
      * @return object|null
      *
      */
-    public function insert_course(object $args) {
+    public function insert_course(array $args) {
         try {
             $response = $this->__soapCall('InsertCourse', ['course' => $args]);
             return $response;

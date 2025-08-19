@@ -115,14 +115,18 @@ class evasys extends bookingextension implements bookingextension_interface {
             || isset($ba->usersonlist[$USER->id])
             || booking_check_if_teacher($settings->id)
         ) {
-                $data = [
-                    'key' => 'evasys_qr',
-                    'value' => '<img src="' . s($settings->subpluginssettings['evasys']->qrurl)
-                        . '" alt="' . get_string('evasysqrcode', 'bookingextension_evasys') . '" class="w-100">',
-                    'label' => 'evasys_qr_class',
-                    'description' => get_string('evasysqrcode', 'bookingextension_evasys'),
-                ];
-                $templatedata = [$data];
+            $now = time();
+            if ($now > $settings->subpluginssettings['evasys']->endtime) {
+                return $templatedata;
+            }
+            $data = [
+                'key' => 'evasys_qr',
+                'value' => '<img src="' . s($settings->subpluginssettings['evasys']->qrurl)
+                    . '" alt="' . get_string('evasysqrcode', 'bookingextension_evasys') . '" class="w-100">',
+                'label' => 'evasys_qr_class',
+                'description' => get_string('evasysqrcode', 'bookingextension_evasys'),
+            ];
+            $templatedata = [$data];
         }
         return $templatedata;
     }
@@ -157,6 +161,10 @@ class evasys extends bookingextension implements bookingextension_interface {
             )
             && isset($settings->subpluginssettings['evasys']->qrurl)
         ) {
+            $now = time();
+            if ($now > $settings->subpluginssettings['evasys']->endtime) {
+                return $option;
+            }
             // First Option show link to qr-code.
             $url = $settings->subpluginssettings['evasys']->qrurl;
             $option = '<a href="' . $url . '" target="_blank" class="dropdown-item d-flex align-items-center">

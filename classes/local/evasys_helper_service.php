@@ -168,7 +168,7 @@ class evasys_helper_service {
      * @param string $customfield
      * @param mixed $courseid
      *
-     * @return object
+     * @return array
      *
      */
     public function set_args_insert_course(
@@ -184,7 +184,7 @@ class evasys_helper_service {
         $array = explode('-', $subunitencoded);
         $subunitname = base64_decode(end($array));
         $subunitid = reset($array);
-        $coursedata = (object) [
+        $coursedata = [
             'm_nCourseId' => $courseid,
             'm_sProgramOfStudy' => (string)$subunitname,
             'm_sCourseTitle' => "$title",
