@@ -246,7 +246,7 @@ class evasys extends field_base {
                 );
             }
         }
-        $mform->addElement('description', 'evasysdescription', get_string('evasysdescription', 'bookingextension_evasys'));
+        $mform->addElement('static', 'evasysdescription', get_string('evasysdescription', 'bookingextension_evasys'));
         $mform->addElement(
             'autocomplete',
             'evasys_form',
