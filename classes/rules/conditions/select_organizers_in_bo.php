@@ -130,13 +130,19 @@ class select_organizers_in_bo implements booking_rule_condition {
      * @param array $params
      */
     public function execute(stdClass &$sql, array &$params): void {
-
         global $DB;
-        $sql->select = $sql->select . ",boz.optionid, u.id";
+
+        $sql->select .= ", boz.optionid, u.id";
+
         $sql->from .= " JOIN {bookingextension_evasys} boz ON boz.optionid = bo.id";
-        $sql->from .= " JOIN m_user u on CONCAT(',', boz.organizers, ',') LIKE CONCAT('%,', u.id, ',%')";
-        $concat = $DB->sql_concat("bo.id", "'-'", "u.id");
-        $sql->select = " $concat AS uniqueid, " . $sql->select;
-        $sql->select .= ", u.id::int AS userid";
+
+        $concat1 = $DB->sql_concat("','", "boz.organizers", "','");
+        $concat2 = $DB->sql_concat("'%,'", "u.id", "',%'");
+        $sql->from .= " JOIN {user} u ON $concat1 LIKE $concat2";
+
+        $concatunique = $DB->sql_concat("bo.id", "'-'", "u.id");
+        $sql->select = " $concatunique AS uniqueid, " . $sql->select;
+
+        $sql->select .= ", u.id AS userid";
     }
 }
