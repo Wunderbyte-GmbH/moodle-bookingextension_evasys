@@ -209,12 +209,12 @@ class evasys_soap_service extends SoapClient {
     /**
      * Updates the Course to EvaSys.
      *
-     * @param object $args
+     * @param array $args
      *
      * @return object|null
      *
      */
-    public function update_course(object $args) {
+    public function update_course(array $args) {
         try {
             $response = $this->__soapCall('UpdateCourse', ['course' => $args]);
             return $response;
