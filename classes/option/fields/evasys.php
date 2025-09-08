@@ -282,7 +282,7 @@ class evasys extends field_base {
             - 86400 => "24",
             -7200 => "2",
             -3600 => "1",
-            0 => "0",
+            -1800 => "0,5",
         ];
 
         // Add date selectors.
