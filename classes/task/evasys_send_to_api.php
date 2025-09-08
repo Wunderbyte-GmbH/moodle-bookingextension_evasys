@@ -27,6 +27,7 @@ namespace bookingextension_evasys\task;
 
 use bookingextension_evasys\local\evasys_handler;
 use mod_booking\booking_option;
+use mod_booking\option\fields\courseid;
 
 
 defined('MOODLE_INTERNAL') || die();
@@ -75,6 +76,7 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                     'relevantkeyscourse',
                     'recipients',
                     'data',
+                    'courseid',
                 ];
                 foreach ($requiredkeys as $key) {
                     if (!property_exists($taskdata, $key)) {
@@ -96,7 +98,7 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                 }
                 $evasys = new evasys_handler();
                 if (empty($data->evasys_courseidexternal) && !empty($data->evasys_form)) {
-                    $course = $evasys->create_course($data, $newoption);
+                    $course = $evasys->create_course($data, $newoption, $taskdata->courseid);
                     if (empty($course)) {
                           mtrace($this->get_name() . ': On course creation there was no connection to EvaSys');
                           return;
@@ -157,7 +159,7 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                     }
                     if ($updatesurvey) {
                         $surveyid = $data->evasys_surveyid;
-                        $evasys->update_survey($surveyid, $data, $newoption);
+                        $evasys->update_survey($surveyid, $data, $newoption, $taskdata->courseid);
                         $taskopen = new evasys_open_survey();
                         $taskclose = new evasys_close_survey();
                         $taskdata = [
@@ -171,7 +173,7 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                         \core\task\manager::reschedule_or_queue_adhoc_task($taskclose);
                     }
                     if ($updatecourse) {
-                        $evasys->update_course($data, $newoption, $data->evasys_booking_id);
+                        $evasys->update_course($data, $newoption, $data->evasys_booking_id, $taskdata->courseid);
                     }
                 }
                 booking_option::purge_cache_for_option($newoption->id);

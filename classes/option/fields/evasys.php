@@ -496,6 +496,7 @@ class evasys extends field_base {
         object $newoption,
         object $originaloption
     ) {
+        global $COURSE;
         // Get just the relevant data for the logic of the task.
         $settings = singleton_service::get_instance_of_booking_option_settings($newoption->id);
         if (!isset($settings->subpluginssettings['evasys']->id)) {
@@ -526,6 +527,7 @@ class evasys extends field_base {
             'relevantkeyscourse' => self::$relevantkeyscourse,
             'recipients' => $data->evasys_other_report_recipients,
             'data' => $relevantdata,
+            'courseid' => $COURSE->category,
         ];
         $task->set_custom_data($taskdata);
         // Now queue the task or reschedule it if it already exists (with matching data).

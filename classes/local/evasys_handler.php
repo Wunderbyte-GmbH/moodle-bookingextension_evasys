@@ -363,15 +363,16 @@ class evasys_handler {
      * @param int $surveyid
      * @param object $data
      * @param object $option
+     * @param int $moodlecourseid
      *
      * @return object | null
      *
      */
-    public function update_survey(int $surveyid, object $data, object $option) {
+    public function update_survey(int $surveyid, object $data, object $option, int $moodlecourseid) {
         global $DB;
         $soap = new evasys_soap_service();
         $helper = new evasys_helper_service();
-        $coursedata = self::aggregate_data_for_course_save($data, $option, $data->evasys_courseidinternal);
+        $coursedata = self::aggregate_data_for_course_save($data, $option, $moodlecourseid, $data->evasys_courseidinternal);
         $course = $soap->update_course($coursedata);
         if (empty($course)) {
             return;
@@ -446,13 +447,13 @@ class evasys_handler {
      *
      * @param object $data
      * @param object $option
-     * @param int $courseid
+     * @param int $moodlecourseid
+     * @param int $evasyscourseid
      *
      * @return array
      *
      */
-    public function aggregate_data_for_course_save($data, $option, $courseid = null) {
-        global $COURSE;
+    public function aggregate_data_for_course_save($data, $option, $moodlecourseid, $evasyscourseid = null) {
         $userfieldshortname = get_config('bookingextension_evasys', 'evasyscategoryfielduser');
         $helper = new evasys_helper_service();
         // Gets all the Teachers and looks if they already exist in Evasys.
@@ -516,7 +517,7 @@ class evasys_handler {
             $customfieldvaluescollected[$count] = implode(',', $valuescollected);
             $count++;
         }
-        $category = core_course_category::get($COURSE->category);
+        $category = core_course_category::get((int) $moodlecourseid, IGNORE_MISSING);
         switch (get_config('bookingextension_evasys', 'evasyscustomfield5')) {
             case 'fullname':
                  $teachernames = [];
@@ -529,8 +530,8 @@ class evasys_handler {
             default:
                 $customfield5 = "";
         }
-         $coursecustomfield = [
-                '1' => $COURSE->category ?? "",
+        $coursecustomfield = [
+                '1' => $category->id ?? '',
                 '2' => $category->get_formatted_name() ?? "",
                 '3' => $customfieldvaluescollected[1],
                 '4' => $customfieldvaluescollected[2],
@@ -541,12 +542,12 @@ class evasys_handler {
          // Merge the rest of the teachers with recipients so they get an Evasys Report.
          $secondaryinstructors = array_merge($teachers ?? [], $recipients ?? []);
          $secondaryinstructorsinsert = $helper->set_secondaryinstructors_for_save($secondaryinstructors);
-         if (!empty($data->evasysperiods)) {
+        if (!empty($data->evasysperiods)) {
              $perioddata = explode('-', $data->evasysperiods);
              $periodid = reset($perioddata);
-         } else {
+        } else {
              $periodid = get_config('bookingextension_evasys', 'evasysperiods');
-         }
+        }
          $coursedata = $helper->set_args_insert_course(
              $option->text,
              (int) $option->id,
@@ -554,7 +555,7 @@ class evasys_handler {
              (int) $periodid,
              $secondaryinstructorsinsert,
              $customfields,
-             $courseid,
+             $evasyscourseid,
          );
         return $coursedata;
     }
@@ -568,9 +569,9 @@ class evasys_handler {
      * @return object|null
      *
      */
-    public function create_course(object $data, object $option) {
+    public function create_course(object $data, object $option, $moodlecourseid) {
         global $DB;
-        $coursedata = $this->aggregate_data_for_course_save($data, $option);
+        $coursedata = $this->aggregate_data_for_course_save($data, $option, $moodlecourseid);
         $soap = new evasys_soap_service();
         $response = $soap->insert_course($coursedata);
         if (!empty($response)) {
@@ -611,12 +612,13 @@ class evasys_handler {
      * @param object $data
      * @param object $newoption
      * @param int $tableid
+     * @param int $moodlecourseid
      *
      * @return object|null
      *
      */
-    public function update_course(object $data, object $newoption, int $tableid) {
-        $coursedata = $this->aggregate_data_for_course_save($data, $newoption, $tableid);
+    public function update_course(object $data, object $newoption, int $tableid, int $moodlecourseid) {
+        $coursedata = $this->aggregate_data_for_course_save($data, $newoption, $moodlecourseid, $tableid);
         $soap = new evasys_soap_service();
         $response = $soap->update_course($coursedata);
         return $response;
