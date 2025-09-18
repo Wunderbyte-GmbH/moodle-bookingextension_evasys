@@ -64,7 +64,7 @@ class evasysevaluationstarttime {
         if (!$record) {
             return "";
         }
-        return date('d.m.y H:i', $record->starttime);
+        return date('d.m.Y H:i', $record->starttime);
     }
 
     /**
