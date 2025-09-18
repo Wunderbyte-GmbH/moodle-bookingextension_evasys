@@ -26,6 +26,7 @@
 namespace bookingextension_evasys\task;
 
 use bookingextension_evasys\local\evasys_handler;
+use mod_booking\booking_option;
 
 
 defined('MOODLE_INTERNAL') || die();
@@ -68,6 +69,7 @@ class evasys_close_survey extends \core\task\adhoc_task {
                 // Check if all required keys exist in $taskdata.
                 $requiredkeys = [
                     'surveyid',
+                    'optionid',
                 ];
                 foreach ($requiredkeys as $key) {
                     if (!property_exists($taskdata, $key)) {
@@ -80,6 +82,7 @@ class evasys_close_survey extends \core\task\adhoc_task {
                     $handler->close_survey_temporary($taskdata->surveyid);
                     mtrace($this->get_name()) . ": Survey was closed, but no answers were submitted";
                 }
+                booking_option::purge_cache_for_option($taskdata->optionid);
                 mtrace($this->get_name() . ": Task done successfully.");
             } catch (\Throwable $e) {
                 mtrace($this->get_name() . ": ERROR - " . $e->getMessage());
