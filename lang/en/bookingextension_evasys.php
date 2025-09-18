@@ -27,6 +27,7 @@ $string['conditionselectorganizersinbo_desc'] = 'Select Additional report recipi
 $string['confirmdelete'] = 'Confirm deletion';
 $string['datepast'] = 'The start time of the evaluation cannot be in the past.';
 $string['delete'] = 'Do you want to delete all data for the evaluation in EvaSys?';
+$string['evaluationactive'] = 'Evaluation can not be deleted because it is already active';
 $string['evaluationdurationafterend'] = 'End of evaluation period (hours after event end)';
 $string['evaluationdurationbeforestart'] = 'Start of evaluation period (hours before event start)';
 $string['evasys'] = 'EvaSys';
