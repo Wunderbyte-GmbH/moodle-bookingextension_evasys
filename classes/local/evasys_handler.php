@@ -526,6 +526,9 @@ class evasys_handler {
                     $teachernames[] = $names;
                 }
                 $customfield5 = implode(',', $teachernames);
+                if(!empty($customfield5)) {
+                    $customfield5 = ", " . $customfield5;
+                }
                 break;
             default:
                 $customfield5 = "";
@@ -535,7 +538,7 @@ class evasys_handler {
                 '2' => $category->get_formatted_name() ?? "",
                 '3' => $customfieldvaluescollected[1],
                 '4' => $customfieldvaluescollected[2],
-                '5' => ", " . $customfield5,
+                '5' => $customfield5
          ];
          $customfields = json_encode($coursecustomfield, JSON_UNESCAPED_UNICODE);
 
