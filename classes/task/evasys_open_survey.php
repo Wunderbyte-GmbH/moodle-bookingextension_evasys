@@ -26,8 +26,6 @@
 namespace bookingextension_evasys\task;
 
 use bookingextension_evasys\local\evasys_handler;
-use PhpParser\Error;
-
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -78,7 +76,7 @@ class evasys_open_survey extends \core\task\adhoc_task {
                 $handler = new evasys_handler();
                 $hasopened = $handler->open_survey($taskdata->surveyid);
                 if (!$hasopened) {
-                    throw new Error('Survey could not be opened on Evasys');
+                    throw new Exception ('Survey could not be opened on Evasys');
                 }
                 mtrace($this->get_name() . ": Task done successfully.");
             } catch (\Throwable $e) {
