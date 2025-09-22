@@ -353,20 +353,20 @@ class evasys extends bookingextension implements bookingextension_interface {
             }
             $evasyssettings->add(
                 new admin_setting_configselect(
-                    'bookingextension_evasys/evasyssubunits',
-                    get_string('evasyssubunits', 'bookingextension_evasys'),
-                    get_string('evasyssubunits_desc', 'bookingextension_evasys'),
-                    0,
-                    $subunitoptions
-                )
-            );
-            $evasyssettings->add(
-                new admin_setting_configselect(
                     'bookingextension_evasys/evasysperiods',
                     get_string('evasysperiods', 'bookingextension_evasys'),
                     get_string('evasysperiods_desc', 'bookingextension_evasys'),
                     0,
                     $periodoptions
+                )
+            );
+            $evasyssettings->add(
+                new admin_setting_configselect(
+                    'bookingextension_evasys/evasyssubunits',
+                    get_string('evasyssubunits', 'bookingextension_evasys'),
+                    get_string('evasyssubunits_desc', 'bookingextension_evasys'),
+                    0,
+                    $subunitoptions
                 )
             );
         }
