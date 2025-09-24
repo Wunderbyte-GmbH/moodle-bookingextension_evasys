@@ -117,6 +117,18 @@ class evasys_soap_service extends SoapClient {
             $response = $this->__soapCall('GetAllPeriods', []);
             return $response;
         } catch (SoapFault $e) {
+            if (get_config('booking', 'bookingdebugmode')) {
+                // If debug mode is enabled, we create a debug message.
+                $event = booking_debug::create([
+                    'objectid' => $optionid ?? 0,
+                    'context' => context_system::instance(),
+                    'relateduserid' => $USER->id ?? 0,
+                    'other' => [
+                        'error' => $e,
+                    ],
+                ]);
+                $event->trigger();
+            }
             return null;
         }
     }
@@ -168,6 +180,18 @@ class evasys_soap_service extends SoapClient {
             $response = $this->__soapCall('GetForm', $args);
             return $response;
         } catch (SoapFault $e) {
+            if (get_config('booking', 'bookingdebugmode')) {
+                // If debug mode is enabled, we create a debug message.
+                $event = booking_debug::create([
+                    'objectid' => $optionid ?? 0,
+                    'context' => context_system::instance(),
+                    'relateduserid' => $USER->id ?? 0,
+                    'other' => [
+                        'error' => $e,
+                    ],
+                ]);
+                $event->trigger();
+            }
             return null;
         }
     }
@@ -185,6 +209,18 @@ class evasys_soap_service extends SoapClient {
             $response = $this->__soapCall('InsertUser', ['user' => $args]);
             return $response;
         } catch (SoapFault $e) {
+            if (get_config('booking', 'bookingdebugmode')) {
+                // If debug mode is enabled, we create a debug message.
+                $event = booking_debug::create([
+                    'objectid' => $optionid ?? 0,
+                    'context' => context_system::instance(),
+                    'relateduserid' => $USER->id ?? 0,
+                    'other' => [
+                        'error' => $e,
+                    ],
+                ]);
+                $event->trigger();
+            }
             return null;
         }
     }
@@ -202,6 +238,18 @@ class evasys_soap_service extends SoapClient {
             $response = $this->__soapCall('InsertCourse', ['course' => $args]);
             return $response;
         } catch (SoapFault $e) {
+            if (get_config('booking', 'bookingdebugmode')) {
+                // If debug mode is enabled, we create a debug message.
+                $event = booking_debug::create([
+                    'objectid' => $optionid ?? 0,
+                    'context' => context_system::instance(),
+                    'relateduserid' => $USER->id ?? 0,
+                    'other' => [
+                        'error' => $e,
+                    ],
+                ]);
+                $event->trigger();
+            }
             return null;
         }
     }
@@ -219,6 +267,18 @@ class evasys_soap_service extends SoapClient {
             $response = $this->__soapCall('UpdateCourse', ['course' => $args]);
             return $response;
         } catch (SoapFault $e) {
+            if (get_config('booking', 'bookingdebugmode')) {
+                // If debug mode is enabled, we create a debug message.
+                $event = booking_debug::create([
+                    'objectid' => $optionid ?? 0,
+                    'context' => context_system::instance(),
+                    'relateduserid' => $USER->id ?? 0,
+                    'other' => [
+                        'error' => $e,
+                    ],
+                ]);
+                $event->trigger();
+            }
             return null;
         }
     }
@@ -236,6 +296,18 @@ class evasys_soap_service extends SoapClient {
             $response = $this->__soapCall('DeleteCourse', $args);
             return $response;
         } catch (SoapFault $e) {
+            if (get_config('booking', 'bookingdebugmode')) {
+                // If debug mode is enabled, we create a debug message.
+                $event = booking_debug::create([
+                    'objectid' => $optionid ?? 0,
+                    'context' => context_system::instance(),
+                    'relateduserid' => $USER->id ?? 0,
+                    'other' => [
+                        'error' => $e,
+                    ],
+                ]);
+                $event->trigger();
+            }
             return false;
         }
     }
@@ -253,6 +325,18 @@ class evasys_soap_service extends SoapClient {
             $response = $this->__soapCall('InsertCentralSurvey', $args);
             return $response;
         } catch (SoapFault $e) {
+            if (get_config('booking', 'bookingdebugmode')) {
+                // If debug mode is enabled, we create a debug message.
+                $event = booking_debug::create([
+                    'objectid' => $optionid ?? 0,
+                    'context' => context_system::instance(),
+                    'relateduserid' => $USER->id ?? 0,
+                    'other' => [
+                        'error' => $e,
+                    ],
+                ]);
+                $event->trigger();
+            }
             return null;
         }
     }
@@ -270,6 +354,18 @@ class evasys_soap_service extends SoapClient {
             $response = $this->__soapCall('DeleteSurvey', $args);
             return $response;
         } catch (SoapFault $e) {
+            if (get_config('booking', 'bookingdebugmode')) {
+                // If debug mode is enabled, we create a debug message.
+                $event = booking_debug::create([
+                    'objectid' => $optionid ?? 0,
+                    'context' => context_system::instance(),
+                    'relateduserid' => $USER->id ?? 0,
+                    'other' => [
+                        'error' => $e,
+                    ],
+                ]);
+                $event->trigger();
+            }
             return false;
         }
     }
@@ -287,6 +383,18 @@ class evasys_soap_service extends SoapClient {
             $response = $this->__soapCall('GetOnlineQRCode', $args);
             return $response;
         } catch (SoapFault $e) {
+            if (get_config('booking', 'bookingdebugmode')) {
+                // If debug mode is enabled, we create a debug message.
+                $event = booking_debug::create([
+                    'objectid' => $optionid ?? 0,
+                    'context' => context_system::instance(),
+                    'relateduserid' => $USER->id ?? 0,
+                    'other' => [
+                        'error' => $e,
+                    ],
+                ]);
+                $event->trigger();
+            }
             return "";
         }
     }
@@ -304,6 +412,18 @@ class evasys_soap_service extends SoapClient {
             $response = $this->__soapCall('OpenSurvey', $args);
             return $response;
         } catch (SoapFault $e) {
+            if (get_config('booking', 'bookingdebugmode')) {
+                // If debug mode is enabled, we create a debug message.
+                $event = booking_debug::create([
+                    'objectid' => $optionid ?? 0,
+                    'context' => context_system::instance(),
+                    'relateduserid' => $USER->id ?? 0,
+                    'other' => [
+                        'error' => $e,
+                    ],
+                ]);
+                $event->trigger();
+            }
             return false;
         }
     }
@@ -320,6 +440,18 @@ class evasys_soap_service extends SoapClient {
             $response = $this->__soapCall('CloseSurvey', $args);
             return $response;
         } catch (SoapFault $e) {
+            if (get_config('booking', 'bookingdebugmode')) {
+                // If debug mode is enabled, we create a debug message.
+                $event = booking_debug::create([
+                    'objectid' => $optionid ?? 0,
+                    'context' => context_system::instance(),
+                    'relateduserid' => $USER->id ?? 0,
+                    'other' => [
+                        'error' => $e,
+                    ],
+                ]);
+                $event->trigger();
+            }
             return false;
         }
     }
@@ -337,6 +469,18 @@ class evasys_soap_service extends SoapClient {
             $response = $this->__soapCall('GetPswdsBySurvey', $args);
             return $response;
         } catch (SoapFault $e) {
+            if (get_config('booking', 'bookingdebugmode')) {
+                // If debug mode is enabled, we create a debug message.
+                $event = booking_debug::create([
+                    'objectid' => $optionid ?? 0,
+                    'context' => context_system::instance(),
+                    'relateduserid' => $USER->id ?? 0,
+                    'other' => [
+                        'error' => $e,
+                    ],
+                ]);
+                $event->trigger();
+            }
             return null;
         }
     }
