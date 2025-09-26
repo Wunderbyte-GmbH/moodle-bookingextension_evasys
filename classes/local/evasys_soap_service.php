@@ -27,6 +27,8 @@ namespace bookingextension_evasys\local;
 use SoapClient;
 use SoapFault;
 use SoapHeader;
+use mod_booking\event\booking_debug;
+use context_system;
 
 
 /**
