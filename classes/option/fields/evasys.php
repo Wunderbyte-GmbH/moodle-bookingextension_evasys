@@ -120,7 +120,7 @@ class evasys extends field_base {
      *
      * @var array
      */
-    public static $relevantkeyscourse = ['evasys_other_report_recipients'];
+    public static $relevantkeyscourse = ['evasys_other_report_recipients', 'coursestarttime'];
 
     /**
      * Prepare Savefield.
@@ -518,6 +518,7 @@ class evasys extends field_base {
 
         $task = new evasys_send_to_api();
         $taskdata = [
+            'coursestarttimechanges' => $changes["mod_booking\\option\\fields\\coursestarttime"],
             'teacherchanges' => $changes["mod_booking\\option\\fields\\teachers"],
             'namechanges' => $changes["mod_booking\\option\\fields\\text"],
             'relevantchanges' => $changes["bookingextension_evasys\\option\\fields\\evasys"]['changes'],

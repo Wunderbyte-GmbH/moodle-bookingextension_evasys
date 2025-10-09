@@ -537,8 +537,8 @@ class evasys_handler {
         $coursecustomfield = [
                 '1' => $category->id ?? '',
                 '2' => $category->get_formatted_name() ?? "",
-                '3' => $customfieldvaluescollected[1],
-                '4' => $customfieldvaluescollected[2],
+                '3' => date('d.m.Y', $settings->coursestarttime),
+                '4' => $customfieldvaluescollected[1],
                 '5' => $customfield5,
          ];
          $customfields = json_encode($coursecustomfield, JSON_UNESCAPED_UNICODE);

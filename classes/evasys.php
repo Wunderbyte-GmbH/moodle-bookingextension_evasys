@@ -310,15 +310,6 @@ class evasys extends bookingextension implements bookingextension_interface {
                 $customfieldshortnames
             )
         );
-         $evasyssettings->add(
-             new admin_setting_configselect(
-                 'bookingextension_evasys/evasyscustomfield2',
-                 get_string('evasyscustomfield2', 'bookingextension_evasys'),
-                 get_string('evasyscustomfield2_desc', 'bookingextension_evasys'),
-                 '',
-                 $customfieldshortnames
-             )
-         );
         $customoptions = [
             '' => '',
             'fullname' => get_string('fullname', 'mod_booking'),
