@@ -171,10 +171,10 @@ class evasys extends bookingextension implements bookingextension_interface {
             $url = $settings->subpluginssettings['evasys']->qrurl;
             $option = '<a href="' . $url . '" target="_blank" class="dropdown-item d-flex align-items-center">
             <i class="icon fa fa-qrcode fa-fw mr-2" aria-hidden="true""
-                aria-label="' . get_string('evasysqrcode', 'bookingextension_evasys') . '"
-                title="' . get_string('evasysqrcode', 'bookingextension_evasys') . '">
+                aria-label="' . get_string('evasysqrcode_col', 'bookingextension_evasys') . '"
+                title="' . get_string('evasysqrcode_col', 'bookingextension_evasys') . '">
             </i>
-            ' . get_string('evasysqrcode', 'bookingextension_evasys') . '
+            ' . get_string('evasysqrcode_col', 'bookingextension_evasys') . '
         </a>';
             // Second Option show the survey.
             $url = $settings->subpluginssettings['evasys']->surveyurl;
