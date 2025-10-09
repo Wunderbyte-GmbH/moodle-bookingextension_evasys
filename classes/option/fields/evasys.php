@@ -426,7 +426,8 @@ class evasys extends field_base {
      */
     public static function definition_after_data(MoodleQuickForm &$mform, $formdata) {
         $freezetime = time();
-        $evaluationstarttime = (int)($formdata['evasys_starttime'] ?? 0);
+        $settings = singleton_service::get_instance_of_booking_option_settings($formdata['optionid']);
+        $evaluationstarttime = $settings->subpluginssettings['evasys']->starttime ?? 0;
         if (empty($evaluationstarttime)) {
             return;
         }
