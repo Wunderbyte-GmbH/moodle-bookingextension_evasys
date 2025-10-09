@@ -97,6 +97,7 @@ class evasys_handler {
         }
         $list = $periods->Periods;
         $periodoptions = $helper->transform_return_to_array($list, 'm_nPeriodId', 'm_sTitel');
+        $periodoptions = array_reverse($periodoptions, true);
         $encodedperiods = [];
         foreach ($periodoptions as $id => $label) {
             $encodedkey = $id . '-' . base64_encode($label);
