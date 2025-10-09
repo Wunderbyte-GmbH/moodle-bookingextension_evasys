@@ -64,7 +64,7 @@ class evasysqrcode {
         if (!$record) {
             return "";
         }
-        return html_writer::img(
+        return " " . html_writer::img(
             $record->qrurl,
             get_string('evasysqrcode', 'bookingextension_evasys'),
             ['width' => '150', 'height' => '150']
