@@ -425,23 +425,6 @@ class evasys extends field_base {
      *
      */
     public static function definition_after_data(MoodleQuickForm &$mform, $formdata) {
-        $nosubmit = false;
-        foreach ($mform->_noSubmitButtons as $key) {
-            if (isset($formdata[$key])) {
-                $nosubmit = true;
-                break;
-            }
-        }
-        if (
-            !$nosubmit
-            && isset($formdata['evasys_form'])
-            && ($mform->_flagSubmitted ?? false)
-            && empty($formdata['evasys_form'])
-        ) {
-            $validationelement = $mform->getElement('evasys_delete');
-            $validationelement->setValue(1);
-        }
-
         $freezetime = time();
         $evaluationstarttime = (int)($formdata['evasys_starttime'] ?? 0);
         if (empty($evaluationstarttime)) {
@@ -460,6 +443,22 @@ class evasys extends field_base {
                 'evasys_notifyparticipants',
             ]);
         };
+        $nosubmit = false;
+        foreach ($mform->_noSubmitButtons as $key) {
+            if (isset($formdata[$key])) {
+                $nosubmit = true;
+                break;
+            }
+        }
+        if (
+            !$nosubmit
+            && isset($formdata['evasys_form'])
+            && ($mform->_flagSubmitted ?? false)
+            && empty($formdata['evasys_form'])
+        ) {
+            $validationelement = $mform->getElement('evasys_delete');
+            $validationelement->setValue(1);
+        }
     }
 
     /**
