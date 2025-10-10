@@ -60,8 +60,8 @@ class evasys_close_survey extends \core\task\adhoc_task {
      * @see \core\task\task_base::execute()
      */
     public function execute() {
+        global $DB;
         $taskdata = $this->get_custom_data();
-
         if ($taskdata != null) {
               mtrace($this->get_name() . ' executed.');
 
@@ -75,6 +75,11 @@ class evasys_close_survey extends \core\task\adhoc_task {
                     if (!property_exists($taskdata, $key)) {
                         throw new Exception("Expected key ({$key}) not found in task data.");
                     }
+                }
+                $evasysendtime = $DB->get_record('bookingextension_evasys', ['surveyid' => $taskdata->surveyid, 'endtime' => $this->get_next_run_time()]);
+                if (empty($evasysendtime)) {
+                     mtrace($this->get_name() . ": Not correct time");
+                     return;
                 }
                 $handler = new evasys_handler();
                 $hasopened = $handler->close_survey_final($taskdata->surveyid);

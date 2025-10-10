@@ -117,7 +117,7 @@ class evasys extends bookingextension implements bookingextension_interface {
         ) {
             $now = time();
             if ($now > $settings->subpluginssettings['evasys']->endtime
-                && $now < $settings->subpluginssettings['evasys']->starttime
+                || $now < $settings->subpluginssettings['evasys']->starttime
             ) {
                 return $templatedata;
             }

@@ -34,8 +34,6 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 
-use Exception;
-
 require_once($CFG->dirroot . '/mod/booking/lib.php');
 
 /**
@@ -105,8 +103,8 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                     }
                     $survey = $evasys->create_survey($course, $data, $newoption);
                     if (empty($survey)) {
-                         mtrace($this->get_name() . ': On survey creation there was no connection to EvaSys');
-                          return;
+                        mtrace($this->get_name() . ': On survey creation there was no connection to EvaSys');
+                        return;
                     }
                     $taskopen = new evasys_open_survey();
                     $taskclose = new evasys_close_survey();
@@ -121,11 +119,6 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                       \core\task\manager::queue_adhoc_task($taskopen);
                       \core\task\manager::queue_adhoc_task($taskclose);
                 } else {
-                    $now = time();
-                    if ($now > (int)$data->evasys_starttime) {
-                        mtrace($this->get_name() . ': Skipping task - Survey already started.');
-                        return;
-                    }
                     if (!empty($data->evasys_confirmdelete)) {
                             // Delete the Survey.
                             $evasys->delete_survey($data->evasys_surveyid);
@@ -177,6 +170,20 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                     if ($updatecourse) {
                         $evasys->update_course($data, $newoption, $data->evasys_booking_id, $taskdata->courseid);
                     }
+                }
+                if (!empty($taskdata->courseendtimechanges) && !$updatesurvey) {
+                    $taskopen = new evasys_open_survey();
+                    $taskclose = new evasys_close_survey();
+                    $taskdata = [
+                        'surveyid' => $survey->m_nSurveyId,
+                        'optionid' => $newoption->id,
+                     ];
+                      $taskopen->set_custom_data($taskdata);
+                      $taskclose->set_custom_data($taskdata);
+                      $taskopen->set_next_run_time($data->evasys_starttime);
+                      $taskclose->set_next_run_time($data->evasys_endtime);
+                      \core\task\manager::queue_adhoc_task($taskopen);
+                      \core\task\manager::queue_adhoc_task($taskclose);
                 }
                 booking_option::purge_cache_for_option($newoption->id);
                 mtrace($this->get_name() . ": Task done successfully.");
