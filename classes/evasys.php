@@ -103,32 +103,34 @@ class evasys extends bookingextension implements bookingextension_interface {
         global $USER;
         $modcontext = context_module::instance($settings->cmid);
         $templatedata = [];
-        if (!isset($settings->subpluginssettings['evasys']->qrurl)) {
-            return $templatedata;
-        }
-        if (empty(get_config('bookingextension_evasys', 'includeqrinoptionview'))) {
-            return $templatedata;
-        }
-        $ba = singleton_service::get_instance_of_booking_answers($settings);
-        if (
-            has_capability('mod/booking:updatebooking', $modcontext)
-            || isset($ba->usersonlist[$USER->id])
-            || booking_check_if_teacher($settings->id)
-        ) {
-            $now = time();
-            if ($now > $settings->subpluginssettings['evasys']->endtime
-                || $now < $settings->subpluginssettings['evasys']->starttime
-            ) {
-                return $templatedata;
-            }
-            $data = [
+        $data = [
                 'key' => 'evasys_qr',
                 'value' => '<img src="' . s($settings->subpluginssettings['evasys']->qrurl)
                     . '" alt="' . get_string('evasysqrcode', 'bookingextension_evasys') . '" class="w-100">',
                 'label' => 'evasys_qr_class',
                 'description' => get_string('evasysqrcode', 'bookingextension_evasys'),
             ];
-            $templatedata = [$data];
+        if (!isset($settings->subpluginssettings['evasys']->qrurl)) {
+            return $templatedata;
+        }
+        if (empty(get_config('bookingextension_evasys', 'includeqrinoptionview'))) {
+            return $templatedata;
+        }
+        if (has_capability('mod/booking:updatebooking', $modcontext)) {
+            return $templatedata = [$data];
+        }
+        $ba = singleton_service::get_instance_of_booking_answers($settings);
+        if (
+            isset($ba->usersonlist[$USER->id])
+            || booking_check_if_teacher($settings->id)
+        ) {
+            $now = time();
+            if (
+                $now <= $settings->subpluginssettings['evasys']->endtime
+                || $now >= $settings->subpluginssettings['evasys']->starttime
+            ) {
+                 $templatedata = [$data];
+            }
         }
         return $templatedata;
     }
