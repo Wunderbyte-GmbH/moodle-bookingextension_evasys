@@ -120,8 +120,9 @@ class evasys extends bookingextension implements bookingextension_interface {
             return $templatedata = [$data];
         }
         $ba = singleton_service::get_instance_of_booking_answers($settings);
+        $userlist = $ba->get_usersonlist();
         if (
-            isset($ba->usersonlist[$USER->id])
+            isset($userlist[$USER->id])
             || booking_check_if_teacher($settings->id)
         ) {
             $now = time();
