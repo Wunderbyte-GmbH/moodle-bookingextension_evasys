@@ -307,9 +307,13 @@ class rule_evasysevaluationtime implements booking_rule {
 
         // Initialize optiondates join.
 
-        $sql->select = "bo.id optionid, cm.id cmid, bee." . $ruledata->datefield . " datefield";
-
-        $sql->where .= " AND bee." . $ruledata->datefield;
+        if ($ruledata->datefield == 'courseendtime') {
+             $sql->select = "bo.id optionid, cm.id cmid, bo." . $ruledata->datefield . " datefield";
+             $sql->where .= " AND bo." . $ruledata->datefield;
+        } else {
+            $sql->select = "bo.id optionid, cm.id cmid, bee." . $ruledata->datefield . " datefield";
+            $sql->where .= " AND bee." . $ruledata->datefield;
+        }
         // In testmode we don't check the timestamp. Add one hour of tolerance.
         $sql->where .= !$testmode ? " >= ( :nowparam - 3600)" : " IS NOT NULL ";
 
