@@ -58,7 +58,7 @@ $string['evasyspassword_desc'] = 'Password for the EvaSys connection';
 $string['evasysperiods'] = 'Semester';
 $string['evasysperiods_desc'] = 'Select the Semester used for EvaSys.';
 $string['evasysqrcode'] = 'We look forward to your feedback!';
-$string['evasysqrcode_col'] = 'QR-Code Download';
+$string['evasysqrcode_col'] = 'QR-Code Download evasys Evaluation';
 $string['evasyssettings'] = 'EvaSys <span class="badge bg-success text-light"><i class="fa fa-cogs" aria-hidden="true"></i> PRO</span>';
 $string['evasyssettings_desc'] = 'Settings for EvaSys';
 $string['evasyssettingswarning'] = '<div class="alert alert-danger" role="alert">Connection to EvaSys could not be established. Please check your username and password.</div>';
