@@ -65,7 +65,7 @@ class evasyssurveylink {
             return "";
         }
         $secureurl = preg_replace("/^http:/i", "https:", $record->surveyurl);
-        return " " . html_writer::link($secureurl, get_string('evasyssurveylink', 'bookingextension_evasys'));
+        return html_writer::link($secureurl, get_string('evasyssurveylink', 'bookingextension_evasys'));
     }
 
     /**
