@@ -272,10 +272,10 @@ class evasys extends bookingextension implements bookingextension_interface {
                 $userprofilefieldsarray
             )
         );
-        $roles = $DB->get_records('role', [], 'id', 'id, name');
+        $roles = $DB->get_records('role', [], 'id', 'id, name, shortname');
         $rolesarray = [];
         foreach ($roles as $role) {
-            $rolesarray[$role->id] = $role->name;
+            $rolesarray[$role->id] = !empty($role->name) ? $role->name : $role->shortname;
         }
         if (empty($rolesarray)) {
             $rolesarray[0] = get_string('nothingtoselect', 'bookingextension_evasys');
