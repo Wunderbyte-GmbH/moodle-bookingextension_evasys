@@ -189,7 +189,7 @@ class evasys_helper_service {
             'm_sProgramOfStudy' => (string)$subunitname,
             'm_sCourseTitle' => "$title",
             'm_sRoom' => '',
-            'm_nCourseType' => 5,
+            'm_nCourseType' => 1,
             'm_sPubCourseId' => "urise_$optionid",
             'm_sExternalId' => "urise_$optionid",
             'm_nCountStud' => null,
