@@ -157,7 +157,7 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                         $taskopen = new evasys_open_survey();
                         $taskclose = new evasys_close_survey();
                         $taskdata = [
-                        'surveyid' => $newsurvey,
+                        'surveyid' => $newsurvey->m_nSurveyId,
                         'optionid' => $newoption->id,
                         ];
                         $taskopen->set_custom_data($taskdata);
