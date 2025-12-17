@@ -16,7 +16,9 @@
 
 namespace bookingextension_evasys\placeholders;
 
+use core\exception\moodle_exception;
 use html_writer;
+use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -62,7 +64,9 @@ class evasysqrcode {
 
         $record = $DB->get_record('bookingextension_evasys', ['optionid' => $optionid], 'qrurl');
         if (!$record) {
-            return "";
+            $a = new stdClass();
+            $a->classname = self::class;
+            throw new moodle_exception('placeholdernotresolved', 'mod_booking', '', $a);
         }
         return html_writer::img(
             $record->qrurl,

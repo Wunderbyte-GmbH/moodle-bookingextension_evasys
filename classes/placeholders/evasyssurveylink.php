@@ -17,6 +17,8 @@
 namespace bookingextension_evasys\placeholders;
 
 use html_writer;
+use core\exception\moodle_exception;
+use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -62,7 +64,9 @@ class evasyssurveylink {
 
         $record = $DB->get_record('bookingextension_evasys', ['optionid' => $optionid], 'surveyurl');
         if (!$record) {
-            return "";
+            $a = new stdClass();
+            $a->classname = self::class;
+            throw new moodle_exception('placeholdernotresolved', 'mod_booking', '', $a);
         }
         $secureurl = preg_replace("/^http:/i", "https:", $record->surveyurl);
         return html_writer::link($secureurl, get_string('evasyssurveylink', 'bookingextension_evasys'));
