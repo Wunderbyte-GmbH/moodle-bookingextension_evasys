@@ -373,35 +373,6 @@ class evasys_soap_service extends SoapClient {
     }
 
     /**
-     * Get QR code from EvaSys.
-     *
-     * @param array $args
-     *
-     * @return string
-     *
-     */
-    public function get_qr_code(array $args) {
-        try {
-            $response = $this->__soapCall('GetOnlineQRCode', $args);
-            return $response;
-        } catch (SoapFault $e) {
-            if (get_config('booking', 'bookingdebugmode')) {
-                // If debug mode is enabled, we create a debug message.
-                $event = booking_debug::create([
-                    'objectid' => $optionid ?? 0,
-                    'context' => context_system::instance(),
-                    'relateduserid' => $USER->id ?? 0,
-                    'other' => [
-                        'error' => $e,
-                    ],
-                ]);
-                $event->trigger();
-            }
-            return "";
-        }
-    }
-
-    /**
      * Opens Survey for Datacollection.
      *
      * @param array $args

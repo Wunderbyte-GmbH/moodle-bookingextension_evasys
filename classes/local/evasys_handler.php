@@ -73,9 +73,8 @@ class evasys_handler {
      * @return void
      *
      */
-    public function load_form(object &$data) {
+    public function load_form(object &$data, $settings) {
         $helper = new evasys_helper_service();
-        $settings = singleton_service::get_instance_of_booking_option_settings($data->id);
         if ((empty($settings->subpluginssettings['evasys']->id))) {
             return;
         }
@@ -394,8 +393,8 @@ class evasys_handler {
             return $survey;
         }
         $this->close_survey_temporary($survey->m_nSurveyId);
-        $qrcode = $this->get_qrcode($data->evasys_booking_id, $survey->m_nSurveyId);
         $surveyurl = $this->get_surveyurl($data->evasys_booking_id, $survey->m_nSurveyId);
+        $qrcode = $this->get_qrcode($data->evasys_booking_id, $surveyurl->OnlineCodes->m_sDirectOnlineLink);
         $settings = singleton_service::get_instance_of_booking_option_settings($option->id);
         $context = context_module::instance($settings->cmid);
         $event = evasys_surveycreated::create([
@@ -431,8 +430,8 @@ class evasys_handler {
             return $survey;
         }
         $this->close_survey_temporary($survey->m_nSurveyId);
-        $qrcode = $this->get_qrcode($id, $survey->m_nSurveyId);
         $surveyurl = $this->get_surveyurl($id, $survey->m_nSurveyId);
+        $qrcode = $this->get_qrcode($id, $surveyurl->OnlineCodes->m_sDirectOnlineLink);
         $settings = singleton_service::get_instance_of_booking_option_settings($option->id);
         $context = context_module::instance($settings->cmid);
         $event = evasys_surveycreated::create([
@@ -637,20 +636,16 @@ class evasys_handler {
      * @return string
      *
      */
-    public function get_qrcode(int $id, int $surveyid) {
+    public function get_qrcode(int $id, string $url) {
         global $DB;
-        $helper = new evasys_helper_service();
-        $args = $helper->set_args_get_qrcode($surveyid);
-        $soap = new evasys_soap_service();
-        $response = $soap->get_qr_code($args);
-        if (!empty($response)) {
-            $dataobject = (object) [
+        $qrurl = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' .
+        rawurlencode($url);
+        $dataobject = (object) [
             'id' => $id,
-            'qrurl' => $response,
-            ];
-            $DB->update_record('bookingextension_evasys', $dataobject);
-        }
-        return $response;
+            'qrurl' => $qrurl,
+        ];
+        $DB->update_record('bookingextension_evasys', $dataobject);
+        return $qrurl;
     }
 
     /**
