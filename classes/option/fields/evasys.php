@@ -29,6 +29,7 @@
  use mod_booking\booking_option_settings;
  use bookingextension_evasys\local\evasys_handler;
  use mod_booking\option\field_base;
+ use mod_booking\option\fields_info;
  use mod_booking\singleton_service;
  use MoodleQuickForm;
  use stdClass;
@@ -120,7 +121,7 @@ class evasys extends field_base {
      *
      * @var array
      */
-    public static $relevantkeyscourse = ['evasys_other_report_recipients', 'coursestarttime'];
+    public static $relevantkeyscourse = ['evasys_other_report_recipients'];
 
     /**
      * Prepare Savefield.
@@ -311,28 +312,17 @@ class evasys extends field_base {
         $mform->setDefault('evasys_durationafterend', 7200);
 
         $mform->addElement(
-            'date_time_selector',
+            'hidden',
             'evasys_starttime',
-            get_string('evasysevaluationstarttime', 'bookingextension_evasys'),
-            ['step' => 5],
         );
-        $starttimestamp = self::prettytime(strtotime("now +1 day +1 hour"));
-        $mform->setDefault('evasys_starttime', $starttimestamp);
+        $mform->setType('evasys_starttime', PARAM_INT);
+
 
         $mform->addElement(
-            'date_time_selector',
+            'hidden',
             'evasys_endtime',
-            get_string('evasysevaluationendtime', 'bookingextension_evasys'),
-            ['step' => 5]
         );
-        $endtimestamp = self::prettytime(strtotime("+2 days"));
-        $mform->setDefault('evasys_endtime', $endtimestamp);
-
-        // Hide date selectors unless "duration" (option 1) is selected.
-        $mform->hideIf('evasys_starttime', 'evasys_timemode', 'noteq', 1);
-        $mform->hideIf('evasys_endtime', 'evasys_timemode', 'noteq', 1);
-        $mform->hideIf('evasys_durationafterend', 'evasys_timemode', 'noteq', 0);
-        $mform->hideIf('evasys_durationbeforestart', 'evasys_timemode', 'noteq', 0);
+         $mform->setType('evasys_endtime', PARAM_INT);
 
         $mform->addElement(
             'autocomplete',
@@ -412,7 +402,7 @@ class evasys extends field_base {
      */
     public static function set_data(&$data, booking_option_settings $settings) {
         $evasys = new evasys_handler();
-        $evasys->load_form($data);
+        $evasys->load_form($data, $settings);
     }
 
     /**
@@ -502,6 +492,14 @@ class evasys extends field_base {
         if (!isset($settings->subpluginssettings['evasys']->id)) {
             return;
         }
+        if (
+            $data->evasys_starttime != $settings->subpluginssettings['evasys']->starttime
+            || $data->evasys_endtime != $settings->subpluginssettings['evasys']->endtime
+        ) {
+            $changetasks = true;
+        } else {
+            $changetasks = false;
+        }
         $relevantdata = new stdClass();
         $relevantdata->evasys_form = $settings->subpluginssettings['evasys']->formid;
         $relevantdata->evasys_surveyid = $settings->subpluginssettings['evasys']->surveyid;
@@ -521,34 +519,17 @@ class evasys extends field_base {
         $taskdata = [
             'teacherchanges' => $changes["mod_booking\\option\\fields\\teachers"],
             'namechanges' => $changes["mod_booking\\option\\fields\\text"],
-            'relevantchanges' => $changes["bookingextension_evasys\\option\\fields\\evasys"]['changes'],
+            'relevantchanges' => isset($changes["bookingextension_evasys\\option\\fields\\evasys"]['changes']) ?? [],
             'newoption' => $relevantoptiondata,
             'relevantkeyssurvey' => self::$relevantkeyssurvey,
             'relevantkeyscourse' => self::$relevantkeyscourse,
             'recipients' => $data->evasys_other_report_recipients,
             'data' => $relevantdata,
             'courseid' => $COURSE->category,
+            'changetasks' => $changetasks,
         ];
         $task->set_custom_data($taskdata);
         // Now queue the task or reschedule it if it already exists (with matching data).
         \core\task\manager::reschedule_or_queue_adhoc_task($task);
-    }
-    /**
-     * Makes the minutes always to be zero.
-     *
-     * @param int $timestamp
-     *
-     * @return int
-     *
-     */
-    private static function prettytime(int $timestamp) {
-        $prettytimestamp = make_timestamp(
-            (int)date('Y', $timestamp),
-            (int)date('n', $timestamp),
-            (int)date('j', $timestamp),
-            (int)date('H', $timestamp),
-            0,
-        );
-        return $prettytimestamp;
     }
 }

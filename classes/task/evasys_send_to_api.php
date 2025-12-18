@@ -89,6 +89,7 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                 $teacherchanges = $taskdata->teacherchanges;
                 $namechanges = $taskdata->namechanges;
                 $relevantchanges = $taskdata->relevantchanges;
+                $changetasks = $taskdata->changetasks;
                 // Check if teachers exist otherwise skip the task.
                 if (empty($data->teachersforoption)) {
                     mtrace($this->get_name() . ': Skipping task - no teachers assigned.');
@@ -171,15 +172,15 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                         $evasys->update_course($data, $newoption, $data->evasys_booking_id, $taskdata->courseid);
                     }
                 }
-                if (!empty($taskdata->courseendtimechanges) && !$updatesurvey) {
+                if ($taskdata->changetasks && !$updatesurvey && !empty($data->evasys_courseidexternal)) {
                     $taskopen = new evasys_open_survey();
                     $taskclose = new evasys_close_survey();
                     $taskdata = [
-                        'surveyid' => $survey->m_nSurveyId,
+                        'surveyid' => $data->evasys_surveyid,
                         'optionid' => $newoption->id,
                      ];
                       $taskopen->set_custom_data($taskdata);
-                      $taskclose->set_custom_data($taskdata);
+                      $taskclose->set_custom_data(customdata: $taskdata);
                       $taskopen->set_next_run_time($data->evasys_starttime);
                       $taskclose->set_next_run_time($data->evasys_endtime);
                       \core\task\manager::queue_adhoc_task($taskopen);
