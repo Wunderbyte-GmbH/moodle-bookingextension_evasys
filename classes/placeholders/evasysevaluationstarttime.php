@@ -18,6 +18,7 @@ namespace bookingextension_evasys\placeholders;
 
 use core\exception\moodle_exception;
 use html_writer;
+use mod_booking\placeholders\placeholder_base;
 use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
@@ -32,7 +33,7 @@ require_once($CFG->dirroot . '/mod/booking/lib.php');
  * @copyright 2025 Wunderbyte GmbH
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class evasysevaluationstarttime {
+class evasysevaluationstarttime extends placeholder_base {
     /**
      * Function which takes a text, replaces the placeholders...
      * ... and returns the text with the correct values.
