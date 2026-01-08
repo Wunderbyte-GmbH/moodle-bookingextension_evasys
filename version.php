@@ -18,13 +18,13 @@
  * This file contains the version information for the bookingextension_evasys plugin
  *
  * @package     bookingextension_evasys
- * @copyright   2025 Wunderbyte GmbH <info@wunderbyte.at>
- * @author      Bernhard Fischer-Sengseis
+ * @copyright   2026 Wunderbyte GmbH <info@wunderbyte.at>
+ * @author      Wunderbyte GmbH
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2025121800;
+$plugin->version   = 2026010800;
 $plugin->requires  = 2024042200; // Requires this Moodle version. Current: Moodle 4.4.
 $plugin->component = 'bookingextension_evasys';
 $plugin->supported = [401, 405];
