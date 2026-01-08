@@ -180,7 +180,7 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                         'optionid' => $newoption->id,
                      ];
                       $taskopen->set_custom_data($taskdata);
-                      $taskclose->set_custom_data(customdata: $taskdata);
+                      $taskclose->set_custom_data($taskdata);
                       $taskopen->set_next_run_time($data->evasys_starttime);
                       $taskclose->set_next_run_time($data->evasys_endtime);
                       \core\task\manager::queue_adhoc_task($taskopen);
