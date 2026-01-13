@@ -172,7 +172,7 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                         $evasys->update_course($data, $newoption, $data->evasys_booking_id, $taskdata->courseid);
                     }
                 }
-                if ($taskdata->changetasks && !$updatesurvey && !empty($data->evasys_courseidexternal)) {
+                if ($changetasks && !$updatesurvey && !empty($data->evasys_courseidexternal)) {
                     $taskopen = new evasys_open_survey();
                     $taskclose = new evasys_close_survey();
                     $taskdata = [
