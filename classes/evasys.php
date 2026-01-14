@@ -119,7 +119,11 @@ class evasys extends bookingextension implements bookingextension_interface {
         if (empty(get_config('bookingextension_evasys', 'includeqrinoptionview'))) {
             return $templatedata;
         }
-        if (has_capability('mod/booking:updatebooking', $modcontext)) {
+        $now = time();
+        if (
+            has_capability('mod/booking:updatebooking', $modcontext)
+            && $now <= $settings->subpluginssettings['evasys']->endtime
+        ) {
             return $templatedata = [$data];
         }
         $ba = singleton_service::get_instance_of_booking_answers($settings);
@@ -128,7 +132,6 @@ class evasys extends bookingextension implements bookingextension_interface {
             isset($userlist[$USER->id])
             || booking_check_if_teacher($settings->id)
         ) {
-            $now = time();
             if (
                 $now <= $settings->subpluginssettings['evasys']->endtime
                 && $now >= $settings->subpluginssettings['evasys']->starttime
