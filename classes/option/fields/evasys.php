@@ -173,6 +173,9 @@ class evasys extends field_base {
         ) {
                 $errors['evasys_confirmdelete'] = get_string('delete', 'bookingextension_evasys');
         }
+        if (!empty($formdata['evasys_form']) && !empty($formdata['selflearningcourse'])) {
+            $errors['evasys_form'] = get_string('selflearningcourse', 'bookingextension_evasys');
+        }
         return $errors;
     }
 
@@ -195,7 +198,11 @@ class evasys extends field_base {
         $fieldstoinstanciate = [],
         $applyheader = true
     ): void {
-
+        $settings = singleton_service::get_instance_of_booking_option_settings($formdata['id']);
+        // If we edit an Option that is already a selflearningcourse, we do not show the evasys Form.
+        if (!empty($settings) && !empty($settings->selflearningcourse)) {
+            return;
+        }
         if (empty(get_config('bookingextension_evasys', 'evasyssubunits'))) {
             return;
         }
@@ -514,7 +521,7 @@ class evasys extends field_base {
         $relevantoptiondata = new stdClass();
         $relevantoptiondata->id = $newoption->id;
         $relevantoptiondata->text = $newoption->text;
-
+        $relevantoptiondata->selflearningcourse = $settings->selflearningcourse;
         $task = new evasys_send_to_api();
         $taskdata = [
             'teacherchanges' => $changes["mod_booking\\option\\fields\\teachers"],

@@ -86,6 +86,7 @@ $string['rulechoosemode'] = 'Activate on: ';
 $string['ruleevasysevaluationtime'] = 'EvaSys Participants Rule';
 $string['ruleevasysevaluationtime_desc'] = 'Choose whether the rule should be triggered at the start time or the end time of the evaluation.';
 $string['selectorganizersinbo'] = 'Choose EvaSys additional report recipients from a Bookingoption';
+$string['selflearningcourse'] = 'There cannot be an evaluation if this is a self-learning course.';
 $string['sendtoapi'] = 'bookingextension_evays: send to api (adhoc task)';
 $string['setcourseendtime'] = 'When using this time mode, a course end time in the future must be set.';
 $string['timemode'] = 'Time mode';
