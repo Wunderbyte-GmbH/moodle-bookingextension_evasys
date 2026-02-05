@@ -95,6 +95,11 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                     mtrace($this->get_name() . ': Skipping task - no teachers assigned.');
                     return;
                 }
+                // If by any chance the option is a selflearningcourse and slips through validation, we skip the task.
+                if (!empty($newoption->selflearningcourse)) {
+                    mtrace($this->get_name() . ': Skipping task - option is a self-learning course.');
+                    return;
+                }
                 $evasys = new evasys_handler();
                 if (empty($data->evasys_courseidexternal) && !empty($data->evasys_form)) {
                     $course = $evasys->create_course($data, $newoption, $taskdata->courseid);
