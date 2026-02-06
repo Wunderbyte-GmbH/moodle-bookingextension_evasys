@@ -72,7 +72,7 @@ final class evasysmessages_test extends advanced_testcase {
      * @covers \bookingextension_evasys\placeholders\evasysqrcode
      * @covers \bookingextension_evasys\placeholders\evasyssurveylink
      *
-     * @param array $bdata
+     * @param string $placeholder
      * @throws \coding_exception
      *
      * @dataProvider placeholder_provider

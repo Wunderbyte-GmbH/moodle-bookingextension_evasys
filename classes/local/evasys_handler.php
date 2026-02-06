@@ -69,11 +69,12 @@ class evasys_handler {
      * Load for optionformfield.
      *
      * @param object $data
+     * @param object $settings
      *
      * @return void
      *
      */
-    public function load_form(object &$data, $settings) {
+    public function load_form(object &$data, object $settings) {
         $helper = new evasys_helper_service();
         if ((empty($settings->subpluginssettings['evasys']->id))) {
             return;
@@ -568,6 +569,7 @@ class evasys_handler {
      *
      * @param object $data
      * @param object $option
+     * @param int $moodlecourseid
      *
      * @return object|null
      *
@@ -631,7 +633,7 @@ class evasys_handler {
      * Gets the QR Code for Survey and saves it to DB.
      *
      * @param int $id
-     * @param int $surveyid
+     * @param string $url
      *
      * @return string
      *
