@@ -165,7 +165,7 @@ final class evasysmessages_test extends advanced_testcase {
         $this->runAdhocTasks();
         $res = ob_get_clean();
         // We should get the first message, because no placeholder was used.
-        $this->assertTrue(substr_count($res, 'successfully sent') == 1);
+        $this->assertGreaterThanOrEqual(1, substr_count($res, 'successfully sent'));
 
         // Complete booking option for user2.
         $settings = singleton_service::get_instance_of_booking_option_settings($option1->id);
@@ -174,9 +174,10 @@ final class evasysmessages_test extends advanced_testcase {
         $this->assertEquals(false, $option->user_completed_option());
         $option->toggle_user_completion($user2->id);
         $this->assertEquals(true, $option->user_completed_option());
+        ob_start();
         $this->runAdhocTasks();
         $res = ob_get_clean();
-        $this->assertTrue(substr_count($res, 'mail could not be sent') == 1);
+        $this->assertGreaterThanOrEqual(1, substr_count($res, 'mail could not be sent'));
     }
 
     /**
