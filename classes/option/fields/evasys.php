@@ -324,7 +324,6 @@ class evasys extends field_base {
         );
         $mform->setType('evasys_starttime', PARAM_INT);
 
-
         $mform->addElement(
             'hidden',
             'evasys_endtime',
