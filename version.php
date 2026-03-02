@@ -24,7 +24,7 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2026021100;
+$plugin->version = 2026030200;
 $plugin->requires = 2024100700; // Requires this Moodle version. Current: Moodle 4.5.
 $plugin->component = 'bookingextension_evasys';
 $plugin->supported = [405, 501];
