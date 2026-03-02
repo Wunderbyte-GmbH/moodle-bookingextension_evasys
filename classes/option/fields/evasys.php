@@ -408,7 +408,7 @@ class evasys extends field_base {
      */
     public static function set_data(&$data, booking_option_settings $settings) {
         // Normally, we don't call set data after the first time loading.
-        if (isset($data->copyoptionid)) {
+        if (isset($data->copyoptionid) && !empty($data->copyoptionid)) {
             return;
         }
         $evasys = new evasys_handler();
