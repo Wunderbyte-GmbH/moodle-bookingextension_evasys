@@ -76,6 +76,14 @@ class evasys_close_survey extends \core\task\adhoc_task {
                         throw new Exception("Expected key ({$key}) not found in task data.");
                     }
                 }
+                if (is_object($taskdata->surveyid)) {
+                    if (isset($taskdata->surveyid->m_nSurveyId)) {
+                        $taskdata->surveyid = $taskdata->surveyid->m_nSurveyId;
+                    } else {
+                        mtrace('Invalid surveyid in task data. Survey was not closed. The surveyid is: ' . $taskdata->surveyid);
+                        return;
+                    }
+                }
                 $evasysendtime = $DB->get_record(
                     'bookingextension_evasys',
                     ['surveyid' => $taskdata->surveyid, 'endtime' => $this->get_next_run_time()]
