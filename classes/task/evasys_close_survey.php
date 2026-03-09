@@ -77,12 +77,8 @@ class evasys_close_survey extends \core\task\adhoc_task {
                     }
                 }
                 if (is_object($taskdata->surveyid)) {
-                    if (isset($taskdata->surveyid->m_nSurveyId)) {
-                        $taskdata->surveyid = $taskdata->surveyid->m_nSurveyId;
-                    } else {
-                        mtrace('Invalid surveyid in task data. Survey was not closed. The surveyid is: ' . $taskdata->surveyid);
+                        mtrace('Invalid surveyid in task data. Survey was not closed. The data is: ' . json_encode($taskdata));
                         return;
-                    }
                 }
                 $evasysendtime = $DB->get_record(
                     'bookingextension_evasys',
