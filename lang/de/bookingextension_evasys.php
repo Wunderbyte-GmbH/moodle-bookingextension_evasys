@@ -71,6 +71,7 @@ $string['evasyssurveylink'] = 'Link zur Umfrage';
 $string['evasyssurveyurl'] = 'Link zur EvaSys Umfrage';
 $string['evasysuser'] = 'Benutzername';
 $string['evasysuser_desc'] = 'Benutzername für die EvaSys-Verbindung';
+$string['evasyswarning'] = '<div class="alert alert-danger" role="alert">Alle Anforderungen für eine Umfrage sind erfüllt, aber wurde keine angelegt.</div>';
 $string['fieldsvalidation'] = 'Nicht alle Pflichtfelder wurden ausgewählt.';
 $string['includeqrinoptionview'] = 'QR-Code der Evaluation in Buchungsbeschreibung anzeigen';
 $string['includeqrinoptionview_desc'] = 'Zeigt den QR-Code zur EvaSys-Evaluation in der Buchungsbeschreibung an. „Admins, Trainer:innen und gebuchte Benutzer:innen können den Code sehen.“';

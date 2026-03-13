@@ -26,6 +26,7 @@
  namespace bookingextension_evasys\option\fields;
 
  use bookingextension_evasys\task\evasys_send_to_api;
+ use context_system;
  use mod_booking\booking_option_settings;
  use bookingextension_evasys\local\evasys_handler;
  use mod_booking\option\field_base;
@@ -395,6 +396,22 @@ class evasys extends field_base {
 
         $mform->addElement('hidden', 'evasys_surveyurl', 0);
         $mform->setType('evasys_surveyurl', PARAM_TEXT);
+
+        if (
+            has_capability('moodle/site:config', context_system::instance())
+            && !empty($settings->subpluginssettings['evasys']->formid)
+        ) {
+            if (
+                empty($settings->subpluginssettings['evasys']->surveyid) && !empty($settings->teacherids)
+            ) {
+                $mform->addElement(
+                    'static',
+                    'evasyswarning',
+                    '',
+                    get_string('evasyswarning', 'bookingextension_evasys')
+                );
+            }
+        }
     }
 
     /**

@@ -70,6 +70,7 @@ $string['evasyssurveylink'] = 'Link to survey';
 $string['evasyssurveyurl'] = 'EvaSys Survey';
 $string['evasysuser'] = 'Username';
 $string['evasysuser_desc'] = 'Username for the EvaSys connection';
+$string['evasyswarning'] = '<div class="alert alert-danger" role="alert">All requirements for a survey are there but there is none.</div>';
 $string['fieldsvalidation'] = 'Not all required fields have been selected.';
 $string['includeqrinoptionview'] = 'Show evaluation QR code in booking description';
 $string['includeqrinoptionview_desc'] = 'Displays the QR code for the EvaSys evaluation in the booking option description. Admins, teachers and booked users can see the code.';
