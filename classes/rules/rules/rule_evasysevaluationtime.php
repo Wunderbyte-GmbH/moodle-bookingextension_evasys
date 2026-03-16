@@ -154,10 +154,12 @@ class rule_evasysevaluationtime implements booking_rule {
         if ($data->id ?? false) {
             $record->id = $data->id;
             $DB->update_record('booking_rules', $record);
+            $ruleid = $data->id;
         } else {
             $ruleid = $DB->insert_record('booking_rules', $record);
             $this->ruleid = $ruleid;
         }
+        return $ruleid;
     }
 
     /**
