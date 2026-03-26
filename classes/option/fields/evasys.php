@@ -201,7 +201,11 @@ class evasys extends field_base {
     ): void {
         $settings = singleton_service::get_instance_of_booking_option_settings($formdata['id']);
         // If we edit an Option that is already a selflearningcourse, we do not show the evasys Form.
-        if (!empty($settings) && !empty($settings->selflearningcourse)) {
+        if (
+            !empty($settings)
+            && !empty($settings->selflearningcourse)
+            && empty($settings->subpluginssettings["evasys"]->id)
+        ) {
             return;
         }
         if (empty(get_config('bookingextension_evasys', 'evasyssubunits'))) {
@@ -448,7 +452,10 @@ class evasys extends field_base {
         if (empty($evaluationstarttime)) {
             return;
         }
-        if ($evaluationstarttime < $freezetime) {
+        if (
+            $evaluationstarttime < $freezetime
+            && $mform->elementExists('evasys_form')
+        ) {
             $mform->freeze([
                 'evasys_form',
                 'evasys_timemode',
