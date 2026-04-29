@@ -224,7 +224,7 @@ class evasys extends bookingextension implements bookingextension_interface {
             )
         );
 
-        set_config('evasyswsdl', 'https://evasys3.qs.univie.ac.at/evasys/services/soapserver-v91.wsdl', 'bookingextension_evasys');
+        set_config('evasyswsdl', 'https://evasys3.qs.univie.ac.at/evasys/services/soapserver-v101.wsdl', 'bookingextension_evasys');
 
         $evasyssettings->add(
             new admin_setting_configcheckbox(

@@ -370,6 +370,24 @@ class evasys_soap_service extends SoapClient {
             return null;
         }
     }
+
+    /**
+     * Sends a report to instructors.
+     *
+     * @param array $args
+     *
+     * @return object|null
+     *
+     */
+    public function send_report(array $args) {
+        try {
+            $response = $this->__soapCall('SaveTasks', $args);
+            return $response;
+        } catch (SoapFault $e) {
+            $this->trace_soap_fault(__FUNCTION__, $e);
+            return null;
+        }
+    }
     /**
      * Sets Soapheader for authentication.
      *
@@ -377,7 +395,7 @@ class evasys_soap_service extends SoapClient {
      *
      */
     private function set_soap_header() {
-        $ns = 'soapserver-v91.wsdl';
+        $ns = 'soapserver-v101.wsdl';
         $headerbody = [
             'Ticket'   => '',
             'Login'    => $this->username,
