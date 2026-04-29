@@ -27,6 +27,7 @@ namespace bookingextension_evasys\task;
 
 use bookingextension_evasys\local\evasys_handler;
 use mod_booking\booking_option;
+use mod_booking\singleton_service;
 
 
 defined('MOODLE_INTERNAL') || die();
@@ -89,11 +90,8 @@ class evasys_close_survey extends \core\task\adhoc_task {
                      return;
                 }
                 $handler = new evasys_handler();
-                $hasopened = $handler->close_survey_final($taskdata->surveyid);
-                if (!$hasopened) {
-                    $handler->close_survey_temporary($taskdata->surveyid);
-                    mtrace($this->get_name()) . ": Survey was closed, but no answers were submitted";
-                }
+                $hasopened = $handler->close_survey($taskdata->surveyid);
+                $handler->send_report($taskdata->surveyid);
                 booking_option::purge_cache_for_option($taskdata->optionid);
                 mtrace($this->get_name() . ": Task done successfully.");
             } catch (\Throwable $e) {

@@ -327,22 +327,6 @@ class evasys_handler {
     }
 
     /**
-     * Close Survey for Data collection and send report to recipients.
-     *
-     * @param int $surveyid
-     *
-     * @return boolean
-     *
-     */
-    public function close_survey_final(int $surveyid) {
-        $helper = new evasys_helper_service();
-        $args = $helper->set_args_close_survey_final($surveyid);
-        $soap = new evasys_soap_service();
-        $response = $soap->close_survey($args);
-        return $response;
-    }
-
-    /**
      * Close Survey temporary for Data collection.
      *
      * @param int $surveyid
@@ -350,9 +334,9 @@ class evasys_handler {
      * @return boolean
      *
      */
-    public function close_survey_temporary(int $surveyid) {
+    public function close_survey(int $surveyid) {
         $helper = new evasys_helper_service();
-        $args = $helper->set_args_close_survey_temporary($surveyid);
+        $args = $helper->set_args_close_survey($surveyid);
         $soap = new evasys_soap_service();
         $response = $soap->close_survey($args);
         return $response;
@@ -393,7 +377,7 @@ class evasys_handler {
         if (empty($survey)) {
             return $survey;
         }
-        $this->close_survey_temporary($survey->m_nSurveyId);
+        $this->close_survey($survey->m_nSurveyId);
         $surveyurl = $this->get_surveyurl($data->evasys_booking_id, $survey->m_nSurveyId);
         $qrcode = $this->get_qrcode($data->evasys_booking_id, $surveyurl->OnlineCodes->m_sDirectOnlineLink);
         $settings = singleton_service::get_instance_of_booking_option_settings($option->id);
@@ -430,7 +414,7 @@ class evasys_handler {
         if (empty($survey)) {
             return $survey;
         }
-        $this->close_survey_temporary($survey->m_nSurveyId);
+        $this->close_survey($survey->m_nSurveyId);
         $surveyurl = $this->get_surveyurl($id, $survey->m_nSurveyId);
         $qrcode = $this->get_qrcode($id, $surveyurl->OnlineCodes->m_sDirectOnlineLink);
         $settings = singleton_service::get_instance_of_booking_option_settings($option->id);
@@ -701,5 +685,20 @@ class evasys_handler {
             $cachedforms = $cachedata;
         }
         return $cachedforms;
+    }
+    /**
+     * Sends a report for a survey to the specified recipients.
+     *
+     * @param int $surveyid
+     *
+     * @return object|null
+     *
+     */
+    public function send_report(int $surveyid) {
+        $helper = new evasys_helper_service();
+        $args = $helper->set_args_send_report($surveyid);
+        $soap = new evasys_soap_service();
+        $response = $soap->send_report($args);
+        return $response;
     }
 }

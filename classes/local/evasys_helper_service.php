@@ -385,7 +385,7 @@ class evasys_helper_service {
     public function set_args_close_survey_final(int $surveyid) {
         $args = [
             'nSurveyId' => $surveyid,
-            'bSendReportToInstructor' => true,
+            'bSendReportToInstructor' => false,
         ];
         return $args;
     }
@@ -397,7 +397,7 @@ class evasys_helper_service {
      * @return array
      *
      */
-    public function set_args_close_survey_temporary(int $surveyid) {
+    public function set_args_close_survey(int $surveyid) {
         $args = [
             'nSurveyId' => $surveyid,
             'bSendReportToInstructor' => false,
@@ -421,6 +421,33 @@ class evasys_helper_service {
             'bForceNewPasswordGeneration' => false,
             'bSetPswdsToSent' => false,
             'bGetFiveDigitOnlineCode' => false,
+        ];
+        return $args;
+    }
+
+    /**
+     * Sets the arguments for sending a report.
+     *
+     * @param int $surveyid
+     *
+     * @return array
+     *
+     */
+    public function set_args_send_report(int $surveyid) {
+        $args = [
+        'TasksToSave' =>
+        [
+            'SendResultsToInstructorsTask' => [
+                'SurveyId' => $surveyid,
+                'SendEmail' => true,
+                'SendDefaultReport' => true,
+                'SendReportDefinitions' => false,
+                'StartTime' => date('c', time() + 300),
+                'Recipients' => [
+                    'Placeholder' => [1, 3],
+                    ],
+                ],
+            ],
         ];
         return $args;
     }
