@@ -32,8 +32,10 @@ use admin_setting_configtext;
 use admin_setting_description;
 use admin_setting_heading;
 use admin_settingpage;
+use html_writer;
 use bookingextension_evasys\local\evasys_handler;
 use context_module;
+use moodle_url;
 use mod_booking\customfield\booking_handler;
 use mod_booking\plugininfo\bookingextension;
 use mod_booking\plugininfo\bookingextension_interface;
@@ -337,6 +339,7 @@ class evasys extends bookingextension implements bookingextension_interface {
         $evasys = new evasys_handler();
         $subunitoptions = $evasys->get_subunits();
         $periodoptions = $evasys->get_periods_for_settings();
+
         if (
             empty($subunitoptions)
         ) {
@@ -370,6 +373,24 @@ class evasys extends bookingextension implements bookingextension_interface {
                 )
             );
         }
+        $sendreportsurl = new moodle_url('/mod/booking/bookingextension/evasys/send_reports.php', [
+            'sesskey' => sesskey(),
+        ]);
+        $sendreportsbutton = html_writer::link(
+            $sendreportsurl,
+            get_string('sendreportforpastsurveys', 'bookingextension_evasys'),
+            ['class' => 'btn btn-secondary']
+        );
+        $evasyssettings->add(
+            new admin_setting_description(
+                'bookingextension_evasys/sendreportforpastsurveys',
+                '',
+                $sendreportsbutton . html_writer::div(
+                    get_string('sendreportforpastsurveys_desc', 'bookingextension_evasys'),
+                    'text-muted mt-1'
+                )
+            )
+        );
         $adminroot->add('modbookingfolder', $evasyssettings);
     }
 }
