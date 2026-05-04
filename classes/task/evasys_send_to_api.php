@@ -122,8 +122,8 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                       $taskclose->set_custom_data($taskdata);
                       $taskopen->set_next_run_time($data->evasys_starttime);
                       $taskclose->set_next_run_time($data->evasys_endtime);
-                      \core\task\manager::queue_adhoc_task($taskopen);
-                      \core\task\manager::queue_adhoc_task($taskclose);
+                      \core\task\manager::reschedule_or_queue_adhoc_task($taskopen);
+                      \core\task\manager::reschedule_or_queue_adhoc_task($taskclose);
                 } else {
                     if (!empty($data->evasys_confirmdelete)) {
                             // Delete the Survey.
@@ -188,8 +188,8 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                       $taskclose->set_custom_data($taskdata);
                       $taskopen->set_next_run_time($data->evasys_starttime);
                       $taskclose->set_next_run_time($data->evasys_endtime);
-                      \core\task\manager::queue_adhoc_task($taskopen);
-                      \core\task\manager::queue_adhoc_task($taskclose);
+                      \core\task\manager::reschedule_or_queue_adhoc_task($taskopen);
+                      \core\task\manager::reschedule_or_queue_adhoc_task($taskclose);
                 }
                 booking_option::purge_cache_for_option($newoption->id);
                 mtrace($this->get_name() . ": Task done successfully.");
