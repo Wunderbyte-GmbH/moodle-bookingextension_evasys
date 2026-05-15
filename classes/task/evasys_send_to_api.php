@@ -95,6 +95,13 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                     mtrace($this->get_name() . ': Skipping task - no teachers assigned.');
                     return;
                 }
+                // Normalize changed keys so update checks work with array or object payloads.
+                $changedkeys = [];
+                if (is_array($relevantchanges)) {
+                    $changedkeys = array_keys($relevantchanges);
+                } else if (is_object($relevantchanges)) {
+                    $changedkeys = array_keys((array)$relevantchanges);
+                }
                 // If by any chance the option is a selflearningcourse and slips through validation, we skip the task.
                 if (!empty($newoption->selflearningcourse)) {
                     mtrace($this->get_name() . ': Skipping task - option is a self-learning course.');
@@ -144,15 +151,16 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                     }
                     // Checks if the survey and therefore the course needs to be updated.
                     if (!$updatesurvey) {
-                        foreach ($relevantchanges as $key => $value) {
+                        foreach ($changedkeys as $key) {
                             if (in_array($key, $relevantkeyssurvey, true)) {
                                 $updatesurvey = true;
+                                break;
                             }
                         }
                         // Checks for the only key where just the course needs to be updated.
                         if (
                             !$updatesurvey
-                            && isset($courserelevantchanges->$relevankeyscourse)
+                            && !empty(array_intersect($changedkeys, $relevankeyscourse))
                         ) {
                             $updatecourse = true;
                         }

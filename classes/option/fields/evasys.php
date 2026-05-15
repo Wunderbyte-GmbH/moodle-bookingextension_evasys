@@ -553,7 +553,7 @@ class evasys extends field_base {
         $taskdata = [
             'teacherchanges' => $changes["mod_booking\\option\\fields\\teachers"],
             'namechanges' => $changes["mod_booking\\option\\fields\\text"],
-            'relevantchanges' => isset($changes["bookingextension_evasys\\option\\fields\\evasys"]['changes']) ?? [],
+            'relevantchanges' => $changes["bookingextension_evasys\\option\\fields\\evasys"]['changes'] ?? [],
             'newoption' => $relevantoptiondata,
             'relevantkeyssurvey' => self::$relevantkeyssurvey,
             'relevantkeyscourse' => self::$relevantkeyscourse,
