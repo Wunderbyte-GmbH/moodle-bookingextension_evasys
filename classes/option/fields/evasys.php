@@ -551,8 +551,9 @@ class evasys extends field_base {
         $relevantoptiondata->selflearningcourse = $settings->selflearningcourse;
         $task = new evasys_send_to_api();
         $taskdata = [
-            'teacherchanges' => $changes["mod_booking\\option\\fields\\teachers"],
-            'namechanges' => $changes["mod_booking\\option\\fields\\text"],
+            'teacherchanges' => $changes["mod_booking\\option\\fields\\teachers"] ?? [],
+            'namechanges' => $changes["mod_booking\\option\\fields\\text"] ?? [],
+
             'relevantchanges' => $changes["bookingextension_evasys\\option\\fields\\evasys"]['changes'] ?? [],
             'newoption' => $relevantoptiondata,
             'relevantkeyssurvey' => self::$relevantkeyssurvey,
