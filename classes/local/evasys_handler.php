@@ -44,6 +44,22 @@ require_once($CFG->dirroot . "/user/profile/lib.php");
  */
 class evasys_handler {
     /**
+     * Creates the EvaSys SOAP client.
+     *
+     * @return object
+     */
+    protected function create_soap_client() {
+        global $CFG;
+
+        if (defined('PHPUNIT_TEST') && PHPUNIT_TEST) {
+            require_once($CFG->dirroot . '/mod/booking/bookingextension/evasys/tests/fixtures/evasys_soap_service_mock.php');
+            return new \bookingextension_evasys\tests\fixtures\evasys_soap_service_mock();
+        }
+
+        return new evasys_soap_service();
+    }
+
+    /**
      * Saves option form.
      *
      * @param object $formdata
@@ -89,7 +105,7 @@ class evasys_handler {
      *
      */
     public function get_periods_for_settings() {
-        $soap = new evasys_soap_service();
+        $soap = $this->create_soap_client();
         $helper = new evasys_helper_service();
         $periods = $soap->fetch_periods();
         if (!isset($periods)) {
@@ -115,7 +131,7 @@ class evasys_handler {
      *
      */
     public function get_periods_for_query(string $query) {
-        $soap = new evasys_soap_service();
+        $soap = $this->create_soap_client();
         $helper = new evasys_helper_service();
         $periods = $soap->fetch_periods();
         $listforarray = $periods->Periods;
@@ -178,7 +194,7 @@ class evasys_handler {
      *
      */
     public function get_allforms() {
-        $soap = new evasys_soap_service();
+        $soap = $this->create_soap_client();
         $helper = new evasys_helper_service();
         $subunitconfig = get_config('bookingextension_evasys', 'evasyssubunits');
         $subunitid = reset(explode('-', $subunitconfig));
@@ -227,7 +243,7 @@ class evasys_handler {
      *
      */
     public function get_subunits() {
-        $soap = new evasys_soap_service();
+        $soap = $this->create_soap_client();
         $helper = new evasys_helper_service();
         $subunits = $soap->fetch_subunits();
         if (!isset($subunits)) {
@@ -261,7 +277,7 @@ class evasys_handler {
             $user->email,
             (int) $user->phone1
         );
-        $soap = new evasys_soap_service();
+        $soap = $this->create_soap_client();
         $response = $soap->insert_user($userdata);
         if (isset($response)) {
             $value = [$response->m_sExternalId, $response->m_nId];
@@ -282,7 +298,7 @@ class evasys_handler {
      */
     public function save_survey(array $args, int $id) {
         global $DB;
-        $soap = new evasys_soap_service();
+        $soap = $this->create_soap_client();
         $response = $soap->insert_survey($args);
         if (isset($response)) {
             $data = [
@@ -305,7 +321,7 @@ class evasys_handler {
     public function delete_survey(int $surveyid) {
         $helper = new evasys_helper_service();
         $args = $helper->set_args_delete_survey($surveyid);
-        $soap = new evasys_soap_service();
+        $soap = $this->create_soap_client();
         $response = $soap->delete_survey($args);
         return $response;
     }
@@ -321,7 +337,7 @@ class evasys_handler {
     public function open_survey(int $surveyid) {
         $helper = new evasys_helper_service();
         $args = $helper->set_args_open_survey($surveyid);
-        $soap = new evasys_soap_service();
+        $soap = $this->create_soap_client();
         $response = $soap->open_survey($args);
         return $response;
     }
@@ -337,7 +353,7 @@ class evasys_handler {
     public function close_survey(int $surveyid) {
         $helper = new evasys_helper_service();
         $args = $helper->set_args_close_survey($surveyid);
-        $soap = new evasys_soap_service();
+        $soap = $this->create_soap_client();
         $response = $soap->close_survey($args);
         return $response;
     }
@@ -355,7 +371,7 @@ class evasys_handler {
      */
     public function update_survey(int $surveyid, object $data, object $option, int $moodlecourseid) {
         global $DB;
-        $soap = new evasys_soap_service();
+        $soap = $this->create_soap_client();
         $helper = new evasys_helper_service();
         $coursedata = self::aggregate_data_for_course_save($data, $option, $moodlecourseid, $data->evasys_courseidinternal);
         $course = $soap->update_course($coursedata);
@@ -561,7 +577,7 @@ class evasys_handler {
     public function create_course(object $data, object $option, $moodlecourseid) {
         global $DB;
         $coursedata = $this->aggregate_data_for_course_save($data, $option, $moodlecourseid);
-        $soap = new evasys_soap_service();
+        $soap = $this->create_soap_client();
         $response = $soap->insert_course($coursedata);
         if (!empty($response)) {
             $dataobject = (object)[
@@ -587,7 +603,7 @@ class evasys_handler {
         global $DB;
         $helper = new evasys_helper_service();
         $argscourse = $helper->set_args_delete_course($internalid);
-        $soap = new evasys_soap_service();
+        $soap = $this->create_soap_client();
         $response = $soap->delete_course($argscourse);
         if (!empty($response)) {
             $DB->delete_records('bookingextension_evasys', ['id' => $tableid]);
@@ -608,7 +624,7 @@ class evasys_handler {
      */
     public function update_course(object $data, object $newoption, int $tableid, int $moodlecourseid) {
         $coursedata = $this->aggregate_data_for_course_save($data, $newoption, $moodlecourseid, $tableid);
-        $soap = new evasys_soap_service();
+        $soap = $this->create_soap_client();
         $response = $soap->update_course($coursedata);
         return $response;
     }
@@ -646,7 +662,7 @@ class evasys_handler {
     public function get_surveyurl(int $id, int $surveyid) {
         global $DB;
         $helper = new evasys_helper_service();
-        $soap = new evasys_soap_service();
+        $soap = $this->create_soap_client();
         $args = $helper->set_args_get_surveyurl($surveyid);
         $response = $soap->get_surveyurl($args);
         if (!empty($response)) {
@@ -671,7 +687,7 @@ class evasys_handler {
 
         if (empty($cachedforms)) {
             $allforms = $this->get_allforms();
-            $soap = new evasys_soap_service();
+            $soap = $this->create_soap_client();
             $helper = new evasys_helper_service();
             $formswithtitle = [];
             foreach ($allforms as $key => $value) {
@@ -697,7 +713,7 @@ class evasys_handler {
     public function send_report(int $surveyid) {
         $helper = new evasys_helper_service();
         $args = $helper->set_args_send_report($surveyid);
-        $soap = new evasys_soap_service();
+        $soap = $this->create_soap_client();
         $response = $soap->send_report($args);
         return $response;
     }
