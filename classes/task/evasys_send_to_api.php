@@ -60,7 +60,8 @@ class evasys_send_to_api extends \core\task\adhoc_task {
      */
     public function execute() {
         $taskdata = $this->get_custom_data();
-
+        $updatesurvey = false;
+        $updatecourse = false;
         if ($taskdata != null) {
             mtrace($this->get_name() . ' executed.');
 
@@ -140,8 +141,6 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                             booking_option::purge_cache_for_option($newoption->id);
                             return;
                     }
-                    $updatesurvey = false;
-                    $updatecourse = false;
                     // Checks if teachers or option name changed. If it changed we already know we need to update course and survey.
                     if (
                         !empty($teacherchanges)
