@@ -371,16 +371,22 @@ class evasys_handler {
      */
     public function update_survey(int $surveyid, object $data, object $option, int $moodlecourseid) {
         global $DB;
+        $now = time();
         $soap = $this->create_soap_client();
         $helper = new evasys_helper_service();
-        $coursedata = self::aggregate_data_for_course_save($data, $option, $moodlecourseid, $data->evasys_courseidinternal);
-        $course = $soap->update_course($coursedata);
-        if (empty($course)) {
-            return;
+        if ($data->evasys_starttime < time()) {
+            $this->close_survey($surveyid);
+            $this->send_report($surveyid);
         }
         $argsdelete = $helper->set_args_delete_survey($surveyid);
         $isdeleted = $soap->delete_survey($argsdelete);
         if (!$isdeleted) {
+            return;
+        }
+        $coursedata = self::aggregate_data_for_course_save($data, $option, $moodlecourseid, $data->evasys_courseidinternal);
+        $deleted = $soap->delete_course($helper->set_args_delete_course($data->evasys_courseidinternal));
+        $course = $soap->insert_course($coursedata);
+        if (empty($course)) {
             return;
         }
         $argsnewsurvey = $helper->set_args_insert_survey(
