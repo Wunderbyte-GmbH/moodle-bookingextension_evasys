@@ -69,5 +69,28 @@ function xmldb_bookingextension_evasys_upgrade($oldversion) {
         // Booking savepoint reached.
         upgrade_plugin_savepoint(true, 2025062301, 'bookingextension', 'evasys');
     }
+
+    if ($oldversion < 2026061602) {
+        // Remove duplicate rows in bookingextension_evasys, keeping the highest id per optionid.
+        $sql = "SELECT optionid, MAX(id) AS maxid FROM {bookingextension_evasys} GROUP BY optionid HAVING COUNT(*) > 1";
+        $duplicates = $DB->get_records_sql($sql);
+        foreach ($duplicates as $dup) {
+            $DB->delete_records_select(
+                'bookingextension_evasys',
+                'optionid = :optionid AND id < :maxid',
+                ['optionid' => $dup->optionid, 'maxid' => $dup->maxid]
+            );
+        }
+
+        // Add unique index on optionid to prevent future duplicates.
+        $table = new xmldb_table('bookingextension_evasys');
+        $index = new xmldb_index('optionid', XMLDB_INDEX_UNIQUE, ['optionid']);
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        upgrade_plugin_savepoint(true, 2026061602, 'bookingextension', 'evasys');
+    }
+
     return true;
 }

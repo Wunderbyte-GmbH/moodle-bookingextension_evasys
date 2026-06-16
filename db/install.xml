@@ -28,6 +28,7 @@
   </FIELDS>
   <KEYS>
     <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+    <KEY NAME="optionid" TYPE="unique" FIELDS="optionid"/>
   </KEYS>
   </TABLE>
   </TABLES>

@@ -73,9 +73,16 @@ class evasys_handler {
         $helper = new evasys_helper_service();
         $insertdata = $helper->map_form_to_record($formdata, $option);
         if (empty($formdata->evasys_booking_id)) {
-            $returnid = $DB->insert_record('bookingextension_evasys', $insertdata, true, false);
-            // Returning ID so we can update record later for internal and external courseid.
-            $formdata->evasys_booking_id = $returnid;
+            $existing = $DB->get_record('bookingextension_evasys', ['optionid' => $option->id]);
+            if ($existing) {
+                $insertdata->id = $existing->id;
+                $formdata->evasys_booking_id = $existing->id;
+                $DB->update_record('bookingextension_evasys', $insertdata);
+            } else {
+                $returnid = $DB->insert_record('bookingextension_evasys', $insertdata, true, false);
+                // Returning ID so we can update record later for internal and external courseid.
+                $formdata->evasys_booking_id = $returnid;
+            }
         } else {
             $DB->update_record('bookingextension_evasys', $insertdata);
         }
@@ -384,6 +391,7 @@ class evasys_handler {
         if (!$isdeleted) {
             return;
         }
+
         $deleted = $soap->delete_course($helper->set_args_delete_course($data->evasys_courseidinternal));
         $course = $this->create_course($data, $option, $moodlecourseid);
         if (empty($course)) {
