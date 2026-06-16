@@ -374,7 +374,7 @@ class evasys_handler {
         $now = time();
         $soap = $this->create_soap_client();
         $helper = new evasys_helper_service();
-        if ($data->evasys_starttime < time()) {
+        if ($data->evasys_starttime < $now) {
             $this->close_survey($surveyid);
             $this->send_report($surveyid);
         }
