@@ -376,16 +376,16 @@ class evasys_handler {
         $helper = new evasys_helper_service();
         if ($data->evasys_starttime < $now) {
             $this->close_survey($surveyid);
-            $this->send_report($surveyid);
+            $report = $this->send_report($surveyid);
+            $execution = $this->execute_task($report->TaskList->SendResultsToInstructorsTask->TaskId);
         }
         $argsdelete = $helper->set_args_delete_survey($surveyid);
         $isdeleted = $soap->delete_survey($argsdelete);
         if (!$isdeleted) {
             return;
         }
-        $coursedata = self::aggregate_data_for_course_save($data, $option, $moodlecourseid, $data->evasys_courseidinternal);
         $deleted = $soap->delete_course($helper->set_args_delete_course($data->evasys_courseidinternal));
-        $course = $soap->insert_course($coursedata);
+        $course = $this->create_course($data, $option, $moodlecourseid);
         if (empty($course)) {
             return;
         }
@@ -721,6 +721,20 @@ class evasys_handler {
         $args = $helper->set_args_send_report($surveyid);
         $soap = $this->create_soap_client();
         $response = $soap->send_report($args);
+        return $response;
+    }
+
+    /**
+     * Executes task
+     *
+     * @param int $taskid
+     *
+     * @return object|null
+     *
+     */
+    public function execute_task(int $taskid) {
+        $soap = $this->create_soap_client();
+        $response = $soap->execute_task($taskid);
         return $response;
     }
 }

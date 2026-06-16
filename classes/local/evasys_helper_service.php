@@ -442,7 +442,7 @@ class evasys_helper_service {
                 'SendEmail' => true,
                 'SendDefaultReport' => true,
                 'SendReportDefinitions' => false,
-                'StartTime' => date('c', time() + 300),
+                'StartTime' => date('c', time() + 30),
                 'Recipients' => [
                     'Placeholder' => [1, 3],
                     ],

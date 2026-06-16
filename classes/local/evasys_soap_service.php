@@ -388,6 +388,24 @@ class evasys_soap_service extends SoapClient {
             return null;
         }
     }
+
+    /**
+     * Executes Task.
+     *
+     * @param int $taskid
+     *
+     * @return object|null
+     *
+     */
+    public function execute_task(int $taskid) {
+        try {
+            $response = $this->__soapCall('ExecuteTask', ['TaskId' => $taskid]);
+            return $response;
+        } catch (SoapFault $e) {
+            $this->trace_soap_fault(__FUNCTION__, $e);
+            return null;
+        }
+    }
     /**
      * Sets Soapheader for authentication.
      *
