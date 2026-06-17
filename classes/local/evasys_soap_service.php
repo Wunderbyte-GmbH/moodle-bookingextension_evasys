@@ -390,6 +390,24 @@ class evasys_soap_service extends SoapClient {
     }
 
     /**
+     * Lists Evasys Tasks.
+     *
+     * @param array $args
+     *
+     * @return object|null
+     *
+     */
+    public function list_tasks(array $args) {
+        try {
+            $response = $this->__soapCall('ListTasks', $args);
+            return $response;
+        } catch (SoapFault $e) {
+            $this->trace_soap_fault(__FUNCTION__, $e);
+            return null;
+        }
+    }
+
+    /**
      * Executes Task.
      *
      * @param int $taskid

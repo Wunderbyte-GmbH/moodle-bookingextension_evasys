@@ -232,7 +232,7 @@ class evasys_helper_service {
         $array = explode('-', $subunitencoded);
         $subunitname = base64_decode(end($array));
         $subunitid = reset($array);
-         $user = (object) [
+        $user = (object) [
             'm_nId' => null,
             'm_nType' => null,
             'm_sLoginName' => '',
@@ -450,5 +450,49 @@ class evasys_helper_service {
             ],
         ];
         return $args;
+    }
+    /**
+     * Args for list task API call.
+     *
+     * @param int $surveyid
+     *
+     * @return array
+     *
+     */
+    public function set_args_task_list(int $surveyid) {
+        $args = [
+            ['ID' => []], // SubunitIDList.
+            ['ID' => []], // FormIDList.
+            ['ID' => [$surveyid]], // SurveyIDList.
+            ['ID' => []], // UserIDList.
+            ['TaskType' => [7]], // TaskTypeIDList.
+            ['ID' => []], // PeriodIDList.
+        ];
+        return $args;
+    }
+
+    /**
+     * [Description for wait_for_task]
+     *
+     * @param mixed $soap
+     * @param mixed $helper
+     * @param int $surveyid
+     *
+     * @return bool
+     *
+     */
+    public function wait_for_task($soap, $helper, int $surveyid): bool {
+        $attempts = 10;
+        $delay = 6;
+        for ($i = 0; $i < $attempts; $i++) {
+            $tasklist = $soap->list_tasks($helper->set_args_task_list($surveyid));
+            $task = $tasklist->TaskList->SendResultsToInstructorsTask ?? null;
+            $status = isset($task->Status) ? (int)$task->Status : null;
+            if ($status !== null && in_array($status, [4, 5, 6, 7], true)) {
+                return true;
+            }
+            sleep($delay);
+        }
+        return false;
     }
 }

@@ -385,14 +385,20 @@ class evasys_handler {
             $this->close_survey($surveyid);
             $report = $this->send_report($surveyid);
             $execution = $this->execute_task($report->TaskList->SendResultsToInstructorsTask->TaskId);
+            if (!$helper->wait_for_task($soap, $helper, $surveyid)) {
+                throw new \moodle_exception(
+                    'Task to send report for update survey did not finish in time. Retrying Survey is not updated so far. Surveyid:
+                    ' . $surveyid . ' Optionid: ' . $option->id
+                );
+            }
         }
         $argsdelete = $helper->set_args_delete_survey($surveyid);
         $isdeleted = $soap->delete_survey($argsdelete);
         if (!$isdeleted) {
             return;
         }
-
-        $deleted = $soap->delete_course($helper->set_args_delete_course($data->evasys_courseidinternal));
+        $args = $helper->set_args_delete_course($data->evasys_courseidinternal);
+        $soap->delete_course($args);
         $course = $this->create_course($data, $option, $moodlecourseid);
         if (empty($course)) {
             return;

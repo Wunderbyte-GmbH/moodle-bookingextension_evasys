@@ -83,7 +83,7 @@ class evasys_open_survey extends \core\task\adhoc_task {
                     ['surveyid' => $taskdata->surveyid, 'starttime' => $this->get_next_run_time()]
                 );
                 if (empty($evasysendtime)) {
-                     mtrace($this->get_name() . ": Not correct time");
+                     mtrace($this->get_name() . ": Not correct time" . $evasysendtime->starttime);
                      return;
                 }
                 $handler = new evasys_handler();
