@@ -474,6 +474,7 @@ class evasys_handler {
      * @return array
      *
      */
+    // TODO: $moodlecourseid is actually $COURSE->category (a category ID), not a course ID. The parameter name is misleading.
     public function aggregate_data_for_course_save($data, $option, $moodlecourseid, $evasyscourseid = null) {
         $userfieldshortname = get_config('bookingextension_evasys', 'evasyscategoryfielduser');
         $helper = new evasys_helper_service();
