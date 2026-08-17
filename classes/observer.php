@@ -16,6 +16,9 @@
 
 namespace bookingextension_evasys;
 
+use bookingextension_evasys\local\evasys_handler;
+use mod_booking\singleton_service;
+
 
 /**
  * Event observers.
@@ -34,5 +37,27 @@ class observer {
      */
     public static function survey_created() {
         return;
+    }
+
+    /**
+     * [Description for bookingoption_created]
+     *
+     * @param \mod_booking\event\bookingoption_cancelled $event
+     *
+     * @return void
+     *
+     */
+    public static function bookingoption_cancelled(\mod_booking\event\bookingoption_cancelled $event) {
+        $optionid = $event->objectid;
+        $settings = singleton_service::get_instance_of_booking_option_settings($optionid);
+        if (!isset($settings->subpluginssettings['evasys']->surveyid)) {
+            return;
+        }
+        $surveyid = $settings->subpluginssettings['evasys']->surveyid;
+        $id = $settings->subpluginssettings['evasys']->id;
+        $internalid = $settings->subpluginssettings['evasys']->courseidinternal;
+        $handler = new evasys_handler();
+        $handler->delete_survey($surveyid);
+        $handler->delete_course($internalid, $id);
     }
 }

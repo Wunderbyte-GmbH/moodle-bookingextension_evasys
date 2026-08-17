@@ -41,13 +41,50 @@ class evasys_soap_service_mock {
     private string $lastresponsexml = '';
 
     /** @var int */
-    private int $nextuserid = 1000;
+    private static int $nextuserid = 1000;
 
     /** @var int */
-    private int $nextcourseid = 2000;
+    private static int $nextcourseid = 2000;
 
     /** @var int */
-    private int $nextsurveyid = 3000;
+    private static int $nextsurveyid = 3000;
+
+    /** @var array Surveys currently existing in the mock EvaSys, indexed by survey id. */
+    private static array $surveys = [];
+
+    /** @var array Courses currently existing in the mock EvaSys, indexed by internal course id. */
+    private static array $courses = [];
+
+    /**
+     * Surveys currently existing in the mock EvaSys, indexed by survey id.
+     *
+     * @return array
+     */
+    public static function get_surveys(): array {
+        return self::$surveys;
+    }
+
+    /**
+     * Courses currently existing in the mock EvaSys, indexed by internal course id.
+     *
+     * @return array
+     */
+    public static function get_courses(): array {
+        return self::$courses;
+    }
+
+    /**
+     * Resets the mock EvaSys state. Call in test setUp.
+     *
+     * @return void
+     */
+    public static function reset_mock_state(): void {
+        self::$surveys = [];
+        self::$courses = [];
+        self::$nextuserid = 1000;
+        self::$nextcourseid = 2000;
+        self::$nextsurveyid = 3000;
+    }
 
     /**
      * Last generated request XML envelope.
@@ -197,7 +234,7 @@ class evasys_soap_service_mock {
         $this->assert_string($user['m_sEmail'], 'InsertUser.user.m_sEmail');
         $this->assert_int($user['m_nFbid'], 'InsertUser.user.m_nFbid');
 
-        $response = (object) array_merge($user, ['m_nId' => $this->nextuserid++]);
+        $response = (object) array_merge($user, ['m_nId' => self::$nextuserid++]);
         $this->record_call('InsertUser', ['user' => $user], $response);
         return $response;
     }
@@ -212,7 +249,9 @@ class evasys_soap_service_mock {
         $course = $args;
         $this->validate_course_payload($course, 'InsertCourse.course', false);
 
-        $response = (object) array_merge($course, ['m_nCourseId' => $this->nextcourseid++]);
+        $courseid = self::$nextcourseid++;
+        self::$courses[$courseid] = $course;
+        $response = (object) array_merge($course, ['m_nCourseId' => $courseid]);
         $this->record_call('InsertCourse', ['course' => $course], $response);
         return $response;
     }
@@ -243,6 +282,7 @@ class evasys_soap_service_mock {
         $this->assert_int($args['CourseId'], 'DeleteCourse.CourseId');
         $this->assert_equals('INTERNAL', $args['IdType'], 'DeleteCourse.IdType');
 
+        unset(self::$courses[$args['CourseId']]);
         $response = true;
         $this->record_call('DeleteCourse', $args, ['DeleteCourseResult' => true]);
         return $response;
@@ -262,7 +302,9 @@ class evasys_soap_service_mock {
         $this->assert_int($args['nPeriodId'], 'InsertCentralSurvey.nPeriodId');
         $this->assert_equals('c', $args['sSurveyType'], 'InsertCentralSurvey.sSurveyType');
 
-        $response = (object) ['m_nSurveyId' => $this->nextsurveyid++];
+        $surveyid = self::$nextsurveyid++;
+        self::$surveys[$surveyid] = $args;
+        $response = (object) ['m_nSurveyId' => $surveyid];
         $this->record_call('InsertCentralSurvey', $args, $response);
         return $response;
     }
@@ -278,6 +320,7 @@ class evasys_soap_service_mock {
         $this->assert_int($args['SurveyId'], 'DeleteSurvey.SurveyId');
         $this->assert_bool($args['IgnoreTwoStepDelete'], 'DeleteSurvey.IgnoreTwoStepDelete');
 
+        unset(self::$surveys[$args['SurveyId']]);
         $this->record_call('DeleteSurvey', $args, ['DeleteSurveyResult' => true]);
         return true;
     }

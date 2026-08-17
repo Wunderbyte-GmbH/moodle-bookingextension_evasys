@@ -30,4 +30,8 @@ $observers = [
         'eventname' => '\bookingextension_evasys\event\evasys_surveycreated',
         'callback' => '\bookingextension_evasys\observer::survey_created',
     ],
+    [
+        'eventname' => '\mod_booking\event\bookingoption_cancelled',
+        'callback' => '\bookingextension_evasys\observer::bookingoption_cancelled',
+    ],
 ];
