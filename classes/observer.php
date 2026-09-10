@@ -60,4 +60,27 @@ class observer {
         $handler->delete_survey($surveyid);
         $handler->delete_course($internalid, $id);
     }
+
+    /**
+     * Deletes survey and course in EvaSys when the booking option is deleted.
+     *
+     * The option record is already gone when this event fires, so we read the
+     * EvaSys record directly from the DB instead of the settings singleton.
+     *
+     * @param \mod_booking\event\bookingoption_deleted $event
+     *
+     * @return void
+     *
+     */
+    public static function bookingoption_deleted(\mod_booking\event\bookingoption_deleted $event) {
+        global $DB;
+        $optionid = $event->objectid;
+        $record = $DB->get_record('bookingextension_evasys', ['optionid' => $optionid]);
+        if (empty($record) || empty($record->surveyid)) {
+            return;
+        }
+        $handler = new evasys_handler();
+        $handler->delete_survey((int) $record->surveyid);
+        $handler->delete_course((int) $record->courseidinternal, (int) $record->id);
+    }
 }
