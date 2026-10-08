@@ -146,6 +146,13 @@ class evasys extends field_base {
         if (empty($formdata->id)) {
             return $changes;
         } else {
+            // Without a stored evasys record and without an evaluation chosen now there is nothing to
+            // compare: save_data() stores nothing in that case, so the form defaults (durations, period)
+            // would be reported as changes on every single save.
+            $settings = singleton_service::get_instance_of_booking_option_settings($formdata->id);
+            if (empty($settings->subpluginssettings['evasys']->id) && empty($formdata->evasys_form)) {
+                return $changes;
+            }
             foreach (self::$evasyskeys as $key) {
                 $value = $formdata->{$key} ?? null;
                 $mockdata = (object)['optionid' => $formdata->id];
@@ -526,9 +533,11 @@ class evasys extends field_base {
         if (!isset($settings->subpluginssettings['evasys']->id)) {
             return;
         }
+        // Saves without the hidden time fields (import, web service, generator) did not move the survey.
+        $evasysrecord = $settings->subpluginssettings['evasys'];
         if (
-            $data->evasys_starttime != $settings->subpluginssettings['evasys']->starttime
-            || $data->evasys_endtime != $settings->subpluginssettings['evasys']->endtime
+            ($data->evasys_starttime ?? $evasysrecord->starttime) != $evasysrecord->starttime
+            || ($data->evasys_endtime ?? $evasysrecord->endtime) != $evasysrecord->endtime
         ) {
             $changetasks = true;
         } else {
@@ -540,11 +549,11 @@ class evasys extends field_base {
         $relevantdata->evasys_courseidexternal = $settings->subpluginssettings['evasys']->courseidexternal;
         $relevantdata->evasys_courseidinternal = $settings->subpluginssettings['evasys']->courseidinternal;
         $relevantdata->evasys_booking_id = $settings->subpluginssettings['evasys']->id;
-        $relevantdata->teachersforoption = $data->teachersforoption;
-        $relevantdata->evasys_other_report_recipients = $data->evasys_other_report_recipients;
+        $relevantdata->teachersforoption = $data->teachersforoption ?? [];
+        $relevantdata->evasys_other_report_recipients = $data->evasys_other_report_recipients ?? [];
         $relevantdata->evasys_starttime = $settings->subpluginssettings['evasys']->starttime;
         $relevantdata->evasys_endtime = $settings->subpluginssettings['evasys']->endtime;
-        $relevantdata->evasys_confirmdelete = $data->evasys_confirmdelete;
+        $relevantdata->evasys_confirmdelete = $data->evasys_confirmdelete ?? 0;
         $relevantoptiondata = new stdClass();
         $relevantoptiondata->id = $newoption->id;
         $relevantoptiondata->text = $newoption->text;
@@ -558,7 +567,7 @@ class evasys extends field_base {
             'newoption' => $relevantoptiondata,
             'relevantkeyssurvey' => self::$relevantkeyssurvey,
             'relevantkeyscourse' => self::$relevantkeyscourse,
-            'recipients' => $data->evasys_other_report_recipients,
+            'recipients' => $data->evasys_other_report_recipients ?? [],
             'data' => $relevantdata,
             'courseid' => $COURSE->category,
             'changetasks' => $changetasks,
