@@ -96,8 +96,8 @@ class evasys_helper_service {
         $insertdata->organizers = implode(',', ($formdata->evasys_other_report_recipients ?? []));
         $insertdata->notifyparticipants = $formdata->evasys_notifyparticipants;
         $insertdata->usermodified = $USER->id;
-        $insertdata->periods = $formdata->evasysperiods;
-        $insertdata->qr = $formdata->qrurl;
+        $insertdata->periods = $formdata->evasysperiods ?? '';
+        // The QR url is not a form value: get_qrcode() writes it to the record itself.
         $insertdata->timemode = $formdata->evasys_timemode;
         $insertdata->surveyurl = $formdata->evasys_surveyurl;
         if (empty($formdata->evasys_booking_id)) {
@@ -123,7 +123,7 @@ class evasys_helper_service {
         $data->evasys_starttime = $record->starttime;
         $data->evasys_endtime = $record->endtime;
         $data->evasys_qr = $record->qrurl;
-        $data->evasys_other_report_recipients = explode(',', $record->organizers);
+        $data->evasys_other_report_recipients = ($record->organizers ?? '') === '' ? [] : explode(',', $record->organizers);
         $data->evasys_notifyparticipants = $record->notifyparticipants;
         $data->evasys_booking_id = $record->id;
         $data->evasys_timecreated = $record->timecreated;
