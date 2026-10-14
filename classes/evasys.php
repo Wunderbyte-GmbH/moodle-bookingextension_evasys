@@ -170,7 +170,7 @@ class evasys extends bookingextension implements bookingextension_interface {
         if (
             (
             has_capability('mod/booking:updatebooking', $context)
-            || ((has_capability('mod/booking:addeditownoption', $context)))
+            || ((has_capability('mod/booking:editownoption', $context)))
             )
             && isset($settings->subpluginssettings['evasys']->qrurl)
         ) {
