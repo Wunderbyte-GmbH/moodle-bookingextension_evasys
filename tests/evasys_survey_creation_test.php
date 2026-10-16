@@ -197,8 +197,6 @@ final class evasys_survey_creation_test extends advanced_testcase {
         $defaultcourseidexternal = (string) ($evasyssubplugin->courseidexternal ?? '');
         $defaultcourseidinternal = (int) ($evasyssubplugin->courseidinternal ?? 0);
         $defaultsurveyid = (int) ($evasyssubplugin->surveyid ?? 0);
-        $defaultqr = $evasyssubplugin->qrurl ?? 0;
-        $defaultsurveyurl = $evasyssubplugin->surveyurl ?? 0;
 
         $postdata = (object) [
             'id' => $option->id,
@@ -221,9 +219,6 @@ final class evasys_survey_creation_test extends advanced_testcase {
             'evasys_courseidexternal' => $defaultcourseidexternal,
             'evasys_courseidinternal' => $defaultcourseidinternal,
             'evasys_surveyid' => $defaultsurveyid,
-            'evasys_qr' => $defaultqr,
-            'qrurl' => $defaultqr,
-            'evasys_surveyurl' => $defaultsurveyurl,
             'teachersforoption' => [$teacher->id],
             'optionid' => $option->id,
         ];

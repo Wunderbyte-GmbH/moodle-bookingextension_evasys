@@ -97,9 +97,8 @@ class evasys_helper_service {
         $insertdata->notifyparticipants = $formdata->evasys_notifyparticipants;
         $insertdata->usermodified = $USER->id;
         $insertdata->periods = $formdata->evasysperiods ?? '';
-        // The QR url is not a form value: get_qrcode() writes it to the record itself.
+        // Survey url and QR url are not form values: the api task writes them to the record itself.
         $insertdata->timemode = $formdata->evasys_timemode;
-        $insertdata->surveyurl = $formdata->evasys_surveyurl;
         if (empty($formdata->evasys_booking_id)) {
             $insertdata->timecreated = $now;
         } else {
@@ -122,7 +121,6 @@ class evasys_helper_service {
         $data->evasys_form = $record->formid;
         $data->evasys_starttime = $record->starttime;
         $data->evasys_endtime = $record->endtime;
-        $data->evasys_qr = $record->qrurl;
         $data->evasys_other_report_recipients = ($record->organizers ?? '') === '' ? [] : explode(',', $record->organizers);
         $data->evasys_notifyparticipants = $record->notifyparticipants;
         $data->evasys_booking_id = $record->id;
@@ -135,7 +133,6 @@ class evasys_helper_service {
         $data->evasys_durationbeforestart = $record->durationbeforestart;
         $data->evasys_durationafterend = $record->durationafterend;
         $data->evasys_timemode = $record->timemode;
-        $data->evasys_surveyurl = $record->surveyurl;
     }
 
     /**

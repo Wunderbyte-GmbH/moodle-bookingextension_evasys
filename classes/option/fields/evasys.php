@@ -106,8 +106,6 @@ class evasys extends field_base {
         'evasys_timemode',
         'evasys_durationbeforestart',
         'evasys_durationafterend',
-        'evasys_qr',
-        'evasys_surveyurl',
     ];
 
     /**
@@ -401,12 +399,6 @@ class evasys extends field_base {
         $mform->addElement('hidden', 'evasys_delete', 0);
         $mform->setDefault('evasys_delete', 0);
         $mform->setType('evasys_delete', PARAM_INT);
-
-        $mform->addElement('hidden', 'evasys_qr', 0);
-        $mform->setType('evasys_qr', PARAM_TEXT);
-
-        $mform->addElement('hidden', 'evasys_surveyurl', 0);
-        $mform->setType('evasys_surveyurl', PARAM_TEXT);
 
         if (
             has_capability('moodle/site:config', context_system::instance())

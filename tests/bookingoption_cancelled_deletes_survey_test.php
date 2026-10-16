@@ -162,9 +162,6 @@ final class bookingoption_cancelled_deletes_survey_test extends advanced_testcas
             'evasys_courseidexternal' => (string) ($evasyssubplugin->courseidexternal ?? ''),
             'evasys_courseidinternal' => (int) ($evasyssubplugin->courseidinternal ?? 0),
             'evasys_surveyid' => (int) ($evasyssubplugin->surveyid ?? 0),
-            'evasys_qr' => $evasyssubplugin->qrurl ?? 0,
-            'qrurl' => $evasyssubplugin->qrurl ?? 0,
-            'evasys_surveyurl' => $evasyssubplugin->surveyurl ?? 0,
             'teachersforoption' => [$teacher->id],
             'optionid' => $option->id,
         ];
