@@ -80,7 +80,7 @@ $string['opensurvey'] = 'bookingextension_evays: open survey for data collection
 $string['otherreportrecipients'] = 'Additional report recipients';
 $string['pluginname'] = 'Booking extension: EvaSys';
 $string['questionaire'] = 'Select questionnaire';
-$string['questionaire_help'] = 'For more information about the forms, please click <a href="https://www.qs.univie.ac.at/evaluationen/weitere-evaluationen/urise/" target="_blank">here</a>.';
+$string['questionaire_help'] = 'For more information about the forms, please click <a href="https://qs.univie.ac.at/urise" target="_blank">here</a>.';
 $string['rolereportrecipients'] = 'Role restriction for additional report recipients';
 $string['rolereportrecipients_desc'] = 'Define the role restriction for additional report recipients.';
 $string['rulechoosemode'] = 'Activate on: ';
