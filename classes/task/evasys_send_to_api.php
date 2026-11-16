@@ -165,20 +165,37 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                         }
                     }
                     if ($updatesurvey) {
-                        $surveyid = $data->evasys_surveyid;
-                        $newsurvey = $evasys->update_survey($surveyid, $data, $newoption, $taskdata->courseid);
-                        $taskopen = new evasys_open_survey();
-                        $taskclose = new evasys_close_survey();
-                        $taskdata = [
-                        'surveyid' => $newsurvey->m_nSurveyId,
-                        'optionid' => $newoption->id,
-                        ];
-                        $taskopen->set_custom_data($taskdata);
-                        $taskclose->set_custom_data($taskdata);
-                        $taskopen->set_next_run_time($data->evasys_starttime);
-                        $taskclose->set_next_run_time($data->evasys_endtime);
-                        \core\task\manager::reschedule_or_queue_adhoc_task($taskopen);
-                        \core\task\manager::reschedule_or_queue_adhoc_task($taskclose);
+                        // Only one task at a time may replace the survey of an option.
+                        // A second task waits here and then works with the ids the first one stored.
+                        $lockfactory = \core\lock\lock_config::get_lock_factory('bookingextension_evasys');
+                        $lock = $lockfactory->get_lock('updatesurvey_' . $newoption->id, 120);
+                        if (!$lock) {
+                            throw new \moodle_exception(
+                                'Another task is still updating the survey. Retrying later. Optionid: ' . $newoption->id
+                            );
+                        }
+                        try {
+                            $newsurvey = $evasys->update_survey($data, $newoption, $taskdata->courseid);
+                        } finally {
+                            $lock->release();
+                        }
+                        if (empty($newsurvey)) {
+                            // Without a new survey there is nothing to open or close.
+                            mtrace($this->get_name() . ': No new survey was created on update, no open/close tasks queued.');
+                        } else {
+                            $taskopen = new evasys_open_survey();
+                            $taskclose = new evasys_close_survey();
+                            $taskdata = [
+                            'surveyid' => $newsurvey->m_nSurveyId,
+                            'optionid' => $newoption->id,
+                            ];
+                            $taskopen->set_custom_data($taskdata);
+                            $taskclose->set_custom_data($taskdata);
+                            $taskopen->set_next_run_time($data->evasys_starttime);
+                            $taskclose->set_next_run_time($data->evasys_endtime);
+                            \core\task\manager::reschedule_or_queue_adhoc_task($taskopen);
+                            \core\task\manager::reschedule_or_queue_adhoc_task($taskclose);
+                        }
                     }
                     if ($updatecourse) {
                         $evasys->update_course($data, $newoption, $data->evasys_booking_id, $taskdata->courseid);

@@ -368,7 +368,6 @@ class evasys_handler {
     /**
      * Update Logic for the Survey in Evasys.
      *
-     * @param int $surveyid
      * @param object $data
      * @param object $option
      * @param int $moodlecourseid
@@ -376,9 +375,23 @@ class evasys_handler {
      * @return object | null
      *
      */
-    public function update_survey(int $surveyid, object $data, object $option, int $moodlecourseid) {
+    public function update_survey(object $data, object $option, int $moodlecourseid) {
         global $DB;
         $now = time();
+        // The ids in the task data are a snapshot from the moment the option was saved.
+        // Another task may have replaced survey and course since then, so we use the current ids.
+        $record = $DB->get_record(
+            'bookingextension_evasys',
+            ['id' => $data->evasys_booking_id],
+            'id, surveyid, courseidinternal'
+        );
+        if (empty($record->surveyid)) {
+            mtrace('EvaSys update_survey: no current survey found for option ' . $option->id . ', nothing to update.');
+            return null;
+        }
+        $surveyid = (int) $record->surveyid;
+        $data->evasys_surveyid = $record->surveyid;
+        $data->evasys_courseidinternal = $record->courseidinternal;
         $soap = $this->create_soap_client();
         $helper = new evasys_helper_service();
         if ($data->evasys_starttime < $now) {
