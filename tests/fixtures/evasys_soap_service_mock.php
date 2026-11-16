@@ -49,6 +49,9 @@ class evasys_soap_service_mock {
     /** @var int */
     private static int $nextsurveyid = 3000;
 
+    /** @var int */
+    private static int $nexttaskid = 4000;
+
     /** @var array Surveys currently existing in the mock EvaSys, indexed by survey id. */
     private static array $surveys = [];
 
@@ -84,6 +87,7 @@ class evasys_soap_service_mock {
         self::$nextuserid = 1000;
         self::$nextcourseid = 2000;
         self::$nextsurveyid = 3000;
+        self::$nexttaskid = 4000;
     }
 
     /**
@@ -436,7 +440,41 @@ class evasys_soap_service_mock {
         }
 
         $response = (object) ['m_bSaved' => true, 'm_nTaskCount' => 1];
+        // Only a survey that still exists gets a report task with an id.
+        if (isset(self::$surveys[$task['SurveyId']])) {
+            $response->TaskList = (object) [
+                'SendResultsToInstructorsTask' => (object) ['TaskId' => self::$nexttaskid++],
+            ];
+        }
         $this->record_call('SaveTasks', $args, $response);
+        return $response;
+    }
+
+    /**
+     * Lists the report tasks. The mock reports them as finished right away.
+     *
+     * @param array $args
+     * @return object
+     */
+    public function list_tasks(array $args) {
+        $response = (object) [
+            'TaskList' => (object) [
+                'SendResultsToInstructorsTask' => (object) ['Status' => 4],
+            ],
+        ];
+        $this->record_call('ListTasks', $args, $response);
+        return $response;
+    }
+
+    /**
+     * Executes a report task.
+     *
+     * @param int $taskid
+     * @return object
+     */
+    public function execute_task(int $taskid) {
+        $response = (object) ['TaskId' => $taskid];
+        $this->record_call('ExecuteTask', ['TaskId' => $taskid], $response);
         return $response;
     }
 
