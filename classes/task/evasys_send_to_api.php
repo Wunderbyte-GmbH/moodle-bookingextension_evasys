@@ -91,6 +91,8 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                 $namechanges = $taskdata->namechanges;
                 $relevantchanges = $taskdata->relevantchanges;
                 $changetasks = $taskdata->changetasks;
+                // Not a required key: tasks queued before this key existed still have to run.
+                $datechanges = $taskdata->datechanges ?? false;
                 // Check if teachers exist otherwise skip the task.
                 if (empty($data->teachersforoption)) {
                     mtrace($this->get_name() . ': Skipping task - no teachers assigned.');
@@ -141,10 +143,12 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                             booking_option::purge_cache_for_option($newoption->id);
                             return;
                     }
-                    // Checks if teachers or option name changed. If it changed we already know we need to update course and survey.
+                    // Checks if teachers, option name or dates changed.
+                    // If one of them changed we already know we need to update course and survey.
                     if (
                         !empty($teacherchanges)
                         || !empty($namechanges)
+                        || !empty($datechanges)
                     ) {
                         $updatesurvey = true;
                     }

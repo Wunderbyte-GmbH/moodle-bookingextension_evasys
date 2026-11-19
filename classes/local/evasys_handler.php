@@ -394,7 +394,8 @@ class evasys_handler {
         $data->evasys_courseidinternal = $record->courseidinternal;
         $soap = $this->create_soap_client();
         $helper = new evasys_helper_service();
-        if ($data->evasys_starttime < $now) {
+        // After a change of the dates, the survey ran in the old evaluation window, not in the new one.
+        if (($data->evasys_oldstarttime ?? $data->evasys_starttime) < $now) {
             $this->close_survey($surveyid);
             $report = $this->send_report($surveyid);
             $execution = $this->execute_task($report->TaskList->SendResultsToInstructorsTask->TaskId);

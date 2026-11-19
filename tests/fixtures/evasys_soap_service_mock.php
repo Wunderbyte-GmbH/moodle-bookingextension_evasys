@@ -58,6 +58,27 @@ class evasys_soap_service_mock {
     /** @var array Courses currently existing in the mock EvaSys, indexed by internal course id. */
     private static array $courses = [];
 
+    /** @var array Names of the operations called on the mock EvaSys, in the order of the calls. */
+    private static array $calls = [];
+
+    /**
+     * Names of the operations called on the mock EvaSys, in the order of the calls.
+     *
+     * @return array
+     */
+    public static function get_calls(): array {
+        return self::$calls;
+    }
+
+    /**
+     * Forgets the operations called so far, the surveys and courses stay.
+     *
+     * @return void
+     */
+    public static function reset_calls(): void {
+        self::$calls = [];
+    }
+
     /**
      * Surveys currently existing in the mock EvaSys, indexed by survey id.
      *
@@ -84,6 +105,7 @@ class evasys_soap_service_mock {
     public static function reset_mock_state(): void {
         self::$surveys = [];
         self::$courses = [];
+        self::$calls = [];
         self::$nextuserid = 1000;
         self::$nextcourseid = 2000;
         self::$nextsurveyid = 3000;
@@ -527,6 +549,7 @@ class evasys_soap_service_mock {
      * @return void
      */
     private function record_call(string $operation, $request, $response): void {
+        self::$calls[] = $operation;
         $requestpayload = [$operation => $this->to_array($request)];
         $responsepayload = [$operation . 'Response' => $this->to_array($response)];
         $this->lastrequestxml = $this->build_envelope($requestpayload);

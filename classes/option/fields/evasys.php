@@ -545,6 +545,10 @@ class evasys extends field_base {
         $relevantdata->evasys_other_report_recipients = $data->evasys_other_report_recipients ?? [];
         $relevantdata->evasys_starttime = $settings->subpluginssettings['evasys']->starttime;
         $relevantdata->evasys_endtime = $settings->subpluginssettings['evasys']->endtime;
+        // The evaluation start before this save: a survey which was already running has to be closed
+        // and reported before it is replaced, even if the new dates moved its start into the future.
+        $relevantdata->evasys_oldstarttime = $originaloption->subpluginssettings['evasys']->starttime
+            ?? $relevantdata->evasys_starttime;
         $relevantdata->evasys_confirmdelete = $data->evasys_confirmdelete ?? 0;
         $relevantoptiondata = new stdClass();
         $relevantoptiondata->id = $newoption->id;
@@ -554,7 +558,8 @@ class evasys extends field_base {
         $taskdata = [
             'teacherchanges' => $changes["mod_booking\\option\\fields\\teachers"] ?? [],
             'namechanges' => $changes["mod_booking\\option\\fields\\text"] ?? [],
-
+            // Changed dates replace survey and course in EvaSys, just like a changed name does.
+            'datechanges' => self::get_dates_signature($originaloption) !== self::get_dates_signature($settings),
             'relevantchanges' => $changes["bookingextension_evasys\\option\\fields\\evasys"]['changes'] ?? [],
             'newoption' => $relevantoptiondata,
             'relevantkeyssurvey' => self::$relevantkeyssurvey,
@@ -567,5 +572,22 @@ class evasys extends field_base {
         $task->set_custom_data($taskdata);
         // Now queue the task or reschedule it if it already exists (with matching data).
         \core\task\manager::reschedule_or_queue_adhoc_task($task);
+    }
+
+    /**
+     * Returns the start and end times of all dates of an option as a sorted list.
+     * Two options settings with the same signature have the same dates.
+     *
+     * @param object $settings booking option settings
+     *
+     * @return array
+     */
+    private static function get_dates_signature(object $settings): array {
+        $signature = [];
+        foreach ($settings->sessions ?? [] as $session) {
+            $signature[] = (int) ($session->coursestarttime ?? 0) . '-' . (int) ($session->courseendtime ?? 0);
+        }
+        sort($signature);
+        return $signature;
     }
 }
