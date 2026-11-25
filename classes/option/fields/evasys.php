@@ -543,6 +543,10 @@ class evasys extends field_base {
         $relevantdata->evasys_booking_id = $settings->subpluginssettings['evasys']->id;
         $relevantdata->teachersforoption = $data->teachersforoption ?? [];
         $relevantdata->evasys_other_report_recipients = $data->evasys_other_report_recipients ?? [];
+        // Without the period the course in EvaSys would always be created in the default period of the settings.
+        $relevantdata->evasysperiods = !empty($data->evasysperiods)
+            ? $data->evasysperiods
+            : ($evasysrecord->periods ?? '');
         $relevantdata->evasys_starttime = $settings->subpluginssettings['evasys']->starttime;
         $relevantdata->evasys_endtime = $settings->subpluginssettings['evasys']->endtime;
         // The evaluation start before this save: a survey which was already running has to be closed
