@@ -412,7 +412,16 @@ class evasys_handler {
             return;
         }
         $args = $helper->set_args_delete_course($data->evasys_courseidinternal);
-        $soap->delete_course($args);
+        $coursedeleted = $soap->delete_course($args);
+        if (!$coursedeleted) {
+            // EvaSys accepts a second course with the same external id if the main instructor differs.
+            // So we must not create a new course as long as the old one still exists.
+            mtrace(
+                'EvaSys update_survey: course ' . $data->evasys_courseidinternal . ' could not be deleted, '
+                . 'no new course and survey created. Optionid: ' . $option->id
+            );
+            return null;
+        }
         $course = $this->create_course($data, $option, $moodlecourseid);
         if (empty($course)) {
             return;
@@ -657,7 +666,15 @@ class evasys_handler {
      *
      */
     public function update_course(object $data, object $newoption, int $tableid, int $moodlecourseid) {
-        $coursedata = $this->aggregate_data_for_course_save($data, $newoption, $moodlecourseid, $tableid);
+        global $DB;
+        // EvaSys identifies the course by its own internal id, not by the id of our record.
+        // We read it from the DB, as another task may have replaced the course since the option was saved.
+        $courseidinternal = $DB->get_field('bookingextension_evasys', 'courseidinternal', ['id' => $tableid]);
+        if (empty($courseidinternal)) {
+            mtrace('EvaSys update_course: no current course found for option ' . $newoption->id . ', nothing to update.');
+            return null;
+        }
+        $coursedata = $this->aggregate_data_for_course_save($data, $newoption, $moodlecourseid, (int) $courseidinternal);
         $soap = $this->create_soap_client();
         $response = $soap->update_course($coursedata);
         return $response;

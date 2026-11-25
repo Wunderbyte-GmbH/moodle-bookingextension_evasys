@@ -61,6 +61,19 @@ class evasys_soap_service_mock {
     /** @var array Names of the operations called on the mock EvaSys, in the order of the calls. */
     private static array $calls = [];
 
+    /** @var bool If true, DeleteCourse fails like it does on a SOAP fault. */
+    private static bool $faildeletecourse = false;
+
+    /**
+     * Lets DeleteCourse fail (or succeed again).
+     *
+     * @param bool $fail
+     * @return void
+     */
+    public static function set_fail_delete_course(bool $fail): void {
+        self::$faildeletecourse = $fail;
+    }
+
     /**
      * Names of the operations called on the mock EvaSys, in the order of the calls.
      *
@@ -106,6 +119,7 @@ class evasys_soap_service_mock {
         self::$surveys = [];
         self::$courses = [];
         self::$calls = [];
+        self::$faildeletecourse = false;
         self::$nextuserid = 1000;
         self::$nextcourseid = 2000;
         self::$nextsurveyid = 3000;
@@ -292,6 +306,12 @@ class evasys_soap_service_mock {
         $course = $args;
         $this->validate_course_payload($course, 'UpdateCourse.course', true);
 
+        // EvaSys answers with a fault if it does not know the course id.
+        if (!isset(self::$courses[$course['m_nCourseId']])) {
+            $this->record_call('UpdateCourse', ['course' => $course], null);
+            return null;
+        }
+        self::$courses[$course['m_nCourseId']] = $course;
         $response = (object) $course;
         $this->record_call('UpdateCourse', ['course' => $course], $response);
         return $response;
@@ -308,6 +328,10 @@ class evasys_soap_service_mock {
         $this->assert_int($args['CourseId'], 'DeleteCourse.CourseId');
         $this->assert_equals('INTERNAL', $args['IdType'], 'DeleteCourse.IdType');
 
+        if (self::$faildeletecourse) {
+            $this->record_call('DeleteCourse', $args, ['DeleteCourseResult' => false]);
+            return false;
+        }
         unset(self::$courses[$args['CourseId']]);
         $response = true;
         $this->record_call('DeleteCourse', $args, ['DeleteCourseResult' => true]);

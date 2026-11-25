@@ -59,6 +59,7 @@ class evasys_send_to_api extends \core\task\adhoc_task {
      * @see \core\task\task_base::execute()
      */
     public function execute() {
+        global $DB;
         $taskdata = $this->get_custom_data();
         $updatesurvey = false;
         $updatecourse = false;
@@ -111,17 +112,53 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                     return;
                 }
                 $evasys = new evasys_handler();
-                if (empty($data->evasys_courseidexternal) && !empty($data->evasys_form)) {
-                    $course = $evasys->create_course($data, $newoption, $taskdata->courseid);
-                    if (empty($course)) {
-                          mtrace($this->get_name() . ': On course creation there was no connection to EvaSys');
-                          return;
+                $lockfactory = \core\lock\lock_config::get_lock_factory('bookingextension_evasys');
+                $createcourse = empty($data->evasys_courseidexternal) && !empty($data->evasys_form);
+                $course = null;
+                $survey = null;
+                if ($createcourse) {
+                    // Only one task at a time may create or replace course and survey of an option.
+                    $lock = $lockfactory->get_lock('updatesurvey_' . $newoption->id, 120);
+                    if (!$lock) {
+                        throw new \moodle_exception(
+                            'Another task is still creating the survey. Retrying later. Optionid: ' . $newoption->id
+                        );
                     }
-                    $survey = $evasys->create_survey($course, $data, $newoption);
-                    if (empty($survey)) {
-                        mtrace($this->get_name() . ': On survey creation there was no connection to EvaSys');
-                        return;
+                    try {
+                        // The ids in the task data are a snapshot from the moment the option was saved.
+                        // Another task may have created the course since then. A second course would be
+                        // accepted by EvaSys, so in this case we continue with the update logic.
+                        $current = $DB->get_record(
+                            'bookingextension_evasys',
+                            ['id' => $data->evasys_booking_id],
+                            'id, surveyid, courseidinternal, courseidexternal'
+                        );
+                        if (empty($current)) {
+                            mtrace($this->get_name() . ': Skipping task - no EvaSys record found for the option.');
+                            return;
+                        }
+                        if (!empty($current->courseidinternal)) {
+                            $createcourse = false;
+                            $data->evasys_surveyid = $current->surveyid;
+                            $data->evasys_courseidinternal = $current->courseidinternal;
+                            $data->evasys_courseidexternal = $current->courseidexternal;
+                        } else {
+                            $course = $evasys->create_course($data, $newoption, $taskdata->courseid);
+                            if (empty($course)) {
+                                mtrace($this->get_name() . ': On course creation there was no connection to EvaSys');
+                                return;
+                            }
+                            $survey = $evasys->create_survey($course, $data, $newoption);
+                            if (empty($survey)) {
+                                mtrace($this->get_name() . ': On survey creation there was no connection to EvaSys');
+                                return;
+                            }
+                        }
+                    } finally {
+                        $lock->release();
                     }
+                }
+                if ($createcourse) {
                     $taskopen = new evasys_open_survey();
                     $taskclose = new evasys_close_survey();
                     $taskdata = [
@@ -171,7 +208,6 @@ class evasys_send_to_api extends \core\task\adhoc_task {
                     if ($updatesurvey) {
                         // Only one task at a time may replace the survey of an option.
                         // A second task waits here and then works with the ids the first one stored.
-                        $lockfactory = \core\lock\lock_config::get_lock_factory('bookingextension_evasys');
                         $lock = $lockfactory->get_lock('updatesurvey_' . $newoption->id, 120);
                         if (!$lock) {
                             throw new \moodle_exception(
